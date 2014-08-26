@@ -71,7 +71,7 @@ classdef singletime
         function obj = set.cdfEpoch(obj,time)
             cdfEpoch = time;
             % Round to nearest second
-            cdfEpoch = round(cdfEpoch*1000)/1000;
+            cdfEpoch = round(cdfEpoch/1000)*1000;
             timeVec = cdflib.epochBreakdown(cdfEpoch);
             dateVec = timeVec(1:6);
             dateNum = datenum(dateVec);
