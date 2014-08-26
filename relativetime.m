@@ -40,20 +40,16 @@ classdef relativetime
                     timeVec = [dateVec,zeros(nTime,1)];
                     timeVec(:,7) = (timeVec(:,6) - floor(timeVec(:,6)))*1000;
                     timeVec(:,6) = floor(timeVec(:,6));
-                    cdfEpoch = zeros(nTime,1);
-                    for iTime = 1:nTime
-                        cdfEpoch(iTime) = cdflib.computeEpoch(timeVec(iTime,:));
-                    end
+                    cdfEpoch = cdflib.computeEpoch(timeVec');
+                    cdfEpoch = cdfEpoch';
                 case 'datevec'
                     nTime = size(time,1);
                     dateVec = time;
                     timeVec = [dateVec,zeros(nTime,1)];
                     timeVec(:,7) = (timeVec(:,6) - floor(timeVec(:,6)))*1000;
                     timeVec(:,6) = floor(timeVec(:,6));
-                    cdfEpoch = zeros(nTime,1);
-                    for iTime = 1:nTime
-                        cdfEpoch(iTime) = cdflib.computeEpoch(timeVec(iTime,:));
-                    end
+                    cdfEpoch = cdflib.computeEpoch(timeVec');
+                    cdfEpoch = cdfEpoch';
                 case 'cdfepoch'
                     cdfEpoch = time;
                 otherwise
