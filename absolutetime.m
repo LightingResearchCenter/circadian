@@ -1,15 +1,52 @@
 classdef absolutetime
-    %ABSOLUTETIME Summary of this class goes here
-    %   Detailed explanation goes here
+    %ABSOLUTETIME Stores absolute local and UTC time in several formats
+    %   All time formats are first converted to the CDF Epoch format
+    %   (milliseconds from midnight January 1, 0000 CE) the time is rounded
+    %   to the nearest seconds and then converted to all other formats.
     %   
+    %   Initial object creation follows the following format
     %   obj = AbsoluteTime(time,timeType,utc,utcOffsetHours)
-    %   Example:
-    %   obj = AbsoluteTime(time,'datenum',false,-5)
+    %   where,
+    %   
+    %   time: is a vertical array of one of the five accepted time types
+    %   timeType: is a string indicating the type of time being input
+    %   utc: is true or false, true meaning the input time is in UTC time,
+    %   false meaning the input time is in local time
+    %   utcOffsetHours: is the offset of local time from UTC in hours
+    %   
+    %   timeType = 'cdfepoch', 'datevec', 'datenum', 'excel', or 'labview
+    %   cdfepoch: is the milliseconds format not to be confused with a
+    %   cdfepoch object
+    %   datevec: is the MATLAB datevec format of [Y,MO,D,H,MI,S]
+    %   datenum: is the MATLAB datenum format of days since
+    %   January 0, 0000 CE
+    %   excel: is the modern MS Excel serial date format of days since
+    %   January 0, 1900 CE
+    %   labview: is the Labview timestamp format of seconds since
+    %   January 1, 1904 CE
+    %   
+    %   Once the object is created the following properties can be accessed
+    %   via dot notation. Example: obj.property
+    %   
+    %       utcOffsetHours      utcOffsetMilliseconds
+    %       utcCdfEpoch         localCdfEpoch
+    %       utcDateVec          localDateVec
+    %       utcDateNum          localDateNum
+    %       utcExcel            localExcel
+    %       utcLabview          localLabview
+    %	
+    %   Modifying any of the time properties will update all the other time
+    %   properties. Modifying any of the UTC offsets will update the local
+    %   time properties.
+    %   
+    %   Examples
+    %       obj = absolutetime(time,'datenum',false,-5) % Create object
+    %       obj.utcOffsetHours = -4             % Change UTC offset
+    %       localCdfEpoch = obj.localCdfEpoch	% Get local CDF Epoch
+    %       obj.utcLabview = newUtcLabview      % Set UTC Labview
+    %   
+    %   See also CDFLIB, DATEVEC, DATENUM
     
-    properties(Constant)
-    end
-    properties
-    end
     properties(Dependent)
         utcOffsetHours
         utcOffsetMilliseconds
