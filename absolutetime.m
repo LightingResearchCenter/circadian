@@ -46,7 +46,8 @@ classdef absolutetime
     methods
         % Object creation
         function obj = absolutetime(time,timeType,utc,utcOffsetHours)
-            obj.utcOffsetHours = utcOffsetHours;
+            obj.privateUtcOffsetHours = utcOffsetHours;
+            obj.privateUtcOffsetMilliseconds = utcOffsetHours*60*60*1000;
             
             timeType = lower(timeType);
             switch timeType
@@ -90,17 +91,27 @@ classdef absolutetime
             utcOffset = obj.privateUtcOffsetHours;
         end
         function obj = set.utcOffsetHours(obj,utcOffset)
-            obj.privateUtcOffsetHours = utcOffset;
-            obj.privateUtcOffsetMilliseconds = utcOffset*60*60*1000;
+            utcOffsetHours = utcOffset;
+            utcOffsetMilliseconds = utcOffsetHours*60*60*1000;
+            
+            obj.privateUtcOffsetHours = utcOffsetHours;
+            obj.privateUtcOffsetMilliseconds = utcOffsetMilliseconds;
+            
+            obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMilliseconds;
         end
         
-        % Get and set utcOffsetHours
+        % Get and set utcOffsetMilliseconds
         function utcOffset = get.utcOffsetMilliseconds(obj)
             utcOffset = obj.privateUtcOffsetMilliseconds;
         end
         function obj = set.utcOffsetMilliseconds(obj,utcOffset)
-            obj.privateUtcOffsetMilliseconds = utcOffset;
-            obj.privateUtcOffsetHours = utcOffset/(60*60*1000);
+            utcOffsetMilliseconds = utcOffset;
+            utcOffsetHours = utcOffsetMilliseconds/(60*60*1000);
+            
+            obj.privateUtcOffsetHours = utcOffsetHours;
+            obj.privateUtcOffsetMilliseconds = utcOffsetMilliseconds;
+            
+            obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMilliseconds;
         end
         
         % Get and set utcCdfEpoch
