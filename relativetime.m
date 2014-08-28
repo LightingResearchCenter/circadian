@@ -2,15 +2,10 @@ classdef relativetime
     %RELATIVETIME Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties(Constant)
-    end
     properties
-        utcOffsetHours
+        startTime
     end
     properties(Dependent)
-        localStartTime
-        utcStartTime
-        
         days
         hours
         minutes
@@ -18,9 +13,6 @@ classdef relativetime
         milliseconds
     end
     properties(Access=private)
-        privateLocalStartTime
-        privateUtcStartTime
-        
         privateDays
         privateHours
         privateMinutes
@@ -30,7 +22,7 @@ classdef relativetime
     
     methods
         % Object creation
-        function obj = relativetime(time,timeType,utc,utcOffsetHours)
+        function obj = relativetime(time,timeType,utc,utcOffset,offsetUnit)
             timeType = lower(timeType);
             switch timeType
                 case 'datenum'
@@ -56,38 +48,12 @@ classdef relativetime
                     error('Unknown timeType');
             end % End of switch
             
-            obj.utcOffsetHours = utcOffsetHours;
             obj.milliseconds = cdfEpoch - cdfEpoch(1);
             
-            if utc
-                obj.utcStartTime = singletime(cdfEpoch(1),'cdfepoch');
-            else
-                obj.localStartTime = singletime(cdfEpoch(1),'cdfepoch');
-            end
+            obj.startTime = absolutetime(cdfEpoch(1),'cdfepoch',utc,...
+                utcOffset,offsetUnit);
             
         end % End of function
-        
-        % Get and set utcStartTime.
-        function time = get.utcStartTime(obj)
-            time = obj.privateUtcStartTime;
-        end
-        function obj = set.utcStartTime(obj,startTime)
-            obj.privateUtcStartTime = startTime;
-            utcOffsetMilliseconds = obj.utcOffsetHours*60*60*1000;
-            localStartTime = startTime.cdfEpoch - utcOffsetMilliseconds;
-            obj.privateLocalStartTime = singletime(localStartTime,'cdfepoch');
-        end
-        
-        % Get and set localStartTime.
-        function time = get.localStartTime(obj)
-            time = obj.privateLocalStartTime;
-        end
-        function obj = set.localStartTime(obj,startTime)
-            obj.privateLocalStartTime = startTime;
-            utcOffsetMilliseconds = obj.utcOffsetHours*60*60*1000;
-            utcStartTime = startTime.cdfEpoch + utcOffsetMilliseconds;
-            obj.privateUtcStartTime = singletime(utcStartTime,'cdfepoch');
-        end
         
         % Get and set milliseconds.
         function time = get.milliseconds(obj)
