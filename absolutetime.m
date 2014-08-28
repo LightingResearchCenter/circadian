@@ -12,7 +12,11 @@ classdef absolutetime
     %   timeType: is a string indicating the type of time being input
     %   utc: is true or false, true meaning the input time is in UTC time,
     %   false meaning the input time is in local time
-    %   utcOffsetHours: is the offset of local time from UTC in hours
+    %   utcOffset: is the offset of local time from UTC in one of the
+    %   accepted offset units
+    %   offsetUnit: is a string indicating the unit of utcOffset
+    %   
+    %   offsetUnit = 'hours', 'minutes', 'seconds', 'milliseconds'
     %   
     %   timeType = 'cdfepoch', 'datevec', 'datenum', 'excel', or 'labview
     %   cdfepoch: is the milliseconds format not to be confused with a
@@ -28,7 +32,8 @@ classdef absolutetime
     %   Once the object is created the following properties can be accessed
     %   via dot notation. Example: obj.property
     %   
-    %       utcOffsetHours      utcOffsetMilliseconds
+    %       utcOffset.hours     utcOffset.minutes
+    %       utcOffset.seconds   utcOffset.milliseconds
     %       utcCdfEpoch         localCdfEpoch
     %       utcDateVec          localDateVec
     %       utcDateNum          localDateNum
@@ -40,16 +45,17 @@ classdef absolutetime
     %   time properties.
     %   
     %   Examples
-    %       obj = absolutetime(time,'datenum',false,-5) % Create object
-    %       obj.utcOffsetHours = -4             % Change UTC offset
-    %       localCdfEpoch = obj.localCdfEpoch	% Get local CDF Epoch
-    %       obj.utcLabview = newUtcLabview      % Set UTC Labview
+    %       % Create object
+    %       obj = absolutetime(time,'datenum',false,-5,'hours')
+    %       % Change UTC offset
+    %       obj.utcOffsetHours = utcoffset(-4,'hours')
+    %       % Get local CDF Epoch
+    %       localCdfEpoch = obj.localCdfEpoch
     %   
     %   See also CDFLIB, DATEVEC, DATENUM
     
     properties(Dependent)
-        utcOffsetHours
-        utcOffsetMilliseconds
+        utcOffset
         
         utcCdfEpoch
         utcDateVec
@@ -64,8 +70,8 @@ classdef absolutetime
         localLabview
     end
     properties(Access=private)
-        privateUtcOffsetHours
-        privateUtcOffsetMilliseconds
+        privateUtcOffset
+        privateConstantOffset
         
         privateUtcCdfEpoch
         privateUtcDateVec
@@ -82,9 +88,14 @@ classdef absolutetime
     
     methods
         % Object creation
-        function obj = absolutetime(time,timeType,utc,utcOffsetHours)
-            obj.privateUtcOffsetHours = utcOffsetHours;
-            obj.privateUtcOffsetMilliseconds = utcOffsetHours*60*60*1000;
+        function obj = absolutetime(time,timeType,utc,utcOffset,offsetUnit)
+            % Determine if utcOffset is constant.
+            if (numel(utcOffset) == 1)
+                nTime = size(time,1);
+                utcOffset = repmat(utcOffset,nTime,1);
+            end
+            % Set utcOffset
+            obj.utcOffset = utcoffset(utcOffset,offsetUnit);
             
             timeType = lower(timeType);
             switch timeType
@@ -123,32 +134,37 @@ classdef absolutetime
             end % End of switch
         end % End of function
         
-        % Get and set utcOffsetHours
-        function utcOffset = get.utcOffsetHours(obj)
-            utcOffset = obj.privateUtcOffsetHours;
+        % Get and set utcOffset
+        function utcOffset = get.utcOffset(obj)
+            if obj.privateConstantOffset
+                utcOffsetMs = obj.privateUtcOffset.milliseconds(1);
+                utcOffset = utcoffset(utcOffsetMs,'milliseconds');
+            else
+                utcOffset = obj.privateUtcOffset;
+            end
         end
-        function obj = set.utcOffsetHours(obj,utcOffset)
-            utcOffsetHours = utcOffset;
-            utcOffsetMilliseconds = utcOffsetHours*60*60*1000;
+        function obj = set.utcOffset(obj,utcOffset)
+            utcOffsetMs = utcOffset.milliseconds;
             
-            obj.privateUtcOffsetHours = utcOffsetHours;
-            obj.privateUtcOffsetMilliseconds = utcOffsetMilliseconds;
+            if (numel(utcOffsetMs) == 1)
+                [mTime,nTime] = size(obj.privateUtcCdfEpoch);
+                utcOffsetMs = repmat(utcOffsetMs,mTime,nTime);
+                obj.privateConstantOffset = true;
+            else
+                diffOffset = utcOffsetMs - utcOffsetMs(1);
+                if any(diffOffset)
+                    obj.privateConstantOffset = false;
+                else
+                    obj.privateConstantOffset = true;
+                end
+            end
             
-            obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMilliseconds;
-        end
-        
-        % Get and set utcOffsetMilliseconds
-        function utcOffset = get.utcOffsetMilliseconds(obj)
-            utcOffset = obj.privateUtcOffsetMilliseconds;
-        end
-        function obj = set.utcOffsetMilliseconds(obj,utcOffset)
-            utcOffsetMilliseconds = utcOffset;
-            utcOffsetHours = utcOffsetMilliseconds/(60*60*1000);
+            obj.privateUtcOffset = utcoffset(utcOffsetMs,'milliseconds');
             
-            obj.privateUtcOffsetHours = utcOffsetHours;
-            obj.privateUtcOffsetMilliseconds = utcOffsetMilliseconds;
-            
-            obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMilliseconds;
+            % Update the local time if utcCdfEpoch exists
+            if ~isempty(obj.utcCdfEpoch)
+                obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMs;
+            end
         end
         
         % Get and set utcCdfEpoch
@@ -158,7 +174,7 @@ classdef absolutetime
         function obj = set.utcCdfEpoch(obj,time)
             % Round time to the nearest second
             utcCdf   = round(time/1000)*1000;
-            localCdf = utcCdf - obj.utcOffsetMilliseconds;
+            localCdf = utcCdf - obj.utcOffset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
@@ -195,7 +211,7 @@ classdef absolutetime
         function obj = set.localCdfEpoch(obj,time)
             % Round time to the nearest second
             localCdf   = round(time/1000)*1000;
-            utcCdf = localCdf + obj.utcOffsetMilliseconds;
+            utcCdf = localCdf + obj.utcOffset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
