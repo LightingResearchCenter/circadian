@@ -1,8 +1,8 @@
-function [absTime,relTime,light,activity,masks] = importD12(filePath)
-%IMPORTD12 Summary of this function goes here
+function [absTime,relTime,light,activity,masks] = convertcdf(filePath)
+%CONVERTCDF Summary of this function goes here
 %   Detailed explanation goes here
 
-Data = readD12cdf(filePath);
+Data = daysimeter12.readcdf(filePath);
 
 absTime = absolutetime(Data.Variables.time(:),'cdfepoch',false,...
     Data.Variables.timeOffset,'seconds');

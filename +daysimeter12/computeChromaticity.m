@@ -1,4 +1,4 @@
-function [chromaticity] = chromaticityDaySim12_29Aug2014(RGB,chromMatrix)
+function [chromaticity] = computeChromaticity(RGB,chromMatrix)
 % Calculates chromaticity values (x,y) using the CIE 1931 Standard Observer
 %
 % RGB is a row vector (or [3 x n] matrix for multiple readings) of
