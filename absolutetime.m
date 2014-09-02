@@ -147,8 +147,10 @@ classdef absolutetime
             utcOffsetMs = utcOffset.milliseconds;
             
             if (numel(utcOffsetMs) == 1)
-                [mTime,nTime] = size(obj.privateUtcCdfEpoch);
-                utcOffsetMs = repmat(utcOffsetMs,mTime,nTime);
+                if ~isempty(obj.privateUtcCdfEpoch)
+                    [mTime,nTime] = size(obj.privateUtcCdfEpoch);
+                    utcOffsetMs = repmat(utcOffsetMs,mTime,nTime);
+                end
                 obj.privateConstantOffset = true;
             else
                 diffOffset = utcOffsetMs - utcOffsetMs(1);

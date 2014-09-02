@@ -1,5 +1,5 @@
-function Data = readD12cdf(filePath)
-%READD12CDF Summary of this function goes here
+function Data = readcdf(filePath)
+%READCDF Summary of this function goes here
 %   Detailed explanation goes here
 
 Data = struct('Variables',[],'GlobalAttributes',[],'VariableAttributes',[]);
@@ -35,7 +35,7 @@ for iAttr = 0:nAttrs-1
     switch attrInfo.scope
         case 'GLOBAL_SCOPE'
             nEntry = cdflib.getAttrMaxgEntry(cdfId,iAttr); % Entry is already zero-based
-            Data.VariableAttributes.(attrInfo.name) = cell(nEntry+1,1);
+            Data.GlobalAttributes.(attrInfo.name) = cell(nEntry+1,1);
             for iEntry = 0:nEntry
                 attrData = cdflib.getAttrgEntry(cdfId,iAttr,iEntry);
                 Data.GlobalAttributes.(attrInfo.name){iEntry+1,1} = attrData;
