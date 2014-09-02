@@ -19,49 +19,19 @@ classdef samplingrate
     
     methods
         % Object creation
-        function obj = samplingrate(epoch,units)
+        function obj = relativetime(epoch,units)
             units = lower(units);
             switch units
                 case 'days'
-                    obj.privateDays = epoch;
-                    % Round to whole seconds.
-                    seconds = round(epoch*24*60*60);
-                    obj.privateHours   = seconds/(60*60);
-                    obj.privateMinutes = seconds/60;
-                    obj.privateSeconds = seconds;
-                    obj.privateHertz   = 1/seconds;
+                    obj.days = epoch;
                 case 'hours'
-                    obj.privateHours = epoch;
-                    % Round to whole seconds.
-                    seconds = round(epoch*60*60);
-                    obj.privateDays    = seconds/(24*60*60);
-                    obj.privateMinutes = seconds/60;
-                    obj.privateSeconds = seconds;
-                    obj.privateHertz   = 1/seconds;
+                    obj.hours = epoch;
                 case 'minutes'
-                    obj.privateMinutes = epoch;
-                    % Round to whole seconds.
-                    seconds = round(epoch*60);
-                    obj.privateDays    = seconds/(24*60*60);
-                    obj.privateHours   = seconds/(60*60);
-                    obj.privateSeconds = seconds;
-                    obj.privateHertz   = 1/seconds;
+                    obj.minutes = epoch;
                 case 'seconds'
-                    % Round to whole seconds.
-                    seconds = round(epoch);
-                    obj.privateSeconds = seconds;
-                    obj.privateDays    = seconds/(24*60*60);
-                    obj.privateHours   = seconds/(60*60);
-                    obj.privateMinutes = seconds/60;
-                    obj.privateHertz   = 1/seconds;
+                    obj.seconds = epoch;
                 case 'hertz'
-                    obj.privateHertz   = epoch;
-                    % Round to whole seconds.
-                    seconds = round(1/epoch);
-                    obj.privateDays    = seconds/(24*60*60);
-                    obj.privateHours   = seconds/(60*60);
-                    obj.privateMinutes = seconds/60;
-                    obj.privateSeconds = seconds;
+                    obj.hertz = epoch;
                 otherwise
                     error('Unknown units');
             end % End of switch
