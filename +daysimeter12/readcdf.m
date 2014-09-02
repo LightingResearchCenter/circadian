@@ -42,10 +42,12 @@ for iAttr = 0:nAttrs-1
             end
         case 'VARIABLE_SCOPE'
             nEntry = cdflib.getAttrMaxEntry(cdfId,iAttr); % Entry is already zero-based
-            Data.VariableAttributes.(attrInfo.name) = cell(nEntry+1,1);
+            Data.VariableAttributes.(attrInfo.name) = cell(nEntry+1,2);
             for iEntry = 0:nEntry
+                varName = cdflib.getVarName(cdfId,iEntry);
                 attrData = cdflib.getAttrEntry(cdfId,iAttr,iEntry);
-                Data.VariableAttributes.(attrInfo.name){iEntry+1,1} = attrData;
+                Data.VariableAttributes.(attrInfo.name){iEntry+1,1} = varName;
+                Data.VariableAttributes.(attrInfo.name){iEntry+1,2} = attrData;
             end
         otherwise
             error('Unknown attribute scope.');
