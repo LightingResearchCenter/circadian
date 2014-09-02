@@ -1,5 +1,5 @@
-function Data = readD12cdf(filePath)
-%READD12CDF Summary of this function goes here
+function Data = readcdf(filePath)
+%READCDF Summary of this function goes here
 %   Detailed explanation goes here
 
 Data = struct('Variables',[],'GlobalAttributes',[],'VariableAttributes',[]);
