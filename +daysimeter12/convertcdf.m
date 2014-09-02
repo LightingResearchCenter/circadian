@@ -12,9 +12,13 @@ relTime = relativetime(Data.Variables.time(:),'cdfepoch',false,...
 red = Data.Variables.red;
 green = Data.Variables.green;
 blue = Data.Variables.blue;
+
+illuminance = Data.Variables.illuminance;
+cla = Data.Variables.CLA;
+
 chromaticity = daysimeter12.rgb2chrom(red,green,blue);
 
-light = []; % placeholder
+light = lightmetrics('illuminance',illuminance,'cla',cla,'chromaticity',chromaticity); % placeholder
 
 activity = Data.Variables.activity(:);
 
