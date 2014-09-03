@@ -1,29 +1,28 @@
-function cct = chrom2cct(x,y)
-%CHROM2CCT Calculate CCT from CIE 1931 chromaticity coordinates (x,y)
-%	Calculates the correlated color temperature (CCT) from CIE x, y values.
+function cct = chrom2cct(u,v)
+%CHROM2CCT Calculate CCT from CIE 1960 chromaticity coordinates (u,v)
+%	Calculates the correlated color temperature (CCT) from CIE u, v values.
 %	Uses method by Allen Robertson as references in W&S (1982).
 %	Needs file 'isoTempLines.mat' for isotemperature lines from W&S (1982) 
 %   or similarly calculated.
 %   
 %	Inputs:
-%       x = CIE 1931 x value
-%       y = CIE 1931 y value
+%       u = CIE 1960 u value
+%       v = CIE 1960 v value
 %   
 %   Output:
 %       cct = correlated color temperature in degrees Kelvin
 %   
 %   EXAMPLE:
-%       cct = lightclac.chrom2cct(x,y)
+%       cct = lightclac.chrom2cct(u,v)
+%   
+%    See also: CIE31TO60, and CIE76TO60
 
 load(['+lightcalc',filesep,'isoTempLines.mat'],'T','ut','vt','tt');
 
-x = x(:);
-y = y(:);
+us = u(:);
+vs = v(:);
 
-us = 4.*x./(-2.*x+12.*y+3);
-vs = 6.*y./(-2.*x+12.*y+3);
-
-nPoint = numel(x);
+nPoint = numel(u);
 cct = NaN(nPoint,1);
 
 for iPoint = 1:nPoint

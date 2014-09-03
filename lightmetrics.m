@@ -93,9 +93,9 @@ classdef lightmetrics
         end
         function obj = set.chromaticity(obj,chromaticity)
             obj.privateChromaticity = chromaticity;
-            x = chromaticity.x;
-            y = chromaticity.y;
-            obj.privateCct = lightcalc.chrom2cct(x,y);
+            u = chromaticity.u;
+            v = chromaticity.v;
+            obj.privateCct = lightcalc.chrom2cct(u,v);
         end
         
         % Get and set cct
