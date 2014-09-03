@@ -13,9 +13,9 @@ function cct = chrom2cct(x,y)
 %       cct = correlated color temperature in degrees Kelvin
 %   
 %   EXAMPLE:
-%       cct = lighttools.chrom2cct(x,y)
+%       cct = lightclac.chrom2cct(x,y)
 
-load(['+lighttools',filesep,'isoTempLines.mat'],'T','ut','vt','tt');
+load(['+lightcalc',filesep,'isoTempLines.mat'],'T','ut','vt','tt');
 
 x = x(:);
 y = y(:);

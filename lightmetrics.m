@@ -73,7 +73,7 @@ classdef lightmetrics
         end
         function obj = set.cla(obj,cla)
             obj.privateCla = cla;
-            cs = lighttools.cla2cs(cla);
+            cs = lightcalc.cla2cs(cla);
             obj.privateCs = cs;
         end
         
@@ -95,7 +95,7 @@ classdef lightmetrics
             obj.privateChromaticity = chromaticity;
             x = chromaticity.x;
             y = chromaticity.y;
-            obj.privateCct = lighttools.chrom2cct(x,y);
+            obj.privateCct = lightcalc.chrom2cct(x,y);
         end
         
         % Get and set cct
