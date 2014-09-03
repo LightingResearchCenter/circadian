@@ -7,7 +7,7 @@ function isoTempLines
 %   The latest (2002) recommended values for the physical constants
 %   determining blackbldy radiation spectra are used.
 
-load(['+lighttools',filesep,'CIE31_1.mat'], 'wavelength','xbar','ybar','zbar');
+load(['+lightcalc',filesep,'CIE31_1.mat'], 'wavelength','xbar','ybar','zbar');
 dwave = 1; % wavelength increment (nm)
 
 ubar = (2/3)*xbar;
@@ -61,6 +61,6 @@ ut = u;
 vt = v;
 tt = m;
 
-save(['+lighttools',filesep,'isoTempLines.mat'],'T','ut','vt','tt');
+save(['+lightcalc',filesep,'isoTempLines.mat'],'T','ut','vt','tt');
 
 end
