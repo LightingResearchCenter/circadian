@@ -34,16 +34,27 @@ for iAttr = 0:nAttrs-1
     attrInfo = cdflib.inquireAttr(cdfId,iAttr);
     switch attrInfo.scope
         case 'GLOBAL_SCOPE'
-            nEntry = cdflib.getAttrMaxgEntry(cdfId,iAttr); % Entry is already zero-based
-            Data.GlobalAttributes.(attrInfo.name) = cell(nEntry+1,1);
-            for iEntry = 0:nEntry
-                attrData = cdflib.getAttrgEntry(cdfId,iAttr,iEntry);
-                Data.GlobalAttributes.(attrInfo.name){iEntry+1,1} = attrData;
+            nEntry = cdflib.getAttrMaxgEntry(cdfId,iAttr) + 1;
+            if nEntry == 1
+                attrData = cdflib.getAttrgEntry(cdfId,iAttr,0);
+                Data.GlobalAttributes.(attrInfo.name) = attrData;
+            else
+                Data.GlobalAttributes.(attrInfo.name) = cell(nEntry,1);
+                for iEntry = 0:nEntry-1
+                    attrData = cdflib.getAttrgEntry(cdfId,iAttr,iEntry);
+                    Data.GlobalAttributes.(attrInfo.name){iEntry+1,1} = attrData;
+                end
             end
         case 'VARIABLE_SCOPE'
+<<<<<<< HEAD
             nEntry = cdflib.getAttrMaxEntry(cdfId,iAttr); % Entry is already zero-based
             Data.VariableAttributes.(attrInfo.name) = cell(nEntry+1,2);
             for iEntry = 0:nEntry
+=======
+            nEntry = cdflib.getAttrMaxEntry(cdfId,iAttr) + 1;
+            Data.VariableAttributes.(attrInfo.name) = cell(nEntry,2);
+            for iEntry = 0:nEntry-1
+>>>>>>> origin/input
                 varName = cdflib.getVarName(cdfId,iEntry);
                 attrData = cdflib.getAttrEntry(cdfId,iAttr,iEntry);
                 Data.VariableAttributes.(attrInfo.name){iEntry+1,1} = varName;
