@@ -46,15 +46,9 @@ for iAttr = 0:nAttrs-1
                 end
             end
         case 'VARIABLE_SCOPE'
-<<<<<<< HEAD
-            nEntry = cdflib.getAttrMaxEntry(cdfId,iAttr); % Entry is already zero-based
-            Data.VariableAttributes.(attrInfo.name) = cell(nEntry+1,2);
-            for iEntry = 0:nEntry
-=======
             nEntry = cdflib.getAttrMaxEntry(cdfId,iAttr) + 1;
             Data.VariableAttributes.(attrInfo.name) = cell(nEntry,2);
             for iEntry = 0:nEntry-1
->>>>>>> origin/input
                 varName = cdflib.getVarName(cdfId,iEntry);
                 attrData = cdflib.getAttrEntry(cdfId,iAttr,iEntry);
                 Data.VariableAttributes.(attrInfo.name){iEntry+1,1} = varName;
