@@ -1,4 +1,4 @@
-function [absTime,relTime,light,activity,masks] = convertcdf(filePath)
+function [absTime,relTime,epoch,light,activity,masks] = convertcdf(filePath)
 %CONVERTCDF Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -8,6 +8,12 @@ absTime = absolutetime(Data.Variables.time(:),'cdfepoch',false,...
     Data.Variables.timeOffset,'seconds');
 relTime = relativetime(Data.Variables.time(:),'cdfepoch',false,...
     Data.Variables.timeOffset,'seconds');
+
+% Find the most frequent sampling rate.
+epochSeconds = mode(diff(relTime.seconds));
+
+% Create a samplingrate object called epoch.
+epoch = samplingrate(epochSeconds,'seconds');
 
 red = Data.Variables.red(:);
 green = Data.Variables.green(:);

@@ -19,7 +19,7 @@ classdef samplingrate
     
     methods
         % Object creation
-        function obj = relativetime(epoch,units)
+        function obj = samplingrate(epoch,units)
             units = lower(units);
             switch units
                 case 'days'

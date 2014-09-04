@@ -4,4 +4,4 @@ clc
 
 filePath = 'test.cdf';
 
-[absTime,relTime,light,activity,masks] = daysimeter12.convertcdf(filePath);
+[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(filePath);
