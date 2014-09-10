@@ -21,8 +21,10 @@ classdef lightmetrics
     %   
     %   A lightmetrics object is created by providing pairs of input
     %   arguments with the name of the propetry followed by the value to be
-    %   assigned. Once created properties of a lightmetrics object can be
-    %   get and set using point notation.
+    %   assigned, obj = lightmetrics('propertyName',propetryValue). Once 
+    %   created properties of a lightmetrics object can be get and set 
+    %   using point notation, obj.propertyName = propetryValue; 
+    %   propetryValue = obj.propertyName.
     %   
     %   EXAMPLES:
     %   
@@ -31,7 +33,7 @@ classdef lightmetrics
     %   
     %   csArray = light.cs
     %   
-    %   See also CHROMCOORD
+    %   See also: CHROMCOORD and LIGHTCALC.CHROM2CCT
     
     properties
         illuminance

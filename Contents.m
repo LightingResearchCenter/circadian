@@ -6,7 +6,7 @@
 %   enrightperiodogram - ENRIGHTPERGRAM Calculates the Enright periodogram on column vector
 %   eventmasks         - Logical arrays to mark certain events
 %   isivcalc           - 
-%   lightmetrics       - Summary of this class goes here
+%   lightmetrics       - Storage and conversion for multiple light metrics.
 %   phasor             - Compares two time dependent signals
 %   relativetime       - Summary of this class goes here
 %   samplingrate       - Summary of this class goes here
