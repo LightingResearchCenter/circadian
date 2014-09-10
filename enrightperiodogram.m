@@ -1,5 +1,5 @@
 function amplitudeArray = enrightperiodogram(dataArray,testPeriodArray)
-% ENRIGHTPERGRAM Calculates the Enright periodogram on column vector
+% ENRIGHTPERIODOGRAM Calculates the Enright periodogram on column vector
 %   dataArray using range of periods given by testPeriodArray. Formulation 
 %   taken from Philip G. Sokolove adn Wayne N. Bushell, The Chi Square 
 %   Periodogram: Its Utility for Analysis of Circadian Rhythms, J. Theor. 

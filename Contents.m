@@ -1,9 +1,10 @@
-% CIRCADIANANALYSISLIBRARY
+% Circadian Analysis Library
+% Version 0.1 10-Sep-2014
 %
 % Files
 %   absolutetime       - Stores absolute local and UTC time in several formats.
 %   chromcoord         - Summary of this class goes here
-%   enrightperiodogram - ENRIGHTPERGRAM Calculates the Enright periodogram on column vector
+%   enrightperiodogram - Calculates the Enright periodogram on column vector
 %   eventmasks         - Logical arrays to mark certain events
 %   isivcalc           - 
 %   lightmetrics       - Storage and conversion for multiple light metrics.

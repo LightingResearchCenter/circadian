@@ -1,58 +1,42 @@
 classdef absolutetime
-    %ABSOLUTETIME Stores absolute local and UTC time in several formats.
+    % ABSOLUTETIME Stores absolute local and UTC time in several formats.
     %   All time formats are first converted to the CDF Epoch format
     %   (milliseconds from midnight January 1, 0000 CE) the time is rounded
     %   to the nearest seconds and then converted to all other formats.
     %   
-    %   Initial object creation follows the following format
-    %   obj = absolutetime(time,timeType,utc,utcOffsetHours)
-    %   where,
+    %   Time formats:
+    %   cdfepoch	- milliseconds from midnight January 1, 0000 CE
+    %   datevec     - Gregorian date vector [Y,MO,D,H,MI,S]
+    %   datenum     - days since January 0, 0000 CE
+    %   excel       - days since January 0, 1900 CE
+    %   labview     - seconds since January 1, 1904 CE
     %   
-    %   time: is a vertical array of one of the five accepted time types
-    %   timeType: is a string indicating the type of time being input
-    %   utc: is true or false, true meaning the input time is in UTC time,
-    %   false meaning the input time is in local time
-    %   utcOffset: is the offset of local time from UTC in one of the
-    %   accepted offset units
-    %   offsetUnit: is a string indicating the unit of utcOffset
-    %   
-    %   offsetUnit = 'hours', 'minutes', 'seconds', 'milliseconds'
-    %   
-    %   timeType = 'cdfepoch', 'datevec', 'datenum', 'excel', or 'labview
-    %   cdfepoch: is the milliseconds format not to be confused with a
-    %   cdfepoch object
-    %   datevec: is the MATLAB datevec format of [Y,MO,D,H,MI,S]
-    %   datenum: is the MATLAB datenum format of days since
-    %   January 0, 0000 CE
-    %   excel: is the modern MS Excel serial date format of days since
-    %   January 0, 1900 CE
-    %   labview: is the Labview timestamp format of seconds since
-    %   January 1, 1904 CE
-    %   
-    %   The properties of absolutetime are:
-    %       utcCdfEpoch         localCdfEpoch
-    %       utcDateVec          localDateVec
-    %       utcDateNum          localDateNum
-    %       utcExcel            localExcel
-    %       utcLabview          localLabview
-    %       utcOffset
+    % ABSOLUTETIME Properties:
+    %	offset          - a utcoffset object
+    %	utcCdfEpoch     - UTC time in CDF Epoch
+    %	utcDateVec      - UTC time in MATLAB datevec
+    %	utcDateNum      - UTC time in MATLAB datenum
+    %	utcExcel        - UTC time in MS Excel serial date
+    %	utcLabview      - UTC time in LabVIEW timestamp
+    %	localCdfEpoch   - Local time in CDF Epoch
+    %	localDateVec    - Local time in MATLAB datevec
+    %	localDateNum    - Local time in MATLAB datenum
+    %	localExcel      - Local time in MS Excel serial date
+    %	localLabview    - Local time in LabVIEW timestamp
     %	
     %   Modifying any of the time properties will update all the other time
     %   properties. Modifying any of the UTC offsets will update the local
     %   time properties.
     %   
-    %   EXAMPLES:
+    % EXAMPLES:
+    %	absTime = absolutetime(time,'datenum',false,-5,'hours');
+    %	absTime.offset.hours = utcoffset(-4,'hours');
+    %	localCdfEpoch = absTime.localCdfEpoch;
     %   
-    %	absTime = absolutetime(time,'datenum',false,-5,'hours')
-    %	
-    %	absTime.utcOffsetHours = utcoffset(-4,'hours')
-    %	
-    %	localCdfEpoch = absTime.localCdfEpoch
-    %   
-    %   See also UTCOFFSET, CDFLIB, DATEVEC, and DATENUM
+    % See also UTCOFFSET, CDFLIB, DATEVEC, DATENUM.
     
     properties(Dependent)
-        utcOffset
+        offset
         
         utcCdfEpoch
         utcDateVec
@@ -67,7 +51,7 @@ classdef absolutetime
         localLabview
     end
     properties(Access=private)
-        privateUtcOffset
+        privateOffset
         privateConstantOffset
         
         privateUtcCdfEpoch
@@ -85,14 +69,22 @@ classdef absolutetime
     
     methods
         % Object creation
-        function obj = absolutetime(time,timeType,utc,utcOffset,offsetUnit)
-            % Determine if utcOffset is constant.
-            if (numel(utcOffset) == 1)
+        function obj = absolutetime(time,timeType,utc,offset,offsetUnit)
+        % ABSOLUTETIME Construct absolutetime object.
+        %   time        - vertical array of an accepted time type
+        %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
+        %   utc         - true (in UTC) or false (in local time)
+        %   offset      - offset of local time from UTC
+        %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
+            
+            
+            % Determine if offset is constant.
+            if (numel(offset) == 1)
                 nTime = size(time,1);
-                utcOffset = repmat(utcOffset,nTime,1);
+                offset = repmat(offset,nTime,1);
             end
-            % Set utcOffset
-            obj.utcOffset = utcoffset(utcOffset,offsetUnit);
+            % Set offset
+            obj.offset = utcoffset(offset,offsetUnit);
             
             timeType = lower(timeType);
             switch timeType
@@ -131,26 +123,26 @@ classdef absolutetime
             end % End of switch
         end % End of function
         
-        % Get and set utcOffset
-        function utcOffset = get.utcOffset(obj)
+        % Get and set offset
+        function offset = get.offset(obj)
             if obj.privateConstantOffset
-                utcOffsetMs = obj.privateUtcOffset.milliseconds(1);
-                utcOffset = utcoffset(utcOffsetMs,'milliseconds');
+                offsetMs = obj.privateOffset.milliseconds(1);
+                offset = utcoffset(offsetMs,'milliseconds');
             else
-                utcOffset = obj.privateUtcOffset;
+                offset = obj.privateOffset;
             end
         end
-        function obj = set.utcOffset(obj,utcOffset)
-            utcOffsetMs = utcOffset.milliseconds;
+        function obj = set.offset(obj,offset)
+            offsetMs = offset.milliseconds;
             
-            if (numel(utcOffsetMs) == 1)
+            if (numel(offsetMs) == 1)
                 if ~isempty(obj.privateUtcCdfEpoch)
                     [mTime,nTime] = size(obj.privateUtcCdfEpoch);
-                    utcOffsetMs = repmat(utcOffsetMs,mTime,nTime);
+                    offsetMs = repmat(offsetMs,mTime,nTime);
                 end
                 obj.privateConstantOffset = true;
             else
-                diffOffset = utcOffsetMs - utcOffsetMs(1);
+                diffOffset = offsetMs - offsetMs(1);
                 if any(diffOffset)
                     obj.privateConstantOffset = false;
                 else
@@ -158,11 +150,11 @@ classdef absolutetime
                 end
             end
             
-            obj.privateUtcOffset = utcoffset(utcOffsetMs,'milliseconds');
+            obj.privateOffset = utcoffset(offsetMs,'milliseconds');
             
             % Update the local time if utcCdfEpoch exists
             if ~isempty(obj.utcCdfEpoch)
-                obj.localCdfEpoch = obj.utcCdfEpoch - utcOffsetMs;
+                obj.localCdfEpoch = obj.utcCdfEpoch - offsetMs;
             end
         end
         
@@ -173,7 +165,7 @@ classdef absolutetime
         function obj = set.utcCdfEpoch(obj,time)
             % Round time to the nearest second
             utcCdf   = round(time/1000)*1000;
-            localCdf = utcCdf - obj.utcOffset.milliseconds;
+            localCdf = utcCdf - obj.offset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
@@ -210,7 +202,7 @@ classdef absolutetime
         function obj = set.localCdfEpoch(obj,time)
             % Round time to the nearest second
             localCdf   = round(time/1000)*1000;
-            utcCdf = localCdf + obj.utcOffset.milliseconds;
+            utcCdf = localCdf + obj.offset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
