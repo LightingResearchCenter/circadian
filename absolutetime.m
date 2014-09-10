@@ -1,11 +1,11 @@
 classdef absolutetime
-    %ABSOLUTETIME Stores absolute local and UTC time in several formats
+    %ABSOLUTETIME Stores absolute local and UTC time in several formats.
     %   All time formats are first converted to the CDF Epoch format
     %   (milliseconds from midnight January 1, 0000 CE) the time is rounded
     %   to the nearest seconds and then converted to all other formats.
     %   
     %   Initial object creation follows the following format
-    %   obj = AbsoluteTime(time,timeType,utc,utcOffsetHours)
+    %   obj = absolutetime(time,timeType,utc,utcOffsetHours)
     %   where,
     %   
     %   time: is a vertical array of one of the five accepted time types
@@ -29,30 +29,27 @@ classdef absolutetime
     %   labview: is the Labview timestamp format of seconds since
     %   January 1, 1904 CE
     %   
-    %   Once the object is created the following properties can be accessed
-    %   via dot notation. Example: obj.property
-    %   
-    %       utcOffset.hours     utcOffset.minutes
-    %       utcOffset.seconds   utcOffset.milliseconds
+    %   The properties of absolutetime are:
     %       utcCdfEpoch         localCdfEpoch
     %       utcDateVec          localDateVec
     %       utcDateNum          localDateNum
     %       utcExcel            localExcel
     %       utcLabview          localLabview
+    %       utcOffset
     %	
     %   Modifying any of the time properties will update all the other time
     %   properties. Modifying any of the UTC offsets will update the local
     %   time properties.
     %   
-    %   Examples
-    %       % Create object
-    %       obj = absolutetime(time,'datenum',false,-5,'hours')
-    %       % Change UTC offset
-    %       obj.utcOffsetHours = utcoffset(-4,'hours')
-    %       % Get local CDF Epoch
-    %       localCdfEpoch = obj.localCdfEpoch
+    %   EXAMPLES:
     %   
-    %   See also CDFLIB, DATEVEC, DATENUM
+    %	absTime = absolutetime(time,'datenum',false,-5,'hours')
+    %	
+    %	absTime.utcOffsetHours = utcoffset(-4,'hours')
+    %	
+    %	localCdfEpoch = absTime.localCdfEpoch
+    %   
+    %   See also UTCOFFSET, CDFLIB, DATEVEC, and DATENUM
     
     properties(Dependent)
         utcOffset
