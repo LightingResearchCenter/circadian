@@ -48,7 +48,7 @@ else
 end
 
 % Create eventmasks object called masks.
-masks = eventmasks('compliance',compliance,'observation',observation,...
+masks = eventmasks('observation',observation,'compliance',compliance,...
     'bed',bed);
 
 end

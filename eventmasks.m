@@ -1,6 +1,29 @@
 classdef eventmasks
-    %EVENTMASKS Logical arrays to mark certain events
-    %   All properties must be entered as logicals
+    %EVENTMASKS Logical arrays to mark certain events.
+    %   All properties should be entered as logicals, those not entered as
+    %   logicals will attempt to be converted using LOGICAL. Properties
+    %   that are not supplied will be intiallized with an empty logical.
+    %   The logical arrays should be the same size as the rest of your time
+    %   series data.
+    %
+    % EVENTMASKS properties:
+    %   observation	- Subject is under observation.
+    %   compliance  - Subject complied with protocol.
+    %   bed         - Subject reported as in bed attempting to sleep.
+    %
+    %	All properties are independent and modifying one will not change 
+    %   the others.
+    %
+    % EXAMPLES:
+    %   masks = eventmasks('observation',observationArray);
+    %   masks = eventmasks('observation',observationArray,...
+    %       'compliance',complianceArray,'bed',bedArray);
+    %   bedArray = masks.bed;
+    %
+    % See also LOGICAL, DAYSIMETER12.CONVERTCDF.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
+    
     
     properties(Dependent)
         observation
