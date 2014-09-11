@@ -1,6 +1,9 @@
 % Circadian Analysis Toolbox
 % Version 0.1 10-Sep-2014
 %
+% For more information, see <a href="matlab: 
+% web('https://github.com/LightingResearchCenter/circadian/wiki')">the Circadian Analysis Toolbox wiki</a>.
+%
 % TABLE OF CONTENTS
 % -----------------
 %
