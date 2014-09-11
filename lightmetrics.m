@@ -2,38 +2,38 @@ classdef lightmetrics
     %LIGHTMETRICS Storage and conversion for multiple light metrics.
     %   All properties are optional. Unassigned independent properties will
     %   be intiallized with empty singular arrays.
-    %   
-    %   The properties of lightmetrics are:
-    %       illuminance     (photopic illuminance)
-    %       cla             (circadian light)
-    %       cs              (circadian stimulus)
-    %       cct             (coordinated color temperature)
-    %       chromaticity    (CIE chromaticity coordinates)
-    %   
+    %
+    % LIGHTMETRICS properties:
+    %	illuminance     - photopic illuminance
+    %	cla             - circadian light
+    %	cs              - circadian stimulus
+    %	cct             - coordinated color temperature
+    %	chromaticity	- CIE chromaticity coordinates (CHROMCOORD object)
+    %
     %   ILLUMINANCE is an independt property.
-    %   
+    %
     %   CLA and CS are dependent on each other. If CLA is set CS will be
     %   calculated from it. If CS is set CLA will be cleared.
-    %   
+    %
     %   CCT and CHROMATICITY are dependent on each other. If CHROMATICITY
     %   is set CCT will be calculated from it. If CCT is set CHROMATICITY
     %   will be cleared. CHROMATICITY is an object of the chromcoord class.
-    %   
+    %
     %   A lightmetrics object is created by providing pairs of input
     %   arguments with the name of the propetry followed by the value to be
     %   assigned, obj = lightmetrics('propertyName',propetryValue). Once 
     %   created properties of a lightmetrics object can be get and set 
     %   using point notation, obj.propertyName = propetryValue; 
     %   propetryValue = obj.propertyName.
-    %   
-    %   EXAMPLES:
-    %   
+    %
+    % EXAMPLES:
     %	light = lightmetrics('illuminance',illuminanceArray,...
-    %       'cla',claArray,'chromaticity',chromcoordObj)
-    %   
-    %   csArray = light.cs
-    %   
-    %   See also: CHROMCOORD and LIGHTCALC.CHROM2CCT
+    %       'cla',claArray,'chromaticity',chromcoordObj);
+    %   csArray = light.cs;
+    %
+    % See also CHROMCOORD, LIGHTCALC.CHROM2CCT.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties
         illuminance
@@ -55,6 +55,9 @@ classdef lightmetrics
     
     methods
         function obj = lightmetrics(varargin)
+        %LIGHTMETRICS Construct LIGHTMETRICS object.
+        %
+            
             % Parse the matched pair input.
             p = inputParser;
             defaultValue = [];

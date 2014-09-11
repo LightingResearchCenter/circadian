@@ -3,14 +3,22 @@ classdef absolutetime
     %   All time formats are first converted to the CDF Epoch format
     %   (milliseconds from midnight January 1, 0000 CE) the time is rounded
     %   to the nearest seconds and then converted to all other formats.
-    %   
+    %
     %   Time formats:
     %   cdfepoch	- milliseconds from midnight January 1, 0000 CE
     %   datevec     - Gregorian date vector [Y,MO,D,H,MI,S]
     %   datenum     - days since January 0, 0000 CE
     %   excel       - days since January 0, 1900 CE
     %   labview     - seconds since January 1, 1904 CE
-    %   
+    %
+    %   Contructor syntax:
+    %   obj = absolutetime(time,timeType,utc,offset,offsetUnit);
+    %   time        - vertical array of an accepted time type
+    %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
+    %   utc         - true (in UTC) or false (in local time)
+    %   offset      - offset of local time from UTC
+    %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
+    %
     % ABSOLUTETIME Properties:
     %	offset          - a utcoffset object
     %	utcCdfEpoch     - UTC time in CDF Epoch
@@ -27,12 +35,12 @@ classdef absolutetime
     %   Modifying any of the time properties will update all the other time
     %   properties. Modifying any of the UTC offsets will update the local
     %   time properties.
-    %   
+    %
     % EXAMPLES:
     %	absTime = absolutetime(time,'datenum',false,-5,'hours');
     %	absTime.offset.hours = utcoffset(-4,'hours');
     %	localCdfEpoch = absTime.localCdfEpoch;
-    %   
+    %
     % See also UTCOFFSET, CDFLIB, DATEVEC, DATENUM.
     
     % Copyright 2014-2014 Rensselaer Polytechnic Institute
@@ -73,6 +81,8 @@ classdef absolutetime
         % Object creation
         function obj = absolutetime(time,timeType,utc,offset,offsetUnit)
         %ABSOLUTETIME Construct absolutetime object.
+        %   Constructor syntax:
+        %   obj = absolutetime(time,timeType,utc,offset,offsetUnit)
         %   time        - vertical array of an accepted time type
         %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
         %   utc         - true (in UTC) or false (in local time)
