@@ -3,54 +3,43 @@ classdef relativetime
     %   All time formats are first converted to milliseconds from the start
     %   time and rounded to the nearest second, then converted to all other
     %   units.
+    %
+    %   Time formats:
+    %   cdfepoch	- milliseconds from midnight January 1, 0000 CE
+    %   datevec     - Gregorian date vector [Y,MO,D,H,MI,S]
+    %   datenum     - days since January 0, 0000 CE
+    %   excel       - days since January 0, 1900 CE
+    %   labview     - seconds since January 1, 1904 CE
+    %
+    %   Contructor syntax:
+    %   obj = relativetime(time,timeType,utc,offset,offsetUnit);
+    %   time        - vertical array of an accepted time type
+    %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
+    %   utc         - true (in UTC) or false (in local time)
+    %   offset      - offset of local time from UTC
+    %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
     %   
-    %   Initial object creation follows the following format
-    %   obj = relative(time,timeType,utc,utcOffsetHours)
-    %   where,
-    %   
-    %   time: is a vertical array of one of the five accepted time types
-    %   timeType: is a string indicating the type of time being input
-    %   utc: is true or false, true meaning the input time is in UTC time,
-    %   false meaning the input time is in local time
-    %   utcOffset: is the offset of local time from UTC in one of the
-    %   accepted offset units
-    %   offsetUnit: is a string indicating the unit of utcOffset
-    %   
-    %   offsetUnit = 'hours', 'minutes', 'seconds', 'milliseconds'
-    %   
-    %   timeType = 'cdfepoch', 'datevec', 'datenum', 'excel', or 'labview
-    %   cdfepoch: is the milliseconds format not to be confused with a
-    %   cdfepoch object
-    %   datevec: is the MATLAB datevec format of [Y,MO,D,H,MI,S]
-    %   datenum: is the MATLAB datenum format of days since
-    %   January 0, 0000 CE
-    %   excel: is the modern MS Excel serial date format of days since
-    %   January 0, 1900 CE
-    %   labview: is the Labview timestamp format of seconds since
-    %   January 1, 1904 CE
-    %   
-    %   The properties of relativetime are:
-    %       startTime       (singular absolutetime object)
-    %       days            (relative time in days)
-    %       hours           (relative time in hours)
-    %       minutes         (relative time in minutes)
-    %       seconds         (relative time in seconds)
-    %       milliseconds	(relative time in milliseconds)
+    % RELATIVETIME properties:
+    %       startTime       - singular ABSOLUTETIME object
+    %       days            - relative time in days
+    %       hours           - relative time in hours
+    %       minutes         - relative time in minutes
+    %       seconds         - relative time in seconds
+    %       milliseconds	- relative time in milliseconds
     %	
     %   All of the relative time properties are dependent. Setting one of 
     %   the relative time properties will update all the other relative 
     %   time properties. STARTTIME is independent and modifying it will not
     %   update the other properties.
+    %
+    % EXAMPLES:
+    %	relTime = relativetime(timeArray,'datenum',false,-5,'hours');
+    %	relativeMinutesArray = relTime.minutes;
+    %   startTimeDatenum = relTime.startTime.datenum;
     %   
-    %   EXAMPLES:
-    %   
-    %	relTime = relativetime(timeArray,'datenum',false,-5,'hours')
-    %	
-    %	relativeMinutesArray = relTime.minutes
-    %   
-    %   startTimeDatenum = relTime.startTime.datenum
-    %   
-    %   See also ABSOLUTETIME, CDFLIB, DATEVEC, and DATENUM
+    % See also ABSOLUTETIME, CDFLIB, DATEVEC, DATENUM.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties
         startTime
@@ -72,7 +61,7 @@ classdef relativetime
     
     methods
         % Object creation
-        function obj = relativetime(time,timeType,utc,utcOffset,offsetUnit)
+        function obj = relativetime(time,timeType,utc,offset,offsetUnit)
             timeType = lower(timeType);
             switch timeType
                 case 'datenum'
@@ -101,7 +90,7 @@ classdef relativetime
             obj.milliseconds = cdfEpoch - cdfEpoch(1);
             
             obj.startTime = absolutetime(cdfEpoch(1),'cdfepoch',utc,...
-                utcOffset,offsetUnit);
+                offset,offsetUnit);
             
         end % End of function
         
