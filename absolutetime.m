@@ -1,5 +1,5 @@
 classdef absolutetime
-    % ABSOLUTETIME Stores absolute local and UTC time in several formats.
+    %ABSOLUTETIME Stores absolute local and UTC time in several formats.
     %   All time formats are first converted to the CDF Epoch format
     %   (milliseconds from midnight January 1, 0000 CE) the time is rounded
     %   to the nearest seconds and then converted to all other formats.
@@ -34,6 +34,8 @@ classdef absolutetime
     %	localCdfEpoch = absTime.localCdfEpoch;
     %   
     % See also UTCOFFSET, CDFLIB, DATEVEC, DATENUM.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties(Dependent)
         offset
@@ -70,7 +72,7 @@ classdef absolutetime
     methods
         % Object creation
         function obj = absolutetime(time,timeType,utc,offset,offsetUnit)
-        % ABSOLUTETIME Construct absolutetime object.
+        %ABSOLUTETIME Construct absolutetime object.
         %   time        - vertical array of an accepted time type
         %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
         %   utc         - true (in UTC) or false (in local time)

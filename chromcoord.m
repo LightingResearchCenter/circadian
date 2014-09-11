@@ -1,6 +1,31 @@
 classdef chromcoord
-    %CHROMCOORD Summary of this class goes here
-    %   Detailed explanation goes here
+    %CHROMCOORD Stores chromaticity coordinates in CIE 1931, 1960, and 1976
+    %   Store and convert between CIE chromaticity coordinate systems
+    %
+    % CHROMCOORD properties:
+    %   x       - CIE 1931 x coordinate
+    %   y       - CIE 1931 y coordinate
+    %   z       - CIE 1931 z coordinate
+    %   u       - CIE 1960 u coordinate
+    %   v       - CIE 1960 v coordinate
+    %   uPrime  - CIE 1976 u' coordinate
+    %   vPrime  - CIE 1976 v' coordinate
+    %
+    %   All properties are dependent and modifying one coordinate system 
+    %   will update the others. Since z cannot be calculated from (u,v) or 
+    %   from (u',v') it is cleared out when either the 1960 or 1976 system
+    %   is modified.
+    %
+    % EXAMPLES:
+    %   chromaticity = chromcoord('x',xArray,'y',yArray,'z',zArray);
+    %   uArray = chromaticity.u;
+    %   chromaticity.vPrime = vPrimeArray;
+    %
+    % See also LIGHTCALC.CIE31TO60, LIGHTCALC.CIE31TO76,
+    %   LIGHTCALC.CIE60TO31, LIGHTCALC.CIE60TO76, LIGHTCALC.CIE76TO31,
+    %   LIGHTCALC.CIE76TO60.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties(Dependent)
         x
@@ -27,6 +52,9 @@ classdef chromcoord
     
     methods
         function obj = chromcoord(varargin)
+        %CHROMCOORD Construct CHROMCOORD object
+        %
+            
             % Parse the matched pair input.
             p = inputParser;
             defaultValue = [];
@@ -59,7 +87,7 @@ classdef chromcoord
                 [x,y] = lightcalc.cie60to31(u,v);
                 z = [];
                 [uPrime,vPrime] = lightcalc.cie60to76(u,v);
-            % CIE 1967 (uPrime, vPrime)
+            % CIE 1976 (uPrime, vPrime)
             elseif ~isempty(p.Results.uPrime) && ~isempty(p.Results.vPrime)
                 uPrime = p.Results.uPrime;
                 vPrime = p.Results.vPrime;
