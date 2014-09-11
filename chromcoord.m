@@ -58,16 +58,13 @@ classdef chromcoord
             % Parse the matched pair input.
             p = inputParser;
             defaultValue = [];
-            % WARNING addParamValue is being depricated switch to
-            % addParameter (supported in 2014a and newer) when nolonger
-            % necessary to support older versions
-            addParamValue(p,'x',defaultValue,@isnumeric);
-            addParamValue(p,'y',defaultValue,@isnumeric);
-            addParamValue(p,'z',defaultValue,@isnumeric);
-            addParamValue(p,'u',defaultValue,@isnumeric);
-            addParamValue(p,'v',defaultValue,@isnumeric);
-            addParamValue(p,'uPrime',defaultValue,@isnumeric);
-            addParamValue(p,'vPrime',defaultValue,@isnumeric);
+            addParameter(p,'x',defaultValue,@isnumeric);
+            addParameter(p,'y',defaultValue,@isnumeric);
+            addParameter(p,'z',defaultValue,@isnumeric);
+            addParameter(p,'u',defaultValue,@isnumeric);
+            addParameter(p,'v',defaultValue,@isnumeric);
+            addParameter(p,'uPrime',defaultValue,@isnumeric);
+            addParameter(p,'vPrime',defaultValue,@isnumeric);
             parse(p,varargin{:});
             
             % Determine what coordinate system was given.
