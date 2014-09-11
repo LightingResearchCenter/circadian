@@ -17,6 +17,9 @@ function phasorVector = cos24hrphasor(timeArray,epoch,signal1,signal2)
 %   Example(s):
 %   phasorVector = cos24hrphasor(timeArray,epoch,signal1,signal2)
 
+% Import the phasor package
+import phasor.*
+
 % Fits the signals using a 24 hour cosine curve.
 [mesor1,amplitude1,phi1] = cosinorfit(timeArray,signal1,1,1);
 [mesor2,amplitude2,phi2] = cosinorfit(timeArray,signal2,1,1);
