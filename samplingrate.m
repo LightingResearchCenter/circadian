@@ -1,6 +1,30 @@
 classdef samplingrate
-    %SAMPLINGRATE Summary of this class goes here
-    %   Detailed explanation goes here
+    %SAMPLINGRATE Data collection sampling rate in several units.
+    %   All input is rounded to the nearest second before being converted
+    %   to other units.
+    %
+    %   Constructor syntax:
+    %   obj = samplingrate(epoch,units)
+    %   epoch	- A single numeric value of the sampling rate
+    %   units   - 'days','hours','minutes','seconds','hertz'
+    %
+    % SAMPLINGRATE properties:
+    %   days	- sampling rate in days
+    %   hours	- sampling rate in hours
+    %   minutes	- sampling rate in minutes
+    %   seconds	- sampling rate in seconds
+    %   hertz	- sampling rate in hertz
+    %
+    %   All properties are dependent. Changing one property will update all
+    %   the others.
+    %
+    % EXAMPLES:
+    %   epoch = samplingrate(30,'seconds');
+    %   rateInHertz = epoch.hertz;
+    %
+    % See also DAYSIMETER12.CONVERTCDF.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties(Dependent)
         days

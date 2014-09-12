@@ -1,6 +1,27 @@
 classdef utcoffset
-    %UTCOFFSET Summary of this class goes here
-    %   Detailed explanation goes here
+    %UTCOFFSET Offset of local time from UTC in several units.
+    %
+    %   Constructor syntax:
+    %   obj = utcoffset(offset,offsetUnit)
+    %   offset      - A single numeric value for offset of local time from UTC
+    %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
+    %
+    % UTCOFFSET properties:
+    %   hours           - Offset from UTC in hours
+    %   minutes         - Offset from UTC in minutes
+    %   seconds         - Offset from UTC in seconds
+    %   milliseconds	- Offset from UTC in milliseconds
+    %
+    %   All properties are dependent. Changing one property will update all
+    %   the others.
+    %
+    % EXAMPLES:
+    %   offset = utcoffset(-5,'hours');
+    %   offsetInMilliseconds = offset.milliseconds;
+    %
+    % See also ABSOLUTETIME.
+    
+    % Copyright 2014-2014 Rensselaer Polytechnic Institute
     
     properties(Dependent)
         hours
@@ -17,64 +38,64 @@ classdef utcoffset
     
     methods
         % Object creation
-        function obj = utcoffset(utcOffset,offsetUnit)
+        function obj = utcoffset(offset,offsetUnit)
             offsetUnit = lower(offsetUnit);
             switch offsetUnit
                 case 'hours'
-                    obj.hours = utcOffset;
+                    obj.hours = offset;
                 case 'minutes'
-                    obj.minutes = utcOffset;
+                    obj.minutes = offset;
                 case 'seconds'
-                    obj.seconds = utcOffset;
+                    obj.seconds = offset;
                 case 'milliseconds'
-                    obj.milliseconds = utcOffset;
+                    obj.milliseconds = offset;
                 otherwise
                     error('Unknown offsetUnit');
             end % End of switch.
         end % End of function.
         
         % Get and set hours.
-        function utcOffset = get.hours(obj)
-            utcOffset = obj.privateHours;
+        function offset = get.hours(obj)
+            offset = obj.privateHours;
         end
-        function obj = set.hours(obj,utcOffset)
-            obj.privateHours = utcOffset;
-            obj.privateMinutes = utcOffset*60;
-            obj.privateSeconds = utcOffset*60*60;
-            obj.privateMilliseconds = utcOffset*60*60*1000;
+        function obj = set.hours(obj,offset)
+            obj.privateHours = offset;
+            obj.privateMinutes = offset*60;
+            obj.privateSeconds = offset*60*60;
+            obj.privateMilliseconds = offset*60*60*1000;
         end
         
         % Get and set minutes.
-        function utcOffset = get.minutes(obj)
-            utcOffset = obj.privateMinutes;
+        function offset = get.minutes(obj)
+            offset = obj.privateMinutes;
         end
-        function obj = set.minutes(obj,utcOffset)
-            obj.privateHours = utcOffset/60;
-            obj.privateMinutes = utcOffset;
-            obj.privateSeconds = utcOffset*60;
-            obj.privateMilliseconds = utcOffset*60*1000;
+        function obj = set.minutes(obj,offset)
+            obj.privateHours = offset/60;
+            obj.privateMinutes = offset;
+            obj.privateSeconds = offset*60;
+            obj.privateMilliseconds = offset*60*1000;
         end
         
         % Get and set seconds.
-        function utcOffset = get.seconds(obj)
-            utcOffset = obj.privateSeconds;
+        function offset = get.seconds(obj)
+            offset = obj.privateSeconds;
         end
-        function obj = set.seconds(obj,utcOffset)
-            obj.privateHours = utcOffset/(60*60);
-            obj.privateMinutes = utcOffset/60;
-            obj.privateSeconds = utcOffset;
-            obj.privateMilliseconds = utcOffset*1000;
+        function obj = set.seconds(obj,offset)
+            obj.privateHours = offset/(60*60);
+            obj.privateMinutes = offset/60;
+            obj.privateSeconds = offset;
+            obj.privateMilliseconds = offset*1000;
         end
         
         % Get and set milliseconds.
-        function utcOffset = get.milliseconds(obj)
-            utcOffset = obj.privateMilliseconds;
+        function offset = get.milliseconds(obj)
+            offset = obj.privateMilliseconds;
         end
-        function obj = set.milliseconds(obj,utcOffset)
-            obj.privateHours = utcOffset/(60*60*1000);
-            obj.privateMinutes = utcOffset/(60*1000);
-            obj.privateSeconds = utcOffset/1000;
-            obj.privateMilliseconds = utcOffset;
+        function obj = set.milliseconds(obj,offset)
+            obj.privateHours = offset/(60*60*1000);
+            obj.privateMinutes = offset/(60*1000);
+            obj.privateSeconds = offset/1000;
+            obj.privateMilliseconds = offset;
         end
     end
     
