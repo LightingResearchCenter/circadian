@@ -3,7 +3,7 @@ classdef utcoffset
     %
     %   Constructor syntax:
     %   obj = utcoffset(offset,offsetUnit)
-    %   offset      - A single numeric value for offset of local time from UTC
+    %   offset      - Offset from UTC as a numeric array the size of your time array
     %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
     %
     % UTCOFFSET properties:
@@ -16,7 +16,8 @@ classdef utcoffset
     %   the others.
     %
     % EXAMPLES:
-    %   offset = utcoffset(-5,'hours');
+    %   offsetArray = repmat(-5,size(timeArray));
+    %   offset = utcoffset(offsetArray,'hours');
     %   offsetInMilliseconds = offset.milliseconds;
     %
     % See also ABSOLUTETIME.
