@@ -55,6 +55,9 @@ classdef chromcoord
         %CHROMCOORD Construct CHROMCOORD object
         %
             
+            % Import the lightcalc package
+            import lightcalc.*;
+            
             % Parse the matched pair input.
             p = inputParser;
             defaultValue = [];
@@ -74,24 +77,24 @@ classdef chromcoord
                 y = p.Results.y;
                 z = p.Results.z;
                 
-                [u,v] = lightcalc.cie31to60(x,y);
-                [uPrime,vPrime] = lightcalc.cie31to76(x,y);
+                [u,v] = cie31to60(x,y);
+                [uPrime,vPrime] = cie31to76(x,y);
             % CIE 1960 (u, v)
             elseif ~isempty(p.Results.u) && ~isempty(p.Results.v)
                 u = p.Results.u;
                 v = p.Results.v;
                 
-                [x,y] = lightcalc.cie60to31(u,v);
+                [x,y] = cie60to31(u,v);
                 z = [];
-                [uPrime,vPrime] = lightcalc.cie60to76(u,v);
+                [uPrime,vPrime] = cie60to76(u,v);
             % CIE 1976 (uPrime, vPrime)
             elseif ~isempty(p.Results.uPrime) && ~isempty(p.Results.vPrime)
                 uPrime = p.Results.uPrime;
                 vPrime = p.Results.vPrime;
                 
-                [x,y] = lightcalc.cie76to31(uPrime,vPrime);
+                [x,y] = cie76to31(uPrime,vPrime);
                 z = [];
-                [u,v] = lightcalc.cie76to60(uPrime,vPrime);
+                [u,v] = cie76to60(uPrime,vPrime);
             else
                 error('Unknown or incomplete chromaticity coordinate system.');
             end

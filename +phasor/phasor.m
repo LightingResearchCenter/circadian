@@ -15,7 +15,7 @@ function [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor(timeArray,epoc
 %       Author(s), Title. Journal Abbrv. year; vol: pp-pp.
 %   
 %   Example(s):
-%   [phasorVector,magnitudeHarmonics,firstHarmonic] = phsor(timeArray,epoch,lightArray,activityArray)
+%   [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(timeArray,epoch,lightArray,activityArray)
 
 % Import the phasor package
 import phasor.*

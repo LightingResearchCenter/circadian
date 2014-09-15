@@ -1,9 +1,6 @@
 function [f24H,f24] = phasor24harmonics(X,Y,Srate)
 % Calculates the 24-hour complex phasor for time series x and y sampled at Srate in units of Hertz
 
-% Import the phasor package
-import phasor.*
-
 if length(X)~=length(Y)
     error('vectors must be equal length')
 end

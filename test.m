@@ -2,16 +2,10 @@ clear
 close all
 clc
 
-delta = 30/(60*60*24);
-time1 = (now:delta:now+7)';
+filePath = 'test.cdf';
 
-timeType = 'datenum';
-utc = false;
-utcOffset = -4;
-offsetUnit = 'hours';
+[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(filePath);
 
-time2 = absolutetime(time1,timeType,utc,utcOffset,offsetUnit);
+[phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(absTime.localDateNum,epoch,light.cs,activity);
 
-time3 = time2;
-
-time3.utcOffset = utcoffset(-5,'hours'); % EDT to EST
+[interdailyStability,intradailyVariability] = isiv.isiv(activity,epoch);
