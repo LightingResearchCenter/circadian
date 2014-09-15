@@ -17,6 +17,7 @@
 %   eventmasks         - Logical arrays to mark certain events.
 %
 % Packages
-% See also daysimeter12, isiv, lightcalc, periodograms, phasor, shared
+% See also daysimeter12, isiv, lightcalc, periodograms, phasor, shared,
+% sleep.
 
 % Copyright 2014-2014 Rensselaer Polytechnic Institute
