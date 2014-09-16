@@ -24,13 +24,7 @@ for i1 = 1:nPoints
     millerDataArray(i1) = mean(dataArray(idx));
 end
 
-millerStart_datenum = floor(relTime.startTime.localDateNum);
-millerStart_utcOffset = relTime.startTime.offset.hours;
-millerStart = absolutetime(millerStart_datenum,'datenum',false,millerStart_utcOffset,'hours');
-
-millerTime = relTime;
-millerTime.startTime = millerStart;
-millerTime.minutes = millerTimeArray_minutes;
+millerTime = relativetime(millerTimeArray_minutes);
 
 end
 
