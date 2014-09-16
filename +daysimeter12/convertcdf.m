@@ -11,8 +11,7 @@ Data = readcdf(filePath);
 % Convert the time to custom time classes
 absTime = absolutetime(Data.Variables.time(:),'cdfepoch',false,...
     Data.Variables.timeOffset,'seconds');
-relTime = relativetime(Data.Variables.time(:),'cdfepoch',false,...
-    Data.Variables.timeOffset,'seconds');
+relTime = relativetime(absTime);
 
 % Find the most frequent sampling rate.
 epochSeconds = mode(diff(relTime.seconds));

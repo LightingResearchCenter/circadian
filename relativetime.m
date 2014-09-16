@@ -4,20 +4,11 @@ classdef relativetime
     %   time and rounded to the nearest second, then converted to all other
     %   units.
     %
-    %   Time formats:
-    %   cdfepoch	- milliseconds from midnight January 1, 0000 CE
-    %   datevec     - Gregorian date vector [Y,MO,D,H,MI,S]
-    %   datenum     - days since January 0, 0000 CE
-    %   excel       - days since January 0, 1900 CE
-    %   labview     - seconds since January 1, 1904 CE
-    %
     %   Contructor syntax:
-    %   obj = relativetime(time,timeType,utc,offset,offsetUnit);
-    %   time        - vertical array of an accepted time type
-    %   timeType	- 'cdfepoch','datevec','datenum','excel','labview'
-    %   utc         - true (in UTC) or false (in local time)
-    %   offset      - offset of local time from UTC
-    %   offsetUnit	- 'hours','minutes','seconds','milliseconds'
+    %   obj = relativetime(time);
+    %   obj = relativetime(time,timeType);
+    %   time        - absolutetime object or array of an accepted time type
+    %   timeType	- 'absolutetime','days','hours','minutes','seconds','milliseconds'
     %   
     % RELATIVETIME properties:
     %       startTime       - singular ABSOLUTETIME object
@@ -33,7 +24,8 @@ classdef relativetime
     %   update the other properties.
     %
     % EXAMPLES:
-    %	relTime = relativetime(timeArray,'datenum',false,-5,'hours');
+    %	relTime = relativetime(absTime);
+    %   relTime = relativetime(relTimeInHours,'hours')
     %	relativeMinutesArray = relTime.minutes;
     %   startTimeDatenum = relTime.startTime.datenum;
     %   
@@ -61,37 +53,34 @@ classdef relativetime
     
     methods
         % Object creation
-        function obj = relativetime(time,timeType,utc,offset,offsetUnit)
-            timeType = lower(timeType);
+        function obj = relativetime(time,varargin)
+        %RELATIVETIME Method details go here
+            
+            % Parse the input
+            p = inputParser;
+            addRequired(p,'time');
+            addOptional(p,'timeType','absolutetime',@ischar);
+            parse(p,time,varargin{:});
+            
+            timeType = lower(p.Results.timeType);
             switch timeType
-                case 'datenum'
-                    nTime = size(time,1);
-                    dateNum = time;
-                    dateVec = datevec(dateNum);
-                    timeVec = [dateVec,zeros(nTime,1)];
-                    timeVec(:,7) = (timeVec(:,6) - floor(timeVec(:,6)))*1000;
-                    timeVec(:,6) = floor(timeVec(:,6));
-                    cdfEpoch = cdflib.computeEpoch(timeVec');
-                    cdfEpoch = cdfEpoch';
-                case 'datevec'
-                    nTime = size(time,1);
-                    dateVec = time;
-                    timeVec = [dateVec,zeros(nTime,1)];
-                    timeVec(:,7) = (timeVec(:,6) - floor(timeVec(:,6)))*1000;
-                    timeVec(:,6) = floor(timeVec(:,6));
-                    cdfEpoch = cdflib.computeEpoch(timeVec');
-                    cdfEpoch = cdfEpoch';
-                case 'cdfepoch'
-                    cdfEpoch = time;
+                case 'absolutetime'
+                    obj.startTime = time;
+                    obj.startTime.utcCdfEpoch = time.utcCdfEpoch(1);
+                    obj.milliseconds = time.utcCdfEpoch - time.utcCdfEpoch(1);
+                case 'days'
+                    obj.days = time;
+                case 'hours'
+                    obj.hours = time;
+                case 'minutes'
+                    obj.minutes = time;
+                case 'seconds'
+                    obj.seconds = time;
+                case 'milliseconds'
+                    obj.milliseconds = time;
                 otherwise
                     error('Unknown timeType');
             end % End of switch
-            
-            obj.milliseconds = cdfEpoch - cdfEpoch(1);
-            
-            obj.startTime = absolutetime(cdfEpoch(1),'cdfepoch',utc,...
-                offset,offsetUnit);
-            
         end % End of function
         
         % Get and set milliseconds.
