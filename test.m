@@ -17,3 +17,5 @@ plot(millerTime.hours,millerDataArray)
 [millerTime,millerDataArray] = millerize.millerize(relTime,light.cs,masks);
 figure(2)
 plot(millerTime.hours,millerDataArray)
+
+alpha = dfa.dfa(epoch,activity,1,[1.5,8]);
