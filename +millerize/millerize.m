@@ -24,7 +24,7 @@ for i1 = 1:nPoints
     millerDataArray(i1) = mean(dataArray(idx));
 end
 
-millerTime = relativetime(millerTimeArray_minutes);
+millerTime = relativetime(millerTimeArray_minutes,'minutes');
 
 end
 
