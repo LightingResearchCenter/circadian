@@ -10,12 +10,10 @@ filePath = 'test.cdf';
 
 [interdailyStability,intradailyVariability] = isiv.isiv(activity,epoch);
 
-[millerTime,millerDataArray] = millerize.millerize(relTime,activity,masks);
-figure(1)
-plot(millerTime.hours,millerDataArray)
+[         ~,millerCS] = millerize.millerize(relTime,light.cs,masks);
+[millerTime,millerActivity] = millerize.millerize(relTime,activity,masks);
+h = plots.miller(millerTime,'Circadian Stimulus (CS)',millerCS,'Activity Index (AI)',millerActivity);
 
-[millerTime,millerDataArray] = millerize.millerize(relTime,light.cs,masks);
-figure(2)
-plot(millerTime.hours,millerDataArray)
 
-alpha = dfa.dfa(epoch,activity,1,[1.5,8]);
+% WARNING: DFA is slow
+% alpha = dfa.dfa(epoch,activity,1,[1.5,8]);
