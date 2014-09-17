@@ -46,6 +46,9 @@ end
 % Create and format the legend.
 legendflex([h1,h2],{label1,label2},'anchor',[2 6],'buffer',[0 10],'ncol',2);
 
+% Fix box
+fixBox(hAxes);
+
 
 end
 
@@ -59,6 +62,7 @@ for iAxis = 1:2
     set(hAxes(iAxis),'Box','off');
     set(hAxes(iAxis),'Color','none');
     set(hAxes(iAxis),'YColor','k');
+    set(hAxes(iAxis),'Layer','top');
 end
 
 % Format data1
@@ -100,9 +104,6 @@ if max(data2) <= 1
 end
 ylabel(hAxes(2),label2);
 
-% Fix box
-fixBox(hAxes);
-
 end
 
 function [hAxes,h1,h2] = displayFormatting(hAxes,h1,h2)
@@ -129,7 +130,9 @@ for iAxis = 1:numel(hAxes)
     axes(hAxes(iAxis));
 end
 % link axes in case of zooming
-linkaxes([hAxes(1) hBox])
+linkaxes([hAxes(1) hAxes(2) hBox])
+
+set(hBox,'Layer','top');
 end
 
 function hArea = line2area(hLine)
@@ -140,29 +143,29 @@ yData = get(hLine,'YData');
 hParent = get(hLine,'Parent');
 displayName = get(hLine,'DisplayName');
 color = get(hLine,'Color');
-lineWidth = get(hLine,'LineWidth');
 
 % Add extra points to close area.
 xLim = get(hParent,'XLim');
-xData = [xLim(1),xData,xLim(2)];
-yData = [0,yData,0];
+xData2 = [xLim(1),xData,xLim(2)];
+yData2 = [0,yData,0];
 
 % Create color data
-cData = ones(size(xData));
-darkerColor = 0.5*color;
+cData = ones(size(xData2));
 
-% Plot the area
+% Make correct axes active.
 hTemp = gca;
 axes(hParent);
-hArea = patch(xData,yData,cData);
+
+% Plot the area
+hArea = patch(xData2,yData2,cData);
 set(hArea,'DisplayName',displayName);
 set(hArea,'FaceColor',color);
-set(hArea,'EdgeColor',darkerColor);
-set(hArea,'LineWidth',lineWidth);
-axes(hTemp);
+set(hArea,'EdgeColor','none');
 
 % Remove the line.
 delete(hLine);
+
+axes(hTemp);
 
 end
 
