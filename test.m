@@ -12,7 +12,8 @@ filePath = 'test.cdf';
 
 [         ~,millerCS] = millerize.millerize(relTime,light.cs,masks);
 [millerTime,millerActivity] = millerize.millerize(relTime,activity,masks);
-h = plots.miller(millerTime,'Circadian Stimulus (CS)',millerCS,'Activity Index (AI)',millerActivity);
+h = axes('Position',[0.125,0.125,0.75,0.75]);
+h = plots.miller(millerTime,'Circadian Stimulus (CS)',millerCS,'Activity Index (AI)',millerActivity,h);
 
 
 % WARNING: DFA is slow
