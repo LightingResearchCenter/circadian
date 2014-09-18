@@ -14,13 +14,13 @@ addRequired(p,'data1',@isnumeric);
 addRequired(p,'label2',@ischar);
 addRequired(p,'data2',@isnumeric);
 addOptional(p,'h',[],@ishandle);
-addOptional(p,'quality','display',@ischar)
+addOptional(p,'quality','display',@ischar);
 parse(p,millerTime,label1,data1,label2,data2,varargin{:});
 
 % Reassign the quality variable.
 quality = lower(p.Results.quality);
 
-% Make axis active or create one.
+% Make axes active or create one.
 if isempty(p.Results.h)
     axes;
 else
