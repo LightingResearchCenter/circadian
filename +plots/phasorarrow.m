@@ -5,7 +5,7 @@ function [h,hLine,hHead] = phasorarrow(vector,varargin)
 p = inputParser;
 addRequired(p,'vector');
 addOptional(p,'scale',1);
-parse(p);
+parse(p,vector,varargin{:});
 scale = p.Results.scale;
 
 h = hggroup;
