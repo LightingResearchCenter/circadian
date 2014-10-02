@@ -1,16 +1,13 @@
-function [absTime,relTime,epoch,light,activity,masks] = convertcdf(filePath)
+function [absTime,relTime,epoch,light,activity,masks] = convertcdf(cdfData)
 %CONVERTCDF Convert an LRC formatted CDF to custom classes
 %   Detailed explanation goes here
 
 % Import daysimeter12 package to enable all other daysimeter12 functions
 import daysimeter12.*;
 
-% Read the data from file
-Data = readcdf(filePath);
-
 % Convert the time to custom time classes
-absTime = absolutetime(Data.Variables.time(:),'cdfepoch',false,...
-    Data.Variables.timeOffset,'seconds');
+absTime = absolutetime(cdfData.Variables.time(:),'cdfepoch',false,...
+    cdfData.Variables.timeOffset,'seconds');
 relTime = relativetime(absTime);
 
 % Find the most frequent sampling rate.
@@ -20,12 +17,12 @@ epochSeconds = mode(diff(relTime.seconds));
 epoch = samplingrate(epochSeconds,'seconds');
 
 % Prepare light data
-red = Data.Variables.red(:);
-green = Data.Variables.green(:);
-blue = Data.Variables.blue(:);
+red = cdfData.Variables.red(:);
+green = cdfData.Variables.green(:);
+blue = cdfData.Variables.blue(:);
 
-illuminance = Data.Variables.illuminance(:);
-cla = Data.Variables.CLA(:);
+illuminance = cdfData.Variables.illuminance(:);
+cla = cdfData.Variables.CLA(:);
 
 % Create an instance of chromcoord from RGB data
 chromaticity = rgb2chrom(red,green,blue);
@@ -35,22 +32,22 @@ light = lightmetrics('illuminance',illuminance,'cla',cla,...
     'chromaticity',chromaticity);
 
 % Reassign activity as a vertical array
-activity = Data.Variables.activity(:);
+activity = cdfData.Variables.activity(:);
 
 
 % Check what logical masks are available.
-if isfield(Data.Variables,'logicalArray')
-    observation = logical(Data.Variables.logicalArray(:));
+if isfield(cdfData.Variables,'logicalArray')
+    observation = logical(cdfData.Variables.logicalArray(:));
 else
     observation = logical([]);
 end
-if isfield(Data.Variables,'complianceArray')
-    compliance = logical(Data.Variables.complianceArray(:));
+if isfield(cdfData.Variables,'complianceArray')
+    compliance = logical(cdfData.Variables.complianceArray(:));
 else
     compliance = logical([]);
 end
-if isfield(Data.Variables,'bedArray')
-    bed = logical(Data.Variables.bedArray(:));
+if isfield(cdfData.Variables,'bedArray')
+    bed = logical(cdfData.Variables.bedArray(:));
 else
     bed = logical([]);
 end
