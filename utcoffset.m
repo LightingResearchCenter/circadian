@@ -40,6 +40,7 @@ classdef utcoffset
     methods
         % Object creation
         function obj = utcoffset(offset,offsetUnit)
+            offset = double(offset);
             offsetUnit = lower(offsetUnit);
             switch offsetUnit
                 case 'hours'
@@ -60,6 +61,7 @@ classdef utcoffset
             offset = obj.privateHours;
         end
         function obj = set.hours(obj,offset)
+            offset = double(offset);
             obj.privateHours = offset;
             obj.privateMinutes = offset*60;
             obj.privateSeconds = offset*60*60;
@@ -71,6 +73,7 @@ classdef utcoffset
             offset = obj.privateMinutes;
         end
         function obj = set.minutes(obj,offset)
+            offset = double(offset);
             obj.privateHours = offset/60;
             obj.privateMinutes = offset;
             obj.privateSeconds = offset*60;
@@ -82,6 +85,7 @@ classdef utcoffset
             offset = obj.privateSeconds;
         end
         function obj = set.seconds(obj,offset)
+            offset = double(offset);
             obj.privateHours = offset/(60*60);
             obj.privateMinutes = offset/60;
             obj.privateSeconds = offset;
@@ -93,6 +97,7 @@ classdef utcoffset
             offset = obj.privateMilliseconds;
         end
         function obj = set.milliseconds(obj,offset)
+            offset = double(offset);
             obj.privateHours = offset/(60*60*1000);
             obj.privateMinutes = offset/(60*1000);
             obj.privateSeconds = offset/1000;
