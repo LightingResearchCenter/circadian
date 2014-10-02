@@ -10,7 +10,7 @@ function Groups = slicedata2breaks(timeArray,varargin)
 %   Breaks(1).lightArray    = the first group's lightArray
 %   Breaks(1).activityArray = the first group's activityArray
 
-import daysigram.*;
+import reports.daysigram.*;
 
 % Check that at least one data array is given
 narginchk(2,inf)

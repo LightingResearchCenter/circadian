@@ -1,10 +1,10 @@
-function plotfooter(hFigure)
+function plotfooter(hFigure,figTitle)
 %PLOTFOOTER Summary of this function goes here
 %   Detailed explanation goes here
 
-import reports.daysigram.*;
+import reports.composite.*;
 
-plotreporttitle(hFigure)
+plotreporttitle(hFigure,figTitle)
 
 loadlrclogo;
 loadrpilogo;

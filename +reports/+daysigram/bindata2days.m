@@ -11,7 +11,7 @@ function Days = bindata2days(timeArray,varargin)
 %   Days(1).lightArray    = the first day's lightArray
 %   Days(1).activityArray = the first day's activityArray
 
-import daysigram.*;
+import reports.daysigram.*;
 
 % Check that at least one data array is given
 narginchk(2,inf)

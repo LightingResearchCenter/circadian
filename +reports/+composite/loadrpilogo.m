@@ -2,7 +2,7 @@ function varargout = loadrpilogo
 %LOADRPILOGO Summary of this function goes here
 %   Detailed explanation goes here
 
-import reports.daysigram.*;
+import reports.composite.*;
 
 % Read in our image.
 [A,map,alpha] = imread('rpiLogo.png');

@@ -1,8 +1,8 @@
-function varargout = plotheader(hFigure,sheetTitle)
-%PLOTHEADER Summary of this function goes here
+function varargout = plotsubjectname(hFigure,subjectName)
+%PLOTSUBJECTNAME Summary of this function goes here
 %   hFigure = figure handle
 
-import reports.daysigram.*;
+import reports.composite.*;
 
 % Create textbox
 hName = annotation(hFigure,'textbox');
@@ -15,7 +15,7 @@ margin = 0;
 set(hName,'Margin',margin);
 
 % Add text to box
-set(hName,'String',sheetTitle);
+set(hName,'String',['Subject: ',subjectName]);
 
 % Make sure box resizes to text
 fitBoxToText = 'on'; % 'on' or 'off'
@@ -32,11 +32,7 @@ set(hName,'VerticalAlignment',verticalAlignment);
 fontUnits = 'points';
 set(hName,'FontUnits',fontUnits);
 
-if numel(sheetTitle) > 1
-    fontSize = 12;
-else
-    fontSize = 18;
-end
+fontSize = 24;
 set(hName,'FontSize',fontSize);
 
 fontName = 'Arial';

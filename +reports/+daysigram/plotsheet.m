@@ -3,7 +3,7 @@ function plotsheet(Days,lightMeasure,lightRange,position,nDaysPerSheet,units)
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
 
-import daysigram.*;
+import reports.daysigram.*;
 
 nDays = numel(Days);
 

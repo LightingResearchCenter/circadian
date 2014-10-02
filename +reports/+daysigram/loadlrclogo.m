@@ -2,11 +2,10 @@ function varargout = loadlrclogo
 %LOADLRCLOGO Summary of this function goes here
 %   Detailed explanation goes here
 
-import daysigram.*;
+import reports.daysigram.*;
 
 % Read in our image.
 [A,map,alpha] = imread('lrcLogo.png');
-
 
 % Make a new axes for logo
 hLogoAxes = axes;

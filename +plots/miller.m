@@ -44,7 +44,7 @@ switch quality
 end
 
 % Create and format the legend.
-legendflex([h1,h2],{label1,label2},'anchor',[2 6],'buffer',[0 10],'ncol',2);
+legendflex([h1,h2],{label1,label2},'anchor',[2 6],'buffer',[0 10],'ncol',2,'padding',[0 1 10]);
 
 % Fix box
 fixBox(hAxes);
@@ -108,7 +108,7 @@ end
 
 function [hAxes,h1,h2] = displayFormatting(hAxes,h1,h2)
 % Format data1
-set(h1,'Color',[0.75,0.75,0.75]);
+set(h1,'Color',[180, 211, 227]/256);
 set(h1,'LineWidth',2);
 h1 = line2area(h1);
 

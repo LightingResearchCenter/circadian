@@ -3,7 +3,7 @@ function daysigram(sheetTitle,timeArray,activityArray,lightArray,lightMeasure,li
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
 
-import daysigram.*;
+import reports.daysigram.*;
 
 [hFigure,width,height,units] = initializefigure(2,'on');
 

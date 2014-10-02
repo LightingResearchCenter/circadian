@@ -1,8 +1,8 @@
-function varargout = plotreporttitle(hFigure)
+function varargout = plotreporttitle(hFigure,figTitle)
 %PLOTREPORTTITLE Summary of this function goes here
 %   hFigure = figure handle
 
-import reports.daysigram.*;
+import reports.composite.*;
 
 % Create textbox
 hReportTitle = annotation(hFigure,'textbox');
@@ -15,8 +15,8 @@ margin = 0;
 set(hReportTitle,'Margin',margin);
 
 % Create text
-nowStr = datestr(now,'mm/dd/yyyy HH:MM');
-reportTitle = {'Daysigram Report';['Generated: ',nowStr]};
+todayStr = datestr(now,'mmmm dd, yyyy');
+reportTitle = {figTitle;['Created: ',todayStr]};
 
 % Add text to box
 set(hReportTitle,'String',reportTitle);

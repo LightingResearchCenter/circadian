@@ -3,7 +3,7 @@ function hAxes = plotday(Day,lightMeasure,lightLim,position,units)
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
 
-import daysigram.*;
+import reports.daysigram.*;
 
 % Dole out variables
 timeArray = Day.timeArray;

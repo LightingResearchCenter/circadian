@@ -2,14 +2,14 @@ function [hFigure,width,height,units] = initializefigure(h,visible)
 %INITIALIZEFIGURE Summary of this function goes here
 %   Detailed explanation goes here
 
-import reports.daysigram.*;
+import reports.composite.*;
 
 % Create figure window
 hFigure = figure(h);
 set(hFigure,'Visible',visible);
 
 % Define paper properties
-paperOrientation = 'portrait'; % 'portrait' or 'landscape'
+paperOrientation = 'landscape'; % 'portrait' or 'landscape'
 set(hFigure,'PaperOrientation',paperOrientation);
 
 paperType = 'usletter';
@@ -36,8 +36,6 @@ set(hFigure,'Units',units);
 
 position = [0.5,0.5,width,height]; % [left,bottom,width,height]
 set(hFigure,'Position',position);
-
-set(hFigure,'Renderer','painters');
 
 % Limit user's ability to change figure
 dockControls = 'off';
