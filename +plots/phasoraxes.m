@@ -33,6 +33,9 @@ set(hAxes,'Visible','off');
 % Prevent unwanted resizing of axes.
 set(hAxes,'ActivePositionProperty','position')
 
+% Prevent axes from being erased.
+set(hAxes,'NextPlot','add');
+
 % Set limits to 1.
 set(hAxes,'XLim',[-1 1]);
 set(hAxes,'YLim',[-1 1]);
@@ -47,7 +50,7 @@ hLabels = hggroup;
 set(hLabels,'Parent',hAxes);
 
 % Define a circle.
-th = 0:pi/50:2*pi;
+th = 0:pi/100:2*pi;
 xunit = cos(th);
 yunit = sin(th);
 % Now really force points on x/y axes to lie on them exactly.
@@ -56,11 +59,11 @@ xunit(inds(2 : 2 : 4)) = zeros(2, 1);
 yunit(inds(1 : 2 : 5)) = zeros(3, 1);
 
 % Plot background
-patch('XData',xunit,'YData',yunit,...
-        'EdgeColor','none',...
-        'FaceColor','w',...
-        'HandleVisibility','off',...
-        'Parent',hGrid);
+% patch('XData',xunit,'YData',yunit,...
+%         'EdgeColor','none',...
+%         'FaceColor','w',...
+%         'HandleVisibility','off',...
+%         'Parent',hGrid);
 
 % Draw radial circles
 cos82 = cos(82*pi/180);
@@ -117,12 +120,14 @@ end
     end
 
     function formatMagnitude(h,hParent)
+        set(h,'FontSize',get(0,'DefaultAxesFontSize'));
         set(h,'VerticalAlignment','bottom');
         set(h,'HandleVisibility','off')
         set(h,'Parent',hParent);
     end
 
     function formatHours(h,hParent)
+        set(h,'FontSize',get(0,'DefaultAxesFontSize'));
         set(h,'HorizontalAlignment','center');
         set(h,'HandleVisibility','off');
         set(h,'Parent',hParent);
