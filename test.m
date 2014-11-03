@@ -3,8 +3,8 @@ close all
 clc
 
 filePath = 'test.cdf';
-
-[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(filePath);
+cdfData = daysimeter12.readcdf(filePath);
+[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(cdfData);
 
 [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(absTime.localDateNum,epoch,light.cs,activity);
 
@@ -12,8 +12,8 @@ figure(1);
 [hAxes,hGrid,hLabels] = plots.phasoraxes;
 [h,hLine,hHead] = plots.phasorarrow(phasorVector);
 set(hLine,'LineWidth',2);
-set(hLine,'Color','r');
-set(hHead,'FaceColor','r');
+set(hLine,'Color','k');
+set(hHead,'FaceColor','k');
 
 [interdailyStability,intradailyVariability] = isiv.isiv(activity,epoch);
 
