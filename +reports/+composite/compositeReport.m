@@ -1,16 +1,16 @@
-function compositeReport(plotDir,Phasor,Average,Miller,subject,figTitle)
+function compositeReport(plotDir,Phasor,Actigraphy,Average,Miller,subject,figTitle)
 %COMPOSITEREPORT Summary of this function goes here
 %   Detailed explanation goes here
 
 import reports.composite.*;
 import plots.*
 
-[hFigure,~,~,units] = initializefigure(1,'on');
+[hFigure,~,~,units] = reports.composite.initializefigure(1,'on');
 
 fileName = ['compositeReport_',datestr(now,'yyyy-mm-dd_HHMM'),'_subject',subject];
 
 %% Specify dimensions of plot areas
-x1 = 0.25;
+x1 = 0;
 y1 = 3.875-.375;
 w1 = 4.5;
 h1 = 3+.375;
@@ -24,7 +24,7 @@ box2 = [x2,y2,w2,h2];
 
 x3 = 0;
 y3 = 1.25;
-w3 = 5;
+w3 = 4.5;
 h3 = 2;
 box3 = [x3,y3,w3,h3];
 
@@ -70,9 +70,16 @@ set(hPhasor,'Units','normalized'); % Return to default
 set(hLine,'LineWidth',2);
 set(hLine,'Color','k');
 set(hHead,'FaceColor','k');
+% Eliminate excess white space
+set(hPhasor, 'Position', get(gca, 'OuterPosition') - ...
+    get(hPhasor, 'TightInset') * [-1 0 1 0; 0 -1 0 1; 0 0 1 0; 0 0 0 1]);
+% Plot Phsor Title
+hPhasorTitle = title(hPhasor,'Circadian Stimulus/Activity Phasor');
+hPhasorTitle.Visible = 'on';
+hPhasorTitle.Position(2) = hPhasorTitle.Position(2)*1.125;
 
 % Notes
-plotnotes(Phasor,Average,box3,units);
+plotnotes(Phasor,Actigraphy,Average,box3,units);
 
 % Miller plot
 % Create axes to plot on
@@ -81,10 +88,13 @@ set(hMiller,'Units',units);
 set(hMiller,'ActivePositionProperty','position');
 set(hMiller,'Position',box2);
 set(hMiller,'Units','normalized'); % Return to default
-miller(Miller.time,'Circadian Stimulus (CS)',Miller.cs,'Activity Index (AI)',Miller.activity,hMiller);
+plots.miller(Miller.time,'Circadian Stimulus (CS)',Miller.cs,'Activity Index (AI)',Miller.activity,hMiller);
+% Create title
+hMillerTitle = title('Average Day');
+hMillerTitle.Position(2) = hMillerTitle.Position(2)*1.125;
 
 % Histograms
-phasorangdist(Phasor.angleHrs,box4,units)
+phasorangdist(Phasor.angle.hours,box4,units)
 phasormagdist(Phasor.magnitude,box5,units)
 plotnursenote(hFigure,box6,units)
 

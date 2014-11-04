@@ -5,25 +5,19 @@ clc
 filePath = 'test.cdf';
 cdfData = daysimeter12.readcdf(filePath);
 [absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(cdfData);
+subject = cdfData.GlobalAttributes.subjectID;
 
-[phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(absTime.localDateNum,epoch,light.cs,activity);
+Phasor = phasor.prep(absTime,epoch,light,activity,masks);
 
-figure(1);
-[hAxes,hGrid,hLabels] = plots.phasoraxes;
-[h,hLine,hHead] = plots.phasorarrow(phasorVector);
-set(hLine,'LineWidth',2);
-set(hLine,'Color','k');
-set(hHead,'FaceColor','k');
+Actigraphy = struct;
+[Actigraphy.interdailyStability,Actigraphy.intradailyVariability] = isiv.isiv(activity,epoch);
 
-[interdailyStability,intradailyVariability] = isiv.isiv(activity,epoch);
+Miller = struct('time',[],'cs',[],'activity',[]);
+[         ~,Miller.cs] = millerize.millerize(relTime,light.cs,masks);
+[Miller.time,Miller.activity] = millerize.millerize(relTime,activity,masks);
 
-[         ~,millerCS] = millerize.millerize(relTime,light.cs,masks);
-[millerTime,millerActivity] = millerize.millerize(relTime,activity,masks);
-
-figure(2);
-h = axes('Position',[0.125,0.125,0.75,0.75]);
-h = plots.miller(millerTime,'Circadian Stimulus (CS)',millerCS,'Activity Index (AI)',millerActivity,h);
-
+Average = reports.composite.daysimeteraverages(light.cs,light.illuminance,activity);
+reports.composite.compositeReport('',Phasor,Actigraphy,Average,Miller,subject,'Composite Report Test')
 
 % WARNING: DFA is slow
 % alpha = dfa.dfa(epoch,activity,1,[1.5,8]);

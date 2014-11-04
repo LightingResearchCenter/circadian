@@ -48,22 +48,8 @@ set(hReportTitle,'FontWeight',fontWeight);
 % Position box centered on the bottom of the page
 set(hReportTitle,'Units','inches');
 
-position = get(hReportTitle,'Position'); % get current position and size
-paperPosition = get(hFigure,'PaperPosition');
-
-width = position(3);
-height = position(4);
-
-paperWidth = paperPosition(3);
-
-left = 0.5*paperWidth - 0.5*width; % Center the textbox
-bottom = 0.5 - height;
-if bottom < 0
-    bottom = 0;
-end
-
-position = [left,bottom,width,height];
-set(hReportTitle,'Position',position);
+hReportTitle.Position(1) = 0.5*hFigure.Position(3) - 0.5*hReportTitle.Position(3); % Center the textbox
+hReportTitle.Position(2) = 0.5-hReportTitle.Position(4);
 
 % Return the text handle if requested
 if nargout == 1
