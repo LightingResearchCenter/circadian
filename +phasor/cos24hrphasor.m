@@ -24,7 +24,16 @@ import phasor.*
 [mesor2,amplitude2,phi2] = cosinorfit(timeArray,signal2,1,1);
 
 % The phasor angle (in radians) is the difference in acrophases.
-angleRad = (phi1 - phi2);
+angleRad = mod((phi1 - phi2),2*pi);
+
+% Shift signal2 so that it lines up with signal1.
+% Number of points to shift is nShift.
+nShift = angleRad/(2*pi*epoch.days);
+signal2 = circshift(signal2, round(nShift));
+
+if angleRad > pi
+    angleRad = -(2*pi -angleRad);
+end
 
 Angle = struct;
 Angle.radians       = angleRad;
@@ -35,10 +44,6 @@ Angle.minutes       = angleRad*24*60/(2*pi);
 Angle.seconds       = angleRad*24*60*60/(2*pi);
 Angle.milliseconds	= angleRad*24*60*60*1000/(2*pi);
 
-% Shift signal2 so that it lines up with signal1.
-% Number of points to shift is nShift.
-nShift = angleRad/(2*pi*epoch.days);
-signal2 = circshift(signal2, round(nShift));
 
 fit1 = mesor1 + amplitude1*cos(2*pi*timeArray + phi1);
 fit2 = mesor2 + amplitude2*cos(2*pi*timeArray + phi2);

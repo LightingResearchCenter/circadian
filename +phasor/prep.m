@@ -34,10 +34,26 @@ if ~isempty(masks.compliance)
     activity(~masks.compliance) = [];
 end
 
+% Apply gaussian filter to data
+filterWindow = ceil(300/epoch.seconds); % approximate number of samples in 5 minutes
+cs = gaussian(cs,filterWindow);
+activity = gaussian(activity,filterWindow);
+
 Phasor = struct;
 [Phasor.vector,Phasor.magnitude,Phasor.angle,...
     Phasor.magnitudeHarmonics,Phasor.firstHarmonic] = ...
     phasor.phasor(time,epoch,cs,activity);
 
 end
+
+function filtered = gaussian(data, window)
+
+%window is number of points on each side of current point that you want to
+%consider
+window = window*2;
+filtered = filtfilt(gausswin(window)/sum(gausswin(window)), 1, data);
+
+end
+
+
 
