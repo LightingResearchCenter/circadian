@@ -65,6 +65,7 @@ end
 % Create full title
 plotTitle = [distribution,' Probability Distribution'];
 hTitle = title(plotTitle);
+hTitle.FontSize = 8;
 
 % Label axes
 xlabel('Phasor Angle (hours)');
