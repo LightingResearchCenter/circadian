@@ -62,7 +62,7 @@ if bottom < 0
     bottom = 0;
 end
 
-position = [left,bottom,width,height];
+position = [left,-0.5,width,height];
 set(hReportTitle,'Position',position);
 
 % Return the text handle if requested

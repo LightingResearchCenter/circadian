@@ -1,4 +1,4 @@
-function daysigram(sheetTitle,timeArray,activityArray,lightArray,lightMeasure,lightRange,nDaysPerSheet,printDir,fileID)
+function daysigram(sheetTitle,timeArray,masks,activityArray,lightArray,lightMeasure,lightRange,nDaysPerSheet,printDir,fileID)
 %DAYSIGRAM Summary of this function goes here
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
@@ -6,8 +6,9 @@ function daysigram(sheetTitle,timeArray,activityArray,lightArray,lightMeasure,li
 import reports.daysigram.*;
 
 [hFigure,width,height,units] = initializefigure(2,'on');
-
-Days = bindata2days(timeArray,activityArray,lightArray);
+excludedData = ~masks.observation;
+notInUse = masks.bed | ~masks.compliance;
+Days = bindata2days(timeArray,excludedData,notInUse,activityArray,lightArray);
 nDays = numel(Days);
 
 nSheets = ceil(nDays/nDaysPerSheet);
@@ -21,6 +22,9 @@ for i1 = 1:nSheets
             ['(page ',num2str(i1),' of ',num2str(nSheets),')']};
         printName = strcat('daysigram_',datestr(now,'yyyy-mm-dd_HHMM'),...
             '_',fileID,'_page',num2str(i1),'of',num2str(nSheets));
+    elseif iscell(sheetTitle)
+        sheetTitle2 = sheetTitle;
+        printName = strcat('daysigram_',datestr(now,'yyyy-mm-dd_HHMM'),'_',fileID);
     else
         sheetTitle2 = {sheetTitle};
         printName = strcat('daysigram_',datestr(now,'yyyy-mm-dd_HHMM'),'_',fileID);

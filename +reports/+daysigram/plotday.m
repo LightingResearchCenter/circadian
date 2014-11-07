@@ -9,6 +9,9 @@ import reports.daysigram.*;
 timeArray = Day.timeArray;
 activityArray = Day.activityArray;
 lightArray = Day.lightArray;
+excludedData = Day.excludedData;
+notInUse = Day.notInUse;
+
 
 % Normalize activity if needed
 % maxActivity = max(activityArray);
@@ -17,7 +20,7 @@ lightArray = Day.lightArray;
 % end
 
 % Separate unevenly sampled data into groups
-Groups = slicedata2breaks(timeArray,activityArray,lightArray);
+Groups = slicedata2breaks(timeArray,activityArray,lightArray,excludedData,notInUse);
 
 % Create the axes
 hAxes = axes('ActivePositionProperty','position','Units',units,'Position',position);
@@ -26,14 +29,20 @@ xLim = [floor(timeArray(1)),ceil(timeArray(end))];
 
 % Plot the data
 for i1 = 1:numel(Groups)
+    
+    hNotInUse = area(hAxes(1),Groups(i1).timeArray,Groups(i1).notInUse);
+    if i1 == 1
+        for i2 = 1:numel(hAxes)
+            hold(hAxes(i2),'on');
+        end
+    end
+    hExcluded = area(hAxes(1),Groups(i1).timeArray,Groups(i1).excludedData);
+    
     switch lightMeasure
         case {'lux','Lux','LUX'}
             if i1 == 1
                 [hAxes,hActivity,hLight] = plotyy(Groups(i1).timeArray,Groups(i1).activityArray,...
                     Groups(i1).timeArray,Groups(i1).lightArray,'area','semilogy');
-                    for i2 = 1:numel(hAxes)
-                        hold(hAxes(i2),'on');
-                    end
             else
                 hActivity = area(hAxes(1),Groups(i1).timeArray,Groups(i1).activityArray);
                 axes(hAxes(2));
@@ -43,20 +52,18 @@ for i1 = 1:numel(Groups)
             isLog = true;
         case {'cs','CS','Cs','cS'}
             if i1 == 1
-                [hAxes,hActivity,hLight] = plotyy(Groups(i1).timeArray,Groups(i1).activityArray,...
-                    Groups(i1).timeArray,Groups(i1).lightArray,'area','plot');
-                for i2 = 1:numel(hAxes)
-                        hold(hAxes(i2),'on');
-                end
+                [hAxes,hLight,hActivity] = plotyy(Groups(i1).timeArray,Groups(i1).lightArray,...
+                    Groups(i1).timeArray,Groups(i1).activityArray,'area','plot');
             else
-                hActivity = area(hAxes(1),Groups(i1).timeArray,Groups(i1).activityArray);
-                hLight = plot(hAxes(1),Groups(i1).timeArray,Groups(i1).lightArray);
+                hLight = area(hAxes(1),Groups(i1).timeArray,Groups(i1).lightArray);
+                hActivity = plot(hAxes(1),Groups(i1).timeArray,Groups(i1).activityArray);
             end
             isLog = false;
         otherwise
             error('Unknown light measure.');
     end
-    
+    formatnotinuse(hNotInUse);
+    formatexcluded(hExcluded);
     formatactivity(hActivity);
     formatlight(hLight,lightMeasure);
     
@@ -72,24 +79,15 @@ hLabel = ylabel(hAxes(1),datestr(xLim(1),'mm/dd/yyyy'));
 set(hLabel,'Rotation',0,'HorizontalAlignment','right');
 
 
-hAxes = hAxes(1);
-
-end
-
-
-function formatactivity(h)
-set(h,...
-    'FaceColor'   , [180, 211, 227]/256,...
-    'EdgeColor'   , 'none',...
-    'DisplayName' , 'Activity');
+% hAxes = hAxes(1);
 
 end
 
 
 function formatlight(h,lightMeasure)
 set(h,...
-    'Color'     , 'k',...
-    'LineWidth' , 2);
+    'FaceColor'   , [180, 211, 227]/256,...
+    'EdgeColor'   , 'none');
 switch lightMeasure
     case {'cs','CS','Cs','cS'}
         set(h,'DisplayName' , 'Circadian Stimulus (CS)');
@@ -99,6 +97,29 @@ switch lightMeasure
         set(h,'DisplayName' , 'Light');
 end
 
+
+end
+
+
+function formatactivity(h)
+set(h,...
+    'Color'     , 'k',...
+    'LineWidth' , 1.5,...
+    'DisplayName' , 'Activity Index (AI)');
+end
+
+function formatexcluded(h)
+set(h,...
+    'FaceColor'   , [255, 215, 215]/255,...
+    'EdgeColor'   , 'none',...
+    'DisplayName' , 'Excluded Data');
+end
+
+function formatnotinuse(h)
+set(h,...
+    'FaceColor'   , [230, 230, 230]/255,...
+    'EdgeColor'   , 'none',...
+    'DisplayName' , 'Not In Use');
 end
 
 

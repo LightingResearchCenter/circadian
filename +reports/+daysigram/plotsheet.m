@@ -4,6 +4,7 @@ function plotsheet(Days,lightMeasure,lightRange,position,nDaysPerSheet,units)
 %   lightMeasure = 'cs' or 'lux'
 
 import reports.daysigram.*;
+import plots.legendflex.*;
 
 nDays = numel(Days);
 
@@ -19,13 +20,14 @@ for i1 = 1:min([nDays,nDaysPerSheet])
     end
 end
 
-xlabel(hAxes,'time of day (hours)');
-set(hAxes,'XTickLabel',0:24);
+xlabel(hAxes(1),'time of day (hours)');
+set(hAxes(1),'XTickLabel',0:24);
 
-hLegend = legend(hAxes,'show','Location','South','Orientation','horizontal');
-legendPosition = get(hLegend,'Position');
-legendPosition(2) = axesPosition(2) - 3*legendPosition(4);
-set(hLegend,'Position',legendPosition)
+hLegend = legend(hAxes(1),'show','Location','South','Orientation','horizontal');
+legendEntries = hLegend.String;
+hLegend.Visible = 'off';
+axes(hAxes(1));
+legendflex(legendEntries,'anchor',[6 2],'buffer',[0 -50],'padding',[0 1 10],'nrow',2);
 
 % Box in the plots
 boxPosition = [x, y(end), width, nDays*height];
