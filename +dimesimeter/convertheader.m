@@ -16,10 +16,12 @@ epochSeconds = mode(diff(relTime.seconds));
 epoch = samplingrate(epochSeconds,'seconds');
 
 % Apply gaussian filter to data
-filterWindow = ceil(300/epochSeconds); % approximate number of samples in 5 minutes
-lux = gaussian(lux,filterWindow);
-CLA = gaussian(CLA,filterWindow);
-AI  = gaussian(AI ,filterWindow);
+if epochSeconds < 300
+    filterWindow = ceil(300/epochSeconds); % approximate number of samples in 5 minutes
+    lux = gaussian(lux,filterWindow);
+    CLA = gaussian(CLA,filterWindow);
+    AI  = gaussian(AI ,filterWindow);
+end
 
 chromaticity = chromcoord('x',X,'y',Y);
 
