@@ -126,28 +126,18 @@ cdfData.Variables.complianceArray = complianceArray;
 cdfData.Variables.bedArray = bedArray;
 
 %% Compliance array properties
-cdfData.VariableAttributes.description{11,1} = 'complianceArray';
-cdfData.VariableAttributes.description{11,2} = 'compliance array, true = subject appears to be using the device';
-cdfData.VariableAttributes.unitPrefix{11,1} = 'complianceArray';
-cdfData.VariableAttributes.unitPrefix{11,2} = '';
-cdfData.VariableAttributes.baseUnit{11,1} = 'complianceArray';
-cdfData.VariableAttributes.baseUnit{11,2} = '1';
-cdfData.VariableAttributes.unitType{11,1} = 'complianceArray';
-cdfData.VariableAttributes.unitType{11,2} = 'logical';
-cdfData.VariableAttributes.otherAttributes{11,1} = 'complianceArray';
-cdfData.VariableAttributes.otherAttributes{11,2} = '';
+cdfData.VariableAttributes.complianceArray.description = 'compliance array, true = subject appears to be using the device';
+cdfData.VariableAttributes.complianceArray.unitPrefix = '';
+cdfData.VariableAttributes.complianceArray.baseUnit = '1';
+cdfData.VariableAttributes.complianceArray.unitType = 'logical';
+cdfData.VariableAttributes.complianceArray.otherAttributes = '';
 
 %% Bed array properties
-cdfData.VariableAttributes.description{12,1} = 'bedArray';
-cdfData.VariableAttributes.description{12,2} = 'bed array, true = subject reported being in bed';
-cdfData.VariableAttributes.unitPrefix{12,1} = 'bedLog';
-cdfData.VariableAttributes.unitPrefix{12,2} = '';
-cdfData.VariableAttributes.baseUnit{12,1} = 'bedLog';
-cdfData.VariableAttributes.baseUnit{12,2} = '1';
-cdfData.VariableAttributes.unitType{12,1} = 'bedArray';
-cdfData.VariableAttributes.unitType{12,2} = 'logical';
-cdfData.VariableAttributes.otherAttributes{12,1} = 'bedArray';
-cdfData.VariableAttributes.otherAttributes{12,2} = '';
+cdfData.VariableAttributes.bedArray.description = 'bed array, true = subject reported being in bed';
+cdfData.VariableAttributes.bedArray.unitPrefix = '';
+cdfData.VariableAttributes.bedArray.baseUnit = '1';
+cdfData.VariableAttributes.bedArray.unitType = 'logical';
+cdfData.VariableAttributes.bedArray.otherAttributes = '';
 
 %% Save new file  
 writecdf(cdfData, newPath);
