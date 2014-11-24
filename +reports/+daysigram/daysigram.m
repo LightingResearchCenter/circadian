@@ -17,7 +17,12 @@ for i1 = 1:nSheets
     startDay = 1 + i1*nDaysPerSheet - nDaysPerSheet;
     stopDay = min([i1*nDaysPerSheet,nDays]);
     
-    if nSheets > 1
+    if nSheets > 1 && iscell(sheetTitle)
+        sheetTitle2 = [sheetTitle;...
+            {['(page ',num2str(i1),' of ',num2str(nSheets),')']}];
+        printName = strcat('daysigram_',datestr(now,'yyyy-mm-dd_HHMM'),...
+            '_',fileID,'_page',num2str(i1),'of',num2str(nSheets));
+    elseif nSheets > 1
         sheetTitle2 = {sheetTitle;...
             ['(page ',num2str(i1),' of ',num2str(nSheets),')']};
         printName = strcat('daysigram_',datestr(now,'yyyy-mm-dd_HHMM'),...
@@ -33,7 +38,7 @@ for i1 = 1:nSheets
     plotheader(hFigure,sheetTitle2);
     plotfooter(hFigure);
     
-    position = [0.875,1.5,width-1.25,height-2];
+    position = [0.875,1.5,width-1.25,height-2.25];
     plotsheet(Days(startDay:stopDay),lightMeasure,lightRange,position,nDaysPerSheet,units);
     
     printPath = fullfile(printDir,printName);
