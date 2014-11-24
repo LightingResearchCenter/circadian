@@ -1,6 +1,7 @@
 function [immobileTime,immobilePercent,mobileTime,mobilePercent] = timeImmobileMobile(time,immobility,sleepStart,sleepEnd,epoch,assumedSleepTime)
 %ACTUALIMMOBILE Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Find when in bed and assumed asleep
 bed = (time >= sleepStart) & (time <= sleepEnd);

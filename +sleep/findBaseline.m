@@ -1,6 +1,7 @@
 function baselineActivity = findBaseline(activity)
 %FINDBASELINE Find the level of background noise
 %   Detailed explanation goes here
+import sleep.*
 
 % Find half of the maximum activity
 halfMax = 0.5*max(activity);

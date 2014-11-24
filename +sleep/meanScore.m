@@ -1,6 +1,7 @@
 function [totalActivityScore,meanActivityScore,meanScoreActivePeriods] = meanScore(time,activityCounts,sleepStart,sleepEnd)
 %MEANSCORE Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Trim the data to the assumed sleep time
 [time,activityCounts] = trimData(time,activityCounts,sleepStart,sleepEnd);

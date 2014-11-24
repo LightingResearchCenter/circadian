@@ -1,5 +1,6 @@
 function threshold = autoThreshold(activity,immobility)
 %AUTOTHRESHOLD Calculate a threshold
+import sleep.*
 
 % Find the mean score in active periods
 meanScoreActivePeriods = sum(activity)/numel(activity(~immobility));
