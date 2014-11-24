@@ -1,9 +1,13 @@
-function [absTime,relTime,epoch,light,activity,masks] = convertcdf(cdfData)
+function [absTime,relTime,epoch,light,activity,masks,subjectID,deviceSN] = convertcdf(cdfData)
 %CONVERTCDF Convert an LRC formatted CDF to custom classes
 %   Detailed explanation goes here
 
 % Import daysimeter12 package to enable all other daysimeter12 functions
 import daysimeter12.*;
+
+% Extract subject ID and device serial number (SN)
+subjectID = cdfData.GlobalAttributes.subjectID;
+deviceSN  = cdfData.GlobalAttributes.deviceSN;
 
 % Convert the time to custom time classes
 absTime = absolutetime(cdfData.Variables.time(:),'cdfepoch',false,...
