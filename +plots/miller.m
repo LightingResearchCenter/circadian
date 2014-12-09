@@ -44,7 +44,8 @@ switch quality
 end
 
 % Create and format the legend.
-legendflex([h1,h2],{label1,label2},'anchor',[2 6],'buffer',[0 10],'ncol',2,'padding',[0 1 10]);
+% legendflex([h1,h2],{label1,label2},'anchor',[2 6],'buffer',[0 10],'ncol',2,'padding',[0 1 10]);
+legendflex([h1,h2],{label1,label2},'anchor',[6 2],'buffer',[0 -45],'ncol',2,'padding',[0 1 10]);
 
 % Fix box
 fixBox(hAxes);
