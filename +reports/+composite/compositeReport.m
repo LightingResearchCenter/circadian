@@ -17,7 +17,8 @@ h1 = 3 + 0.25;
 box1 = [x1,y1,w1,h1];
 
 x2 = 5.375  - 0.5;
-y2 = 3.875 - 0.125;
+% y2 = 3.875 - 0.125;
+y2 = 3.875 + 0.25;
 w2 = 4.5;
 h2 = 3 - 0.25;
 box2 = [x2,y2,w2,h2];
@@ -91,7 +92,7 @@ set(hMiller,'Units','normalized'); % Return to default
 plots.miller(Miller.time,'Circadian Stimulus (CS)',Miller.cs,'Activity Index (AI)',Miller.activity,hMiller);
 % Create title
 hMillerTitle = title('Average Day');
-hMillerTitle.Position(2) = hMillerTitle.Position(2)*1.125;
+% hMillerTitle.Position(2) = hMillerTitle.Position(2)*1.125;
 
 % Histograms
 phasorangdist(Phasor.angle.hours,box4,units)
