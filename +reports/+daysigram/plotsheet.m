@@ -16,18 +16,22 @@ y = position(2) + position(4) - (1:nDays)'*height;
 for i1 = 1:min([nDays,nDaysPerSheet])
     axesPosition = [x, y(i1), width, height];
     if numel(Days(i1).timeArray) > 0
-        hAxes = plotday(Days(i1),lightMeasure,lightRange,axesPosition,units);
+        [hAxesLeft,hAxesRight,hAxesMasks,hGroup] = reports.daysigram.plotday(Days(i1),lightMeasure,lightRange,axesPosition,units);
     end
 end
 
-xlabel(hAxes(1),'time of day (hours)');
-set(hAxes(1),'XTickLabel',0:24);
+xlabel(hAxesRight,'time of day (hours)');
+set(hAxesRight,'XTickLabel',0:24);
 
-hLegend = legend(hAxes(1),'show','Location','South','Orientation','horizontal');
+% hLegend = legend(hAxes(1),'show','Location','South','Orientation','horizontal');
+hLegend = legend(hGroup);
+hLegend.Location = 'South';
+hLegend.Orientation = 'horizontal';
 legendEntries = hLegend.String;
 hLegend.Visible = 'off';
-axes(hAxes(1));
-legendflex(legendEntries,'anchor',[6 2],'buffer',[0 -50],'padding',[0 1 10],'nrow',2);
+legendflex(hGroup,legendEntries,'anchor',[6 2],'buffer',[0 -50],'padding',[0 1 10],'nrow',2);
+axes(hAxesLeft);
+axes(hAxesRight);
 
 % Box in the plots
 boxPosition = [x, y(end), width, nDays*height];

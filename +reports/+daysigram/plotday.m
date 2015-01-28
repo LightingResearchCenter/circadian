@@ -1,4 +1,4 @@
-function hAxes = plotday(Day,lightMeasure,lightLim,position,units)
+function [hAxesLeft,hAxesRight,hAxesMasks,hGroup] = plotday(Day,lightMeasure,lightLim,position,units)
 %PLOTDAY Summary of this function goes here
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
@@ -11,6 +11,7 @@ activityArray = Day.activityArray;
 lightArray = Day.lightArray;
 excludedData = Day.excludedData;
 notInUse = Day.notInUse;
+inBed = Day.inBed;
 
 
 % Normalize activity if needed
@@ -20,81 +21,89 @@ notInUse = Day.notInUse;
 % end
 
 % Separate unevenly sampled data into groups
-Groups = slicedata2breaks(timeArray,activityArray,lightArray,excludedData,notInUse);
+Groups = reports.daysigram.slicedata2breaks(timeArray,activityArray,lightArray,excludedData,notInUse,inBed);
 
 % Create the axes
-hAxes = axes('ActivePositionProperty','position','Units',units,'Position',position);
+hAxesMasks = axes('ActivePositionProperty','position','Units',units,'Position',position);
+hAxesLeft = axes('ActivePositionProperty','position','Units',units,'Position',position);
+hAxesRight = axes('ActivePositionProperty','position','Units',units,'Position',position);
 
 xLim = [floor(timeArray(1)),ceil(timeArray(end))];
 
 % Plot the data
 for i1 = 1:numel(Groups)
     
-    hNotInUse = area(hAxes(1),Groups(i1).timeArray,Groups(i1).notInUse);
+    hInBed = area(hAxesMasks,Groups(i1).timeArray,Groups(i1).inBed);
     if i1 == 1
-        for i2 = 1:numel(hAxes)
-            hold(hAxes(i2),'on');
-        end
+        hold(hAxesMasks,'on');
+        hold(hAxesLeft,'on');
+        hold(hAxesRight,'on');
     end
-    hExcluded = area(hAxes(1),Groups(i1).timeArray,Groups(i1).excludedData);
+    hNotInUse = area(hAxesMasks,Groups(i1).timeArray,Groups(i1).notInUse);
+    hExcluded = area(hAxesMasks,Groups(i1).timeArray,Groups(i1).excludedData);
     
     switch lightMeasure
         case {'lux','Lux','LUX'}
-            if i1 == 1
-                [hAxes,hActivity,hLight] = plotyy(Groups(i1).timeArray,Groups(i1).activityArray,...
-                    Groups(i1).timeArray,Groups(i1).lightArray,'area','semilogy');
-            else
-                hActivity = area(hAxes(1),Groups(i1).timeArray,Groups(i1).activityArray);
-                axes(hAxes(2));
-                hLight = semilogy(Groups(i1).timeArray,Groups(i1).lightArray);
-            end
-                
+            Groups(i1).lightArray(Groups(i1).lightArray < lightLim(1)) = lightLim(1);
+            hLight = area(hAxesLeft,Groups(i1).timeArray,Groups(i1).lightArray);
+            hAxesLeft.YScale = 'log';
+            hActivity = plot(hAxesRight,Groups(i1).timeArray,Groups(i1).activityArray);
             isLog = true;
         case {'cs','CS','Cs','cS'}
-            if i1 == 1
-                [hAxes,hLight,hActivity] = plotyy(Groups(i1).timeArray,Groups(i1).lightArray,...
-                    Groups(i1).timeArray,Groups(i1).activityArray,'area','plot');
-            else
-                hLight = area(hAxes(1),Groups(i1).timeArray,Groups(i1).lightArray);
-                hActivity = plot(hAxes(1),Groups(i1).timeArray,Groups(i1).activityArray);
-            end
+            hLight = area(hAxesLeft,Groups(i1).timeArray,Groups(i1).lightArray);
+            hActivity = plot(hAxesRight,Groups(i1).timeArray,Groups(i1).activityArray);
             isLog = false;
         otherwise
             error('Unknown light measure.');
     end
+    formatinbed(hInBed);
     formatnotinuse(hNotInUse);
     formatexcluded(hExcluded);
     formatactivity(hActivity);
     formatlight(hLight,lightMeasure);
     
-    hideaxes(hAxes)
+    hideaxes(hAxesMasks);
+    hideaxes(hAxesLeft);
+    hideaxes(hAxesRight);
 end
 
 hold off;
+formatxaxes(hAxesMasks,xLim);
+hAxesMasks.Visible = 'off';
+formatxaxes(hAxesLeft,xLim);
+formatxaxes(hAxesRight,xLim);
+formatlightaxes(hAxesLeft,lightLim,isLog);
+formatactivityaxes(hAxesRight);
 
-formatxaxes(hAxes,xLim);
-formatyaxes(hAxes,lightLim,isLog);
-
-hLabel = ylabel(hAxes(1),datestr(xLim(1),'mm/dd/yyyy'));
+hLabel = ylabel(hAxesLeft(1),datestr(xLim(1),'mm/dd/yyyy'));
 set(hLabel,'Rotation',0,'HorizontalAlignment','right');
 
+axes(hAxesRight);
 
-% hAxes = hAxes(1);
+hGroup = [hLight;hActivity;hExcluded;hNotInUse;hInBed];
 
 end
 
 
 function formatlight(h,lightMeasure)
-set(h,...
-    'FaceColor'   , [180, 211, 227]/256,...
-    'EdgeColor'   , 'none');
 switch lightMeasure
     case {'cs','CS','Cs','cS'}
+        set(h,...
+            'FaceColor'   , [180, 211, 227]/256,...
+            'EdgeColor'   , 'none');
         set(h,'DisplayName' , 'Circadian Stimulus (CS)');
     case {'lux','Lux','LUX'}
         set(h,'DisplayName' , 'Illuminance (lux)');
+%         set(h,'Color'   , [180, 211, 227]/256);
+        set(h,...
+            'FaceColor'   , [180, 211, 227]/256,...
+            'EdgeColor'   , 'none');
+%         set(h,'LineWidth' , 1.5);
     otherwise
         set(h,'DisplayName' , 'Light');
+        set(h,...
+            'FaceColor'   , [180, 211, 227]/256,...
+            'EdgeColor'   , 'none');
 end
 
 
@@ -122,57 +131,60 @@ set(h,...
     'DisplayName' , 'Not In Use');
 end
 
+function formatinbed(h)
+set(h,...
+    'FaceColor'   , [255, 255, 191]/255,...
+    'EdgeColor'   , 'none',...
+    'DisplayName' , 'Reported In Bed');
+end
 
 function hideaxes(h)
 
 for i1 = 1:numel(h)
     set(h(i1),'Visible','off');
+    h(i1).Color = 'none';
 end
 
 end
 
 
 function formatxaxes(h,xLim)
-
+h.Visible = 'on';
 xTick = xLim(1):1/24:xLim(2);
-
-for i1 = 1:numel(h)
-    set(h(i1),'Visible','on');
-    set(h(i1),'XLimMode','manual','XLim',xLim);
-    set(h(i1),'XTick',xTick,'XTickLabel','');
-    set(h(i1),'Box','off','XGrid','on');
-end
+set(h,'XLimMode','manual','XLim',xLim);
+set(h,'XTick',xTick,'XTickLabel','');
+set(h,'Box','off','XGrid','on');
 
 end
 
-function formatyaxes(h,lightLim,isLog)
+function formatlightaxes(h,lightLim,isLog)
+
+if lightLim(1) < 1 && lightLim(2) > 1
+    yTick = [lightLim(1),1,lightLim(2)];
+else
+    yTick = lightLim;
+end
+
+h.YLimMode = 'manual';
+h.YLim = lightLim;
+h.YTick = yTick;
+h.YTickLabel = '';
+h.YColor = 'k';
+
+plotyticklabels(h,yTick,'left',isLog);
+end
+
+function formatactivityaxes(h)
 
 yLim = [0,1];
 yTick = yLim;
 
-for i1 = 1:numel(h)
-    set(h(i1),'Visible','on');
-end
-set(h(1),'YLimMode','manual','YLim',yLim);
-set(h(1),'YTick',yTick,'YTickLabel','');
-plotyticklabels(h(1),yTick,'left',false);
-
-if numel(h) > 1 % Format additional y-axes if they exist
-    
-    
-    if lightLim(1) < 1 && lightLim(2) > 1
-        yTick = [lightLim(1),1,lightLim(2)];
-    else
-        yTick = lightLim;
-    end
-    
-    set(h(2),'YLimMode','manual','YLim',lightLim);
-    set(h(2),'YTick',yTick,'YTickLabel','');
-    set(h(2),'YColor','k');
-    
-    plotyticklabels(h(2),yTick,'right',isLog);
-end
-
+h.YLimMode = 'manual';
+h.YLim = yLim;
+h.YTick = yTick;
+h.YTickLabel = '';
+h.YColor = 'k';
+plotyticklabels(h,yTick,'right',false);
 end
 
 function plotyticklabels(h,yTick,side,isLog)

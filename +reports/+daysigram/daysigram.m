@@ -1,14 +1,15 @@
-function daysigram(sheetTitle,timeArray,masks,activityArray,lightArray,lightMeasure,lightRange,nDaysPerSheet,printDir,fileID)
+function daysigram(figNum,sheetTitle,timeArray,masks,activityArray,lightArray,lightMeasure,lightRange,nDaysPerSheet,printDir,fileID)
 %DAYSIGRAM Summary of this function goes here
 %   Detailed explanation goes here
 %   lightMeasure = 'cs' or 'lux'
 
 import reports.daysigram.*;
 
-[hFigure,width,height,units] = initializefigure(2,'on');
+[hFigure,width,height,units] = initializefigure(figNum,'on');
 excludedData = ~masks.observation;
-notInUse = masks.bed | ~masks.compliance;
-Days = bindata2days(timeArray,excludedData,notInUse,activityArray,lightArray);
+notInUse = ~masks.compliance;
+inBed = masks.bed;
+Days = bindata2days(timeArray,excludedData,notInUse,inBed,activityArray,lightArray);
 nDays = numel(Days);
 
 nSheets = ceil(nDays/nDaysPerSheet);
