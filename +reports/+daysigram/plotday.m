@@ -69,6 +69,8 @@ end
 
 hold off;
 formatxaxes(hAxesMasks,xLim);
+hAxesMasks.YLimMode = 'manual';
+hAxesMasks.YLim = [0 1];
 hAxesMasks.Visible = 'off';
 formatxaxes(hAxesLeft,xLim);
 formatxaxes(hAxesRight,xLim);
