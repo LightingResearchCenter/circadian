@@ -26,7 +26,9 @@ green = cdfData.Variables.green(:);
 blue = cdfData.Variables.blue(:);
 
 illuminance = cdfData.Variables.illuminance(:);
+illuminance(illuminance<0) = 0;
 cla = cdfData.Variables.CLA(:);
+cla(cla<0) = 0;
 
 % Create an instance of chromcoord from RGB data
 chromaticity = rgb2chrom(red,green,blue);

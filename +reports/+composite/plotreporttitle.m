@@ -15,8 +15,8 @@ margin = 0;
 set(hReportTitle,'Margin',margin);
 
 % Create text
-todayStr = datestr(now,'mmmm dd, yyyy');
-reportTitle = {figTitle;['Created: ',todayStr]};
+todayStr = datestr(now,'mmmm dd, yyyy  HH:MM');
+reportTitle = {figTitle;['Generated: ',todayStr]};
 
 % Add text to box
 set(hReportTitle,'String',reportTitle);

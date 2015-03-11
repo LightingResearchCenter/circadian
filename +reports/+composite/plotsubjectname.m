@@ -1,4 +1,4 @@
-function varargout = plotsubjectname(hFigure,subject,deviceID)
+function varargout = plotsubjectname(hFigure,subjectID,deviceSN)
 %PLOTSUBJECTNAME Summary of this function goes here
 %   hFigure = figure handle
 
@@ -15,7 +15,7 @@ margin = 0;
 set(hName,'Margin',margin);
 
 % Add text to box
-set(hName,'String',['Subject: ',subject,'  Device ID: ',deviceID]);
+set(hName,'String',['Subject ID: ',subjectID,'  Device SN: ',deviceSN]);
 
 % Make sure box resizes to text
 fitBoxToText = 'on'; % 'on' or 'off'

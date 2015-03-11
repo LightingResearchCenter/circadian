@@ -1,4 +1,4 @@
-function compositeReport(plotDir,Phasor,Actigraphy,Average,Miller,subject,deviceID,figTitle)
+function compositeReport(plotDir,Phasor,Actigraphy,Average,Miller,subjectID,deviceSN,figTitle)
 %COMPOSITEREPORT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,7 +7,7 @@ import plots.*
 
 [hFigure,~,~,units] = reports.composite.initializefigure(1,'on');
 
-fileName = ['compositeReport_',datestr(now,'yyyy-mm-dd_HHMM'),'_subject',subject,'_deviceID',deviceID];
+fileName = ['compositeReport_',datestr(now,'yyyy-mm-dd_HHMM'),'_subjectID',subjectID,'_deviceSN',deviceSN];
 
 %% Specify dimensions of plot areas
 x1 = 0;
@@ -54,7 +54,7 @@ box6 = [x6,y6,w6,h6];
 set(0,'CurrentFigure',hFigure)
 
 %% Plot annotations
-plotsubjectname(hFigure,subject,deviceID)
+plotsubjectname(hFigure,subjectID,deviceSN)
 
 plotfooter(hFigure,figTitle);
 
