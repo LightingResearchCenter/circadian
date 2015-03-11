@@ -1,6 +1,7 @@
 function sleepLatency = latency(bedTime,sleepStart,epoch)
 %LATENCY Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 sleepLatencySec = (sleepStart - bedTime)*24*60*60; % Sleep Latency in seconds
 

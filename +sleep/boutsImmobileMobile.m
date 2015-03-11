@@ -1,6 +1,7 @@
 function [immobileBouts,mobileBouts,meanImmobileBoutTime,meanMobileBoutTime,immobile1MinBouts,immobile1MinPercent] = boutsImmobileMobile(time,immobility,sleepStart,sleepEnd,immobileTime,mobileTime,epoch)
 %BOUTS Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Trim data to the assumed sleep period
 [~,immobility] = trimData(time,immobility,sleepStart,sleepEnd);

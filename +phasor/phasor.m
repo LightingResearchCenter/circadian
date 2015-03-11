@@ -1,4 +1,4 @@
-function [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor(timeArray,epoch,signal1,signal2)
+function [vector,magnitude,Angle,magnitudeHarmonics,firstHarmonic] = phasor(timeArray,epoch,signal1,signal2)
 % PHASOR Compares two time dependent signals
 %   
 %   Input:
@@ -21,7 +21,7 @@ function [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor(timeArray,epoc
 import phasor.*
 
 % Calculate phasors
-phasorVector = cos24hrphasor(timeArray,epoch,signal1,signal2);
+[vector,magnitude,Angle] = cos24hrphasor(timeArray,epoch,signal1,signal2);
 
 % f24H returns all the harmonics of the 24-hour rhythm (as complex numbers)
 [f24H,f24] = phasor24harmonics(signal1,signal2,epoch.hertz);

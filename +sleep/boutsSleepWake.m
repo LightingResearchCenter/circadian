@@ -1,6 +1,7 @@
 function [sleepBouts,wakeBouts,meanSleepBoutTime,meanWakeBoutTime] = boutsSleepWake(time,sleep,sleepStart,sleepEnd,actualSleepTime,actualWakeTime)
 %BOUTS Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Trim data to the assumed sleep period
 [~,sleep] = trimData(time,sleep,sleepStart,sleepEnd);

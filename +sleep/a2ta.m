@@ -1,6 +1,7 @@
 function totalActivity = a2ta(activity,epoch)
 %A2TA Convert activity to total activity
 %   epoch = sampling epoch in seconds
+import sleep.*
 
 % Set scaling factors
 k1 = 1;

@@ -1,6 +1,7 @@
 function [sleepStart,sleepEnd,sleepStartStr,sleepEndStr] = sleepBounds(time,immobility,bedTime,getupTime,epoch)
 %SLEEPBOUNDS Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Determine the number of epochs that makes a 10 minute window
 n = ceil(600/epoch);

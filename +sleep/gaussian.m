@@ -1,4 +1,5 @@
 function filtered = gaussian(data, window)
+import sleep.*
 
 %window is number of points on each side of current point that you want to
 %consider

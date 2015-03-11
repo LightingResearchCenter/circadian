@@ -3,17 +3,21 @@ close all
 clc
 
 filePath = 'test.cdf';
+cdfData = daysimeter12.readcdf(filePath);
+[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(cdfData);
+subject = cdfData.GlobalAttributes.subjectID;
 
-[absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(filePath);
+Phasor = phasor.prep(absTime,epoch,light,activity,masks);
 
-[phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(absTime.localDateNum,epoch,light.cs,activity);
+Actigraphy = struct;
+[Actigraphy.interdailyStability,Actigraphy.intradailyVariability] = isiv.isiv(activity,epoch);
 
-[interdailyStability,intradailyVariability] = isiv.isiv(activity,epoch);
+Miller = struct('time',[],'cs',[],'activity',[]);
+[         ~,Miller.cs] = millerize.millerize(relTime,light.cs,masks);
+[Miller.time,Miller.activity] = millerize.millerize(relTime,activity,masks);
 
-[millerTime,millerDataArray] = millerize.millerize(relTime,activity,masks);
-figure(1)
-plot(millerTime.hours,millerDataArray)
+Average = reports.composite.daysimeteraverages(light.cs,light.illuminance,activity);
+reports.composite.compositeReport('',Phasor,Actigraphy,Average,Miller,subject,'Composite Report Test')
 
-[millerTime,millerDataArray] = millerize.millerize(relTime,light.cs,masks);
-figure(2)
-plot(millerTime.hours,millerDataArray)
+% WARNING: DFA is slow
+% alpha = dfa.dfa(epoch,activity,1,[1.5,8]);

@@ -1,6 +1,7 @@
 function [actualSleepTime,actualSleepPercent,actualWakeTime,actualWakePercent] = actualSleep(time,sleep,sleepStart,sleepEnd,epoch,assumedSleepTime)
 %ACTUALSLEEP Summary of this function goes here
 %   Detailed explanation goes here
+import sleep.*
 
 % Find when in bed and assumed asleep
 bed = (time >= sleepStart) & (time <= sleepEnd);

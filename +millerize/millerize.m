@@ -4,14 +4,18 @@ function [millerTime,millerDataArray] = millerize(relTime,dataArray,masks)
 
 dataArray = dataArray(masks.observation);
 
-startTime_datevec = relTime.startTime.localDateVec;
-startTime_minutes = startTime_datevec(4)*60 + startTime_datevec(5) + startTime_datevec(6)/60;
+if ~isempty(relTime.startTime)
+    startTime_datevec = relTime.startTime.localDateVec;
+    startTime_minutes = startTime_datevec(4)*60 + startTime_datevec(5) + startTime_datevec(6)/60;
 
-relTime_minutes = relTime.minutes(masks.observation) + startTime_minutes;
+    relTime_minutes = relTime.minutes(masks.observation) + startTime_minutes;
 
-mod_minutes = mod(relTime_minutes,24*60);
+    mod_minutes = mod(relTime_minutes,24*60);
 
-roundedMod_minutes = round(mod_minutes/10)*10; % precise to 10 minutes
+    roundedMod_minutes = round(mod_minutes/10)*10; % precise to 10 minutes
+else
+    roundedMod_minutes = relTime.minutes;
+end
 
 millerTimeArray_minutes = unique(roundedMod_minutes);
 
@@ -24,13 +28,7 @@ for i1 = 1:nPoints
     millerDataArray(i1) = mean(dataArray(idx));
 end
 
-millerStart_datenum = floor(relTime.startTime.localDateNum);
-millerStart_utcOffset = relTime.startTime.offset.hours;
-millerStart = absolutetime(millerStart_datenum,'datenum',false,millerStart_utcOffset,'hours');
-
-millerTime = relTime;
-millerTime.startTime = millerStart;
-millerTime.minutes = millerTimeArray_minutes;
+millerTime = relativetime(millerTimeArray_minutes,'minutes');
 
 end
 
