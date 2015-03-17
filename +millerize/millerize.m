@@ -2,13 +2,13 @@ function [millerTime,millerDataArray] = millerize(relTime,dataArray,masks)
 %MILLERIZE Summary of this function goes here
 %   Detailed explanation goes here
 
-dataArray = dataArray(masks.observation);
+dataArray = dataArray(masks.observation & masks.compliance);
 
 if ~isempty(relTime.startTime)
     startTime_datevec = relTime.startTime.localDateVec;
     startTime_minutes = startTime_datevec(4)*60 + startTime_datevec(5) + startTime_datevec(6)/60;
 
-    relTime_minutes = relTime.minutes(masks.observation) + startTime_minutes;
+    relTime_minutes = relTime.minutes(masks.observation & masks.compliance) + startTime_minutes;
 
     mod_minutes = mod(relTime_minutes,24*60);
 
