@@ -6,7 +6,13 @@ function [hAxes,hGrid,hLabels] = phasoraxes(varargin)
 p = inputParser;
 addOptional(p,'hAxes',[],@ishandle);
 addOptional(p,'quality','display',@ischar);
+addOptional(p,'rMax',1);
+addOptional(p,'rTicks',5);
 parse(p,varargin{:});
+
+
+rMax = p.Results.rMax;
+rTicks = p.Results.rTicks;
 
 % Reassign the quality variable.
 switch lower(p.Results.quality);
@@ -36,9 +42,9 @@ set(hAxes,'ActivePositionProperty','position')
 % Prevent axes from being erased.
 set(hAxes,'NextPlot','add');
 
-% Set limits to 1.
-set(hAxes,'XLim',[-1 1]);
-set(hAxes,'YLim',[-1 1]);
+% Set limits to rMax.
+set(hAxes,'XLim',[-rMax rMax]);
+set(hAxes,'YLim',[-rMax rMax]);
 
 % Make aspect ratio equal.
 set(hAxes,'DataAspectRatio',[1 1 1]);
@@ -69,8 +75,8 @@ yunit(inds(1 : 2 : 5)) = zeros(3, 1);
 cos82 = cos(82*pi/180);
 sin82 = sin(82*pi/180);
 rMin = 0;
-rMax = 1;
-rTicks = 5;
+% rMax = 1;
+% rTicks = 5;
 rInc = (rMax - rMin)/rTicks;
 for iTick = (rMin + rInc):rInc:rMax
     hRadial = line(xunit*iTick,yunit*iTick);
