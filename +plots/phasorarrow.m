@@ -26,10 +26,15 @@ set(hHead,'Parent',h);
 end
 
 function hHead = arrowhead(vector,scale,hLine)
+% Constants that define arrowhead proportions
+% xC = 0.1;
+% yC = 0.02;
+xC = 0.05;
+yC = 0.02;
 
 % Create arrowhead points
-xx = [1,(1-.1*scale),(1-.1*scale),1].';
-yy = scale.*[0,(.02*scale),(-.02*scale),0].';
+xx = [1,(1-xC*scale),(1-xC*scale),1].';
+yy = scale.*[0,(yC*scale),(-yC*scale),0].';
 arrow = xx + yy.*1i;
 
 % Calculate new vector with same angle but magnitude of 1
