@@ -39,7 +39,7 @@ Phasor = struct;
     Phasor.magnitudeHarmonics,Phasor.firstHarmonic] = ...
     phasor.phasor(time,epoch,cs,activity);
 
-Phasor.nDays = epoch.days*numel(time);
+Phasor.nDays = floor(epoch.days*numel(time));
 
 end
 

@@ -32,7 +32,7 @@ end
 Actigraphy = struct;
 [Actigraphy.interdailyStability,Actigraphy.intradailyVariability] = isiv.isiv(activity,epoch);
 
-Actigraphy.nDays = epoch.days*numel(time);
+Actigraphy.nDays = floor(epoch.days*numel(time));
 
 end
 
