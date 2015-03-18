@@ -14,7 +14,7 @@ if ~isempty(relTime.startTime)
 
     roundedMod_minutes = round(mod_minutes/10)*10; % precise to 10 minutes
 else
-    roundedMod_minutes = relTime.minutes;
+    roundedMod_minutes = relTime.minutes(masks.observation & masks.compliance);
 end
 
 millerTimeArray_minutes = unique(roundedMod_minutes);
