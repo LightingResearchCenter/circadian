@@ -1,17 +1,32 @@
-function mdl = antilog_fit(X,y)
+function [nlm,fStat,pVal,cm] = antilog_fit(X,y)
 %ANTILOG_FIT Summary of this function goes here
 %   Detailed explanation goes here
 
-coeNames = {'min', 'amp', 'phi', 'alpha', 'beta'};
-beta0 = [0.02, 0.8, 170, 0, 2]; % min, amp, phi, alpha, beta
+% Fit a cosine curve
+cm = sigmoidfit.cos_fit(X,y);
 
-mdl = fitnlm(X,y,@modelfun,beta0,'CoefficientNames',coeNames);
+% Get starting coefficient values from cosine fit
+min0 = mean(y) - cm.amp;
+amp0 = cm.amp;
+phi0 = cm.phi;
+alpha0 = 0;
+beta0 = 2;
+
+% Assign coefficients
+coefNames = {'min', 'amp', 'phi', 'alpha', 'beta'};
+b0 = [min0, amp0, phi0, alpha0, beta0]; % min, amp, phi, alpha, beta
+
+% Fit nonlinear model
+nlm = fitnlm(X,y,@modelfun,b0,'CoefficientNames',coefNames);
+
+% Calculate F-statistic and p-value
+[fStat,pVal,emptyNullModel,hasIntercept] = sigmoidfit.ftest(nlm);
 
 end
 
 
 function y = modelfun(b,X)
-%MODELFUN Summary of this function goes here
+%MODELFUN Wrapper for the transformed antilog function
 %   Detailed explanation goes here
 
 minR	= b(1); % min (minimum)
