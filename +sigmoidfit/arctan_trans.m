@@ -3,7 +3,7 @@ function r = arctan_trans(t,minR,amp,phi,alpha,beta)
 %   Detailed explanation goes here
 
 c = sigmoidfit.cos_trans(t,phi);
-x = c + 1;
+x = c;
 psi = sigmoidfit.arctan(x,alpha,beta);
 r = minR + amp.*psi;
 
