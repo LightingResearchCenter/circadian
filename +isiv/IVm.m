@@ -18,8 +18,8 @@ if (rem(1/epoch.hours,1) > eps)
 end
 
 % Find ranges between 1 and 60 mins
-r0 = max([1,epoch.minutes]);
-rangeArray = r0:epoch.minutes:60;
+r1 = max([1,epoch.minutes]);
+rangeArray = r1:r1:60;
 nRange = numel(rangeArray);
 
 iv = zeros(nRange,1); % Preallocated IV array
