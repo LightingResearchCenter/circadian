@@ -1,20 +1,18 @@
-function [nlm,fStat,pVal,cm] = hill_fit(X,y)
-%HILL_FIT Summary of this function goes here
+function [nlm,fStat,pVal] = cos_fit_nlm(X,y)
+%COS_FIT_NLM Summary of this function goes here
 %   Detailed explanation goes here
 
 % Fit a cosine curve
 cm = sigmoidfit.cos_fit(X,y);
 
 % Get starting coefficient values from cosine fit
-min0   = mean(y) - cm.amp;
-amp0   = cm.amp;
-phi0   = cm.phi;
-m0     = 0.5;
-gamma0 = 1.4;
+min0 = mean(y) - cm.amp;
+amp0 = cm.amp;
+phi0 = cm.phi;
 
 % Assign coefficients
-coefNames = {'min', 'amp', 'phi', 'm', 'gamma'};
-b0 = [min0, amp0, phi0, m0, gamma0]; % min, amp, phi, m, gamma
+coefNames = {'min', 'amp', 'phi'};
+b0 = [min0, amp0, phi0]; % min, amp, phi
 
 % Fit nonlinear model
 nlm = fitnlm(X,y,@modelfun,b0,'CoefficientNames',coefNames);
@@ -26,15 +24,13 @@ end
 
 
 function y = modelfun(b,X)
-%MODELFUN Wrapper for the transformed Hill function
+%MODELFUN Wrapper for the transformed cosine function
 %   Detailed explanation goes here
 
 minR	= b(1); % min (minimum)
 amp     = b(2); % amp (amplitude)
 phi     = b(3); % phi (acrophase)
-m       = b(4); % alpha (width parameter)
-gamma	= b(5); % beta (steepness parameter)
 
-y = sigmoidfit.hill_trans(X,minR,amp,phi,m,gamma);
+y = minR + amp.*sigmoidfit.cos_trans(X,phi);
 
 end
