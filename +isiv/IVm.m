@@ -4,8 +4,8 @@ function [iv_m,iv_60] = IVm(dataArray,epoch)
 %
 % See also SAMPLINGRATE.
 
-n = numel(dataArray);
-if (n < 24 || n*epoch.hours < 24)
+n1 = numel(dataArray);
+if (n1 < 24 || n1*epoch.hours < 24)
     error('Cannot compute statistic because time series is less than 24 hours');
 end
 
@@ -16,6 +16,11 @@ end
 if (rem(1/epoch.hours,1) > eps)
     error('epoch does not divide into an hour without a remainder');
 end
+
+% Make sure dataArray spans whole days, remove excess from end
+nDay = floor(n1*epoch.minutes/1440);
+n2 = floor(nDay*1440/epoch.minutes);
+dataArray = dataArray(1:n2);
 
 % Find ranges between 1 and 60 mins
 r1 = max([1,epoch.minutes]);
