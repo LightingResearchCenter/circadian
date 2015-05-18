@@ -10,6 +10,9 @@ cdfData = daysimeter12.readcdf(filePath);
 [absTime,relTime,epoch,light,activity,masks] = daysimeter12.convertcdf(cdfData);
 subject = cdfData.GlobalAttributes.subjectID;
 
+%Reference function
+Actigraphy = isiv.prep(absTime,epoch,activity,masks);
+
 % Prep data
 time = absTime.localDateNum;
 time(~masks.observation) = [];
@@ -37,6 +40,4 @@ end
 
 % Analyze data
 [iv_m,iv_60] = isiv.IVm(activity,epoch);
-
-display(iv_m);
-display(iv_60);
+[is_m,is_60] = isiv.ISm(activity,epoch);
