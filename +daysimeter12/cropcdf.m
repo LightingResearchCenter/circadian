@@ -30,7 +30,8 @@ else
     bedLogDir = pwd;
 end
 
-hCrop = figure('Units','normal');
+hCrop = figure(500);
+set(hCrop,'Units','normal');
     
 %% Load the data
 cdfData = readcdf(cdfPath);
@@ -196,9 +197,14 @@ switch ext
         
         % Load the data from the cell
         for i1 = 1:nIntervals
-            bedTimeArray(i1) = datenum(bedLogCell{i1 + 1,2});
-            riseTimeArray(i1) = datenum(bedLogCell{i1 + 1,3});
+            try
+                bedTimeArray(i1) = datenum(bedLogCell{i1 + 1,2});
+                riseTimeArray(i1) = datenum(bedLogCell{i1 + 1,3});
+            catch err
+                % Skip entries that cannot be converted
+            end
         end
+        
     case '.txt'
         fileID = fopen(file);
         [bedCell] = textscan(fileID,'%f%s%s%s%s','headerlines',1);
@@ -210,12 +216,21 @@ switch ext
         riseTimeArray = zeros(size(bedd));
         % this can probably be vectorized
         for i1 = 1:length(bedd)
-            bedTimeArray(i1) = datenum([bedd{i1} ' ' bedt{i1}]);
-            riseTimeArray(i1) = datenum([rised{i1} ' ' riset{i1}]);
+            try
+                bedTimeArray(i1) = datenum([bedd{i1} ' ' bedt{i1}]);
+                riseTimeArray(i1) = datenum([rised{i1} ' ' riset{i1}]);
+            catch err
+                % Skip entries that cannot be converted
+            end
         end
         fclose(fileID);
     otherwise
         return
 end
+
+% Delete skipped entries
+idxSkipped = bedTimeArray == 0;
+bedTimeArray(idxSkipped)  = [];
+riseTimeArray(idxSkipped) = [];
 
 end

@@ -15,7 +15,7 @@ margin = 0;
 set(hName,'Margin',margin);
 
 % Add text to box
-set(hName,'String',['Subject ID: ',subjectID,'  Device SN: ',deviceSN]);
+set(hName,'String',['Subject ID: ',subjectID,',  Device SN: ',deviceSN]);
 
 % Make sure box resizes to text
 fitBoxToText = 'on'; % 'on' or 'off'
