@@ -166,7 +166,7 @@ classdef absolutetime
             
             % Update the local time if utcCdfEpoch exists
             if ~isempty(obj.utcCdfEpoch)
-                obj.localCdfEpoch = obj.utcCdfEpoch - offsetMs;
+                obj.localCdfEpoch = obj.utcCdfEpoch + offsetMs;
             end
         end
         
@@ -177,7 +177,7 @@ classdef absolutetime
         function obj = set.utcCdfEpoch(obj,time)
             % Round time to the nearest second
             utcCdf   = round(time/1000)*1000;
-            localCdf = utcCdf - obj.offset.milliseconds;
+            localCdf = utcCdf + obj.offset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
@@ -214,7 +214,7 @@ classdef absolutetime
         function obj = set.localCdfEpoch(obj,time)
             % Round time to the nearest second
             localCdf   = round(time/1000)*1000;
-            utcCdf = localCdf + obj.offset.milliseconds;
+            utcCdf = localCdf - obj.offset.milliseconds;
             
             utcTimeVec   = (cdflib.epochBreakdown(utcCdf))';
             localTimeVec = (cdflib.epochBreakdown(localCdf))';
