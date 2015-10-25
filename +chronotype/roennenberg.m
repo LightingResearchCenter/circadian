@@ -1,5 +1,5 @@
-function [SO,SE,SD,MS,W] = RoennenbergMethod(t,AI,SPrep,GU)
-%ROENNENBERGMETHOD Calculates sleep parameters using Roennenberg method
+function [SO,SE,SD,MS,W] = roennenberg(t,AI,SPrep,GU)
+%ROENNENBERG Calculates sleep parameters using Roennenberg method
 %   Combines Actiware sleep algorithim with Roennenberg sleep parameters
 %   t = t in matlab DATENUM format
 %   AI = activity index

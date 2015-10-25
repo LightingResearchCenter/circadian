@@ -1,4 +1,4 @@
-function MSFsc = Chronotype(tDay,AI,SPrep,GU)
+function MSFsc = chronotype(tDay,AI,SPrep,GU)
 % CHRONOTYPE Calculates the sleep debt corrected free day mid-sleep time
 %   t = t in matlab DATENUM format
 %   AI = activity index
@@ -23,7 +23,7 @@ idxW = false(TD,1); % workday logical
 %% Calculate basic Roennenberg variables for each day
 for i1 = 1:TD
     [SO(i1),SE(i1),SD(i1),MS(i1),idxW(i1)] = ...
-        RoennenbergMethod(tDay,AI,SPrep(i1),GU(i1));
+        roennenberg(tDay,AI,SPrep(i1),GU(i1));
 end
 
 %% Calculate workday variables
