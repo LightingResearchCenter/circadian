@@ -1,10 +1,13 @@
-function [SO,SE,SD,MS,W] = roennenberg(t,AI,SPrep,GU)
-%ROENNENBERG Calculates sleep parameters using Roennenberg method
+function [SO,SE,SD,MS,W] = roenneberg(t,AI,SPrep,GU)
+%ROENNENBERG Calculates sleep parameters using Roenneberg method
 %   Combines Actiware sleep algorithim with Roennenberg sleep parameters
 %   t = t in matlab DATENUM format
 %   AI = activity index
 %   SPrep = local time of preparing to sleep
 %   GU = local time of getting out of bed
+
+%% Find the sleep state (SS)
+SS = sleepState(AI,'auto',3);
 
 %% Trim data to within the analysis plus a buffer
 buffer = 5/(60*24); % 5 minute buffer
@@ -23,13 +26,6 @@ else
     W = true;
 end
 
-%% Attempt to apply a gaussian filter to Activity
-try
-    AI = gaussian(AI,4);
-catch % err
-%     warning(err.message);
-end
-
 %% Convert time to seconds from start of first day
 tSec = (t - floor(t(1)))*86400;
 
@@ -38,9 +34,6 @@ tempSec1 = tSec(2:end);
 tempSec2 = circshift(tSec,1);
 tempSec2(1) = [];
 epoch = round(mean(abs(tempSec1-tempSec2)));
-
-%% Find the sleep state (SS)
-SS = FindSleepState(AI,'auto',3);
 
 %% Find sleep onset (SO) and sleep end (SE)
 % Find sleep state in a 10 minute window
