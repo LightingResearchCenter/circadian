@@ -15,7 +15,8 @@ end
 
 if ~isempty(masks.bed)
     masks.bed(~masks.observation) = [];
-    activity(masks.bed) = 0;
+    % For testing pendant2wristActivity
+    %activity(masks.bed) = 0;
 end
 
 masks.observation(~masks.observation) = [];
