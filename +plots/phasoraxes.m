@@ -6,8 +6,8 @@ function [hAxes,hGrid,hLabels] = phasoraxes(varargin)
 p = inputParser;
 addOptional(p,'hAxes',[],@ishandle);
 addOptional(p,'quality','display',@ischar);
-addOptional(p,'rMax',1);
-addOptional(p,'rTicks',5);
+addOptional(p,'rMax',0.6);
+addOptional(p,'rTicks',6);
 parse(p,varargin{:});
 
 

@@ -67,7 +67,7 @@ set(hPhasor,'Units',units);
 set(hPhasor,'OuterPosition',box1);
 set(hPhasor,'Units','normalized'); % Return to default
 [hPhasor,hGrid,hLabels] = plots.phasoraxes(hPhasor);
-[h,hLine,hHead] = plots.phasorarrow(Phasor.vector,1.5);
+[h,hLine,hHead] = plots.phasorarrow(Phasor.vector,1);
 set(hLine,'LineWidth',2);
 set(hLine,'Color','k');
 set(hHead,'FaceColor','k');
