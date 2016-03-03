@@ -44,6 +44,36 @@ logicalArray = true(size(timeArray));
 complianceArray = true(size(timeArray));
 bedArray = false(size(timeArray));
 
+%% bed Cropping
+display = true(size(timeArray));
+plotcrop(hCrop,timeArray,csArray,activityArray,display)
+plotcroptitle(subjectID,'');
+
+bed = cropdialog('Is there a bed log for this data?','bed log');
+temp = false(size(timeArray));
+while bed == true
+    [fileName, pathName] = uigetfile(...
+        {'*.m; *.xls; *.xlsx; *.txt'},...
+        ['Subject: ',subjectID,' bed log'],...
+        bedLogDir);
+
+    if ~isequal(pathName, 0)
+        file = fullfile(pathName, fileName);
+        [bedTimes, riseTimes] = importbedlog(file);
+        for i2 = 1:length(bedTimes)
+            temp2 = timeArray>bedTimes(i2) & timeArray<riseTimes(i2);
+            temp = temp | temp2;
+        end
+
+        plotcrop(hCrop,timeArray,csArray,activityArray,~temp)
+        plotcroptitle(subjectID,'');
+    else
+        'user canceled';
+    end
+    bed = ~cropdialog('Is this data cropped correctly?','Crop Data');
+    bedArray = temp;
+end
+
 %% Start and Stop end points cropping
 needsCropping = true;
 while needsCropping
@@ -65,66 +95,7 @@ while needsCropping
     plotcroptitle(subjectID,'');
     needsCropping = ~cropdialog('Is this data cropped correctly?','Crop Data');
 end
-
-%% Sleep Cropping
-% bed log Cropping
-display = true(size(timeArray));
-plotcrop(hCrop,timeArray,csArray,activityArray,display)
-plotcroptitle(subjectID,'');
-
-bed = cropdialog('Is there a bed log for this data?','bed log');
-temp = false(size(timeArray));
-if bed == true
-    while bed == true
-        [fileName, pathName] = uigetfile(...
-            {'*.m; *.xls; *.xlsx; *.txt'},...
-            ['Subject: ',subjectID,' bed log'],...
-            bedLogDir);
-
-        if ~isequal(pathName, 0)
-            file = fullfile(pathName, fileName);
-            [bedTimes, riseTimes] = importbedlog(file);
-            for i2 = 1:length(bedTimes)
-                temp2 = timeArray>bedTimes(i2) & timeArray<riseTimes(i2);
-                temp = temp | temp2;
-            end
-
-            plotcrop(hCrop,timeArray,csArray,activityArray,~temp)
-            plotcroptitle(subjectID,'');
-        else
-            'user canceled';
-        end
-        bed = ~cropdialog('Is this data cropped correctly?','Crop Data');
-        bedArray = temp;
-    end
-end
-% Sleep cropping with no bed log
-needsCropping = cropdialog('Is there further sleep in the data?','Compliance');
-while needsCropping
-    display = ~bedArray & logicalArray & complianceArray;
-    plotcrop(hCrop,timeArray,csArray,activityArray,display)
-    plotcroptitle(subjectID,'Select Start of Sleep');
-    zoom(hCrop,'on');
-    pause
-    [cropStart,~] = ginput(1);
-    zoom(hCrop,'out');
-    zoom(hCrop,'on');
-    plotcroptitle(subjectID,'Select End of Sleep');
-    pause
-    [cropStop,~] = ginput(1);
-    temp  = (timeArray >= cropStart) & (timeArray <= cropStop);
-    display = ~bedArray & logicalArray & complianceArray & ~temp;
-    plotcrop(hCrop,timeArray,csArray,activityArray,display)
-    plotcroptitle(subjectID,'');
-    needsCropping = ~cropdialog('Is this data cropped correctly?','Crop Data');
-    if needsCropping == false
-        needsCropping = cropdialog('Is there more sleep in the data?','Compliance');
-        bedArray = bedArray | temp;
-    end
-end
-
-
-%% Compliance cropping
+%% Compliance Cropping
 needsCropping = cropdialog('Is there non-compliance in the data?','Compliance');
 while needsCropping
     display = ~bedArray & logicalArray & complianceArray;
