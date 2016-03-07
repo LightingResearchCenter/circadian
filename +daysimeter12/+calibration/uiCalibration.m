@@ -51,7 +51,7 @@ luxSpec = '%.3f';
 errSpec = '%.1f';
 
 %% Attempt to automatically detect calibration periods
-[startTimes,endTimes] = findCalPlateau(data);
+[startTimes,endTimes] = daysimeter12.calibration.findCalPlateau(data);
 
 %% Prepare figure window
 figure(h); % Make figure active
@@ -101,7 +101,7 @@ selectedEnd = endTimes(1);
 
 %% Initialize illuminance variables
 oldLux = mean(calculateIlluminance(data,selectedStart,selectedEnd,previousCal));
-currentCal = calculateCalibration(data,selectedStart,selectedEnd,referenceIlluminance);
+currentCal = daysimeter12.calibration.calculateCalibration(data,selectedStart,selectedEnd,referenceIlluminance);
 newLux = mean(calculateIlluminance(data,selectedStart,selectedEnd,currentCal));
 
 %% Initialize percent error variables
@@ -269,7 +269,7 @@ calibrationTitle = uiText(hPanel,x0,luxField.Position(2),'Calibration Factors:',
 calibrationTable = uiCalibrationTable(hPanel,x0,calibrationTitle.Position(2),previousCal);
     function tbl = uiCalibrationTable(p,x0,y0,previousCal)
         % create the data
-        currentCal = calculateCalibration(data,selectedStart,selectedEnd,referenceIlluminance);
+        currentCal = daysimeter12.calibration.calculateCalibration(data,selectedStart,selectedEnd,referenceIlluminance);
         d = [(previousCal(:))'; (currentCal(:))'];
         
         % Create the column and row names in cell arrays
