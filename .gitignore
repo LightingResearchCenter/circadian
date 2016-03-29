@@ -14,3 +14,8 @@
 
 # Simulink Code Generation
 slprj/
+
+# start/stop hub testing 
+startStopHub/
+hubtest.m
+*.prj

@@ -6,7 +6,7 @@ function drvs = getDrives
 %   On Windows systems, this is a list of the names of all single-letter 
 %   mounted drives.
 %
-%   Does not work for non-Windows systems.
+%   Does not work for non-Windows systems. This may be updated later. 
 %
 %   Note that only the names of MOUNTED volumes are returned.  In 
 %   particular, removable media drives that do not have the media inserted 
