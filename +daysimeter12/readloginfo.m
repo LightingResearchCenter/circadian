@@ -3,7 +3,7 @@ function [ txt ] = readloginfo( log_infoPath )
 %   Detailed explanation goes here
 
 % Open the file for reading
-fidInfo = fopen(log_infoPath,'r','b');
+fidInfo = fopen(fullfile(log_infoPath),'r','b');
 % Create an opject that closes the file when the object is destroyed
 c = onCleanup(@() fclose(fidInfo));
 % Read the file as char array

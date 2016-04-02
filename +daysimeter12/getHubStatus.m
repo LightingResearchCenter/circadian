@@ -1,4 +1,4 @@
-function [output, status ] = getHubStatus( daysims )
+function [output, status ] = getHubStatus( )
 %GETHUBSTATUS get the status of the daysimeters connected to the hub 
 %   GETHUBSTATUS(  ) will return what shared state all of the daysimeters that
 %   are connected to the hub are. If there is more then one state of daysimeter
@@ -21,10 +21,16 @@ if isempty(daysims) == 1
 end
 
 %% Keep section
-status = cellfun(@daysimeter12.getCurrentStatus,daysims);
+logInfoString = cell(length(daysims),1);
+for index = 1:length(daysims)
+   logInfoString{index} = 'log_info.txt'; 
+end
+logInfoPaths = cellfun(@fullfile,daysims,logInfoString,'UniformOutput',0); 
+daysimsTxt = cellfun(@daysimeter12.readloginfo,logInfoPaths,'UniformOutput',0);
+status = cellfun(@daysimeter12.parseStatus,daysimsTxt,'UniformOutput',0);
 status = [status{1:end,1}];
-if all([status{1,1:end}] == status{1,1})
-    output = status(1);
+if all([status(1,1:end)] == status(1,1))
+    output = daysimeter12.daysimeterStatus(status(1));
 else
     output = -1;
 end
