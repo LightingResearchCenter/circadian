@@ -82,7 +82,10 @@ index = get(handels.logInfoControl.startLogInterval,'value');
 logInterval = str2double(potentialLogInterval{index});
 daysims = daysimeter12.getDaysimeters();
 start = daysimeter12.daysimeterStatus(2);
-for iDaysim = length(daysims)
+
+for iDaysim = 1:length(daysims)
+    logInfoTxt = daysimeter12.readloginfo(fullfile(daysims{iDaysim},'log_info.txt'));
+    device = daysimeter12.parseDeviceSn(logInfoTxt);
     message = daysimeter12.setStatus(fullfile(daysims{iDaysim},'log_info.txt'), start);
     if isempty(message)
         message = daysimeter12.setStartDateTime(fullfile(daysims{iDaysim},'log_info.txt'), Date1);
@@ -90,18 +93,22 @@ for iDaysim = length(daysims)
             message = daysimeter12.setLoggingInterval(fullfile(daysims{iDaysim},'log_info.txt'), logInterval);
             if ~isempty(message)
                 set(handels.error,'visible','on');
-                set(handels.errorControl.instructBlock,'String',['There was an error writing the Log Interval to daysimeter in drive ',  daysims(iDaysim)]);
+                set(handels.errorControl.instructBlock,'String',['There was an error writing the Log Interval to daysimeter in daysimeter ',  device]);
             end
         else
             set(handels.error,'visible','on');
-            set(handels.errorControl.instructBlock,'String',['There was an error writing the Date to daysimeter in drive ',  daysims(iDaysim)]);
+            set(handels.errorControl.instructBlock,'String',['There was an error writing the Date to daysimeter in daysimeter ', device]);
         end
     else
         set(handels.error,'visible','on');
-        set(handels.errorControl.instructBlock,'String',['There was an error writing the Status to daysimeter in drive ',  daysims(iDaysim)]);
+        set(handels.errorControl.instructBlock,'String',['There was an error writing the Status to daysimeter in daysimeter ',  device]);
     end
-    
+    newFileName = daysimeter12.makeNameStub(device);
+    copyfile(fullfile(daysims{iDaysim},'log_info.txt'),fullfile(getenv('DAYSIMSAVELOC'),[newFileName,'-LOG.txt']),'f');
 end
+
+set(handels.daysimSearch,'visible','on');
+set(handels.search.instructBlock,'string',sprintf('Daysimeters started. \nPlease Select what you would like to do.'));
 
 end
 
