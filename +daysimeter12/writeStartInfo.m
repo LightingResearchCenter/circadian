@@ -1,5 +1,10 @@
 function [ output_args ] = writeStartInfo( handels )
-
+% WRITESTARTINFO will write the chosen starting information to daysimeters
+%   This function will check to make sure that the desiered date is a date
+%   that can exist and fundimentally makes sence. It will then take all the
+%   information it needs to write the starting information to the
+%   daysimeter and will write it. Finally it will save the new log_info.txt
+%   file to the users default directory. 
 
 currentDate = datevec(now);
 potentialDate = (currentDate(1):currentDate(1)+10);
@@ -77,20 +82,28 @@ if ~(strcmp(date_string1,date_string2))
     return
 end
 set(handels.logInfo,'visible','off');
+pause(0.0001);
 potentialLogInterval = get(handels.logInfoControl.startLogInterval,'string');
 index = get(handels.logInfoControl.startLogInterval,'value');
 logInterval = str2double(potentialLogInterval{index});
 daysims = daysimeter12.getDaysimeters();
 start = daysimeter12.daysimeterStatus(2);
-
+x = 0;
+h = waitbar(x,'Starting Daysimeters');
 for iDaysim = 1:length(daysims)
     logInfoTxt = daysimeter12.readloginfo(fullfile(daysims{iDaysim},'log_info.txt'));
     device = daysimeter12.parseDeviceSn(logInfoTxt);
     message = daysimeter12.setStatus(fullfile(daysims{iDaysim},'log_info.txt'), start);
+    x = x+1;
+    waitbar(x/(length(daysims)*4),h,'Writing Daysimeter to Default Folder');
     if isempty(message)
         message = daysimeter12.setStartDateTime(fullfile(daysims{iDaysim},'log_info.txt'), Date1);
+        x = x+1;
+        waitbar(x/(length(daysims)*4),h,'Writing Daysimeter to Default Folder');
         if isempty(message)
             message = daysimeter12.setLoggingInterval(fullfile(daysims{iDaysim},'log_info.txt'), logInterval);
+            x = x+1;
+            waitbar(x/(length(daysims)*4),h,'Writing Daysimeter to Default Folder');
             if ~isempty(message)
                 set(handels.error,'visible','on');
                 set(handels.errorControl.instructBlock,'String',['There was an error writing the Log Interval to daysimeter in daysimeter ',  device]);
@@ -104,9 +117,11 @@ for iDaysim = 1:length(daysims)
         set(handels.errorControl.instructBlock,'String',['There was an error writing the Status to daysimeter in daysimeter ',  device]);
     end
     newFileName = daysimeter12.makeNameStub(device);
+    x = x+1;
+    waitbar(x/(length(daysims)*4),h,'Writing Daysimeter to Default Folder');
     copyfile(fullfile(daysims{iDaysim},'log_info.txt'),fullfile(getenv('DAYSIMSAVELOC'),[newFileName,'-LOG.txt']),'f');
 end
-
+delete(h);
 set(handels.daysimSearch,'visible','on');
 set(handels.search.instructBlock,'string',sprintf('Daysimeters started. \nPlease Select what you would like to do.'));
 

@@ -1,7 +1,7 @@
 function [  ] = quickSetup( handels )
-%USECURRENTTIME Summary of this function goes here
-%   Detailed explanation goes here
-
+%USECURRENTTIME Prepares the GUI with the quickest starting information 
+%   This will change all of the data needed for the daysimeter to be
+%   started with the current time and a 30 second logging interval.
 datetime = datevec(now);
 set(handels.logInfoControl.startMonth,'value',datetime(2)+1)
 set(handels.logInfoControl.startDay,'value',datetime(3)+1)

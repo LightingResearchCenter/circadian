@@ -1,6 +1,6 @@
 function [ deviceSn ] = parseDeviceSn( logInfoTxt )
-%PARSEDEVICESN Summary of this function goes here
-%   Detailed explanation goes here
+%PARSEDEVICESN return the daysimeters serial number 
+%   logInfoTxt should be the read in string of the daysimeter. 
 
 % Find the position of the first line feed character (char(10))
 q = find(logInfoTxt==char(10),1,'first');

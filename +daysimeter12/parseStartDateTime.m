@@ -1,6 +1,6 @@
 function [ startDateTime ] = parseStartDateTime( logInfoTxt )
-%PARSESTARTDATETIME Summary of this function goes here
-%   Detailed explanation goes here
+%PARSESTARTDATETIME return the daysimeters start date and time
+%   logInfoTxt should be the read in string of the daysimeter.
 
 % Find the position of the first 2 line feed characters (char(10))
 q = find(logInfoTxt==char(10),2,'first');

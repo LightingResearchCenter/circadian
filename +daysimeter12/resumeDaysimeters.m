@@ -1,6 +1,10 @@
 function [ output_args ] = resumeDaysimeters( handels )
-%RESUMEDAYSIMETERS Summary of this function goes here
-%   Detailed explanation goes here
+%RESUMEDAYSIMETERS will resume any daysimeters connected to the computer
+%   This function will resume any daysimeters conneced to the system and
+%   then dave the log file to the users directory.
+%   NOTE: this function should be able to be called thorugh the GUI after
+%   4/6/2016
+
 set(handels.daysimFound,'visible','off');
 daysims = daysimeter12.getDaysimeters();
 resume = daysimeter12.daysimeterStatus(4);

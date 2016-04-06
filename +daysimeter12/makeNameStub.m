@@ -1,6 +1,6 @@
 function nameStub = makeNameStub(IDnum)
-%MAKENAMESTUB Summary of this function goes here
-%   Detailed explanation goes here
+%MAKENAMESTUB creates the daysimeters downloaded name string. 
+%   IDnum is the serial number for the daysimeter
 
 t = datestr(now,'yyyy-mm-dd-HH-MM-SS');
 nameStub = [num2str(IDnum,'%04u'),'-',t];
