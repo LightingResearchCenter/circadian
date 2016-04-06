@@ -17,7 +17,8 @@ for iDaysim = 1:length(daysims)
     if isempty(message)
     else
         set(handels.error,'visible','on');
-        set(handels.errorControl.instructBlock,'String',['There was an error writing the Status to daysimeter in daysimeter ',  device]);
+        set(handels.errorControl.instructBlock,'String',sprintf('There was an error writing the Status to daysimeter in daysimeter %d',  device));
+        return
     end
     newFileName = daysimeter12.makeNameStub(device);
     copyfile(fullfile(daysims{iDaysim},'log_info.txt'),fullfile(saveloc,[newFileName,'-LOG.txt']));

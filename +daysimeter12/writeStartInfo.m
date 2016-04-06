@@ -106,15 +106,18 @@ for iDaysim = 1:length(daysims)
             waitbar(x/(length(daysims)*4),h,'Writing Daysimeter to Default Folder');
             if ~isempty(message)
                 set(handels.error,'visible','on');
-                set(handels.errorControl.instructBlock,'String',['There was an error writing the Log Interval to daysimeter in daysimeter ',  device]);
+                set(handels.errorControl.instructBlock,'String',sprintf('There was an error writing the Logging interval to daysimeter in daysimeter %d',  device));
+                return
             end
         else
             set(handels.error,'visible','on');
-            set(handels.errorControl.instructBlock,'String',['There was an error writing the Date to daysimeter in daysimeter ', device]);
+            set(handels.errorControl.instructBlock,'String',sprintf('There was an error writing the date and time to daysimeter in daysimeter %d',  device));
+            return
         end
     else
         set(handels.error,'visible','on');
-        set(handels.errorControl.instructBlock,'String',['There was an error writing the Status to daysimeter in daysimeter ',  device]);
+        set(handels.errorControl.instructBlock,'String',sprintf('There was an error writing the Status to daysimeter in daysimeter %d',  device));
+        return
     end
     newFileName = daysimeter12.makeNameStub(device);
     x = x+1;
