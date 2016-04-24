@@ -11,6 +11,7 @@ classdef CalibrationData
         Label   char = char.empty(0,1);         % Label describing calibration session
     end
     
+    % Internal methods
     methods
         % Class constructor method
         function obj = CalibrationData(R,G,B,varargin)
@@ -38,12 +39,19 @@ classdef CalibrationData
                 end
                 
                 for iC = n:-1:1
-                    obj(iC,1) = [R(iC),G(iC),B(iC)];
+                    obj(iC,1).R = R(iC);
+                    obj(iC,1).G = G(iC);
+                    obj(iC,1).B = B(iC);
                     obj(iC,1).Date = Date(iC);
                     obj(iC,1).Label = Label{iC};
                 end
             end
         end % End of constructor method
+    end
+    
+    % External methods
+    methods
+        Coefficients = double(obj)
     end
     
 end
