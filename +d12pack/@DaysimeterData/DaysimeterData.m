@@ -8,7 +8,7 @@ classdef DaysimeterData
         log_info        char        % Unprocessed "log_info.txt" file data
         data_log        uint16      % Unprocessed "data_log.txt" file data
         SerialNumber	uint16      % Daysimeter serial number
-        Calibration     table       % Calibration values (red,green,blue,date,label)
+        Calibration     d12pack.CalibrationData     % Calibration values (R,G,B,Date,Label)
         Subject         struct      % Subject metadata
         Location        struct      % Location metadata
         Created         datetime    % When the original files were downloaded
