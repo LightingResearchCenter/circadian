@@ -146,7 +146,7 @@ classdef DaysimeterData
             % convert activity to rms g
             % raw activity is a mean squared value, 1 count = .0039 g's, and the 4 comes
             % from four right shifts in the source code
-            ActivityIndex = (sqrt(obj.ActivityIndexCounts))*.0039*4;
+            ActivityIndex = (sqrt(double(obj.ActivityIndexCounts)))*.0039*4;
         end % End of get ActivityIndex
     end
     
