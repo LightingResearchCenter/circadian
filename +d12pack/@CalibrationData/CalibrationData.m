@@ -52,6 +52,7 @@ classdef CalibrationData
     % External public methods
     methods
         Coefficients = double(obj)
+        t = table(obj)
         obj = import(obj,FilePath,SerialNumber)
     end
     
