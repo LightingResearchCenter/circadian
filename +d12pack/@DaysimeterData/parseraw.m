@@ -36,7 +36,7 @@ Resets = CumulativeResets(~OriginalResets2);
 s.Resets = Resets(1:end-1);
 
 % create a time array
-nEntries = numel(RedCounts);
+nEntries = numel(s.RedCounts);
 RelativeTime = s.Epoch*(0:nEntries-1)';
 s.Time = s.Start + RelativeTime;
 
