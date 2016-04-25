@@ -8,6 +8,7 @@ classdef DaysimeterData
         SerialNumber uint16   % Daysimeter serial number
         Calibration  d12pack.CalibrationData % Calibration values
         CalibrationRatio double % Ratio used when mixing multiple calibration
+        CalibrationPath char = '\\root\projects\DaysimeterAndDimesimeterReferenceFiles\recalibration2016\calibration_log.csv';
         Epoch        duration % Logging rate
         
         Time         datetime % Time stamps of readings
@@ -67,6 +68,7 @@ classdef DaysimeterData
                 obj.BlueCounts = s.BlueCounts;
                 obj.ActivityIndexCounts = s.ActivityIndexCounts;
                 obj.Resets = s.Resets;
+                obj.Calibration = obj.Calibration.import(obj.CalibrationPath,obj.SerialNumber);
             end
         end % End of set log_info
         % Get log_info
@@ -87,6 +89,7 @@ classdef DaysimeterData
                 obj.BlueCounts = s.BlueCounts;
                 obj.ActivityIndexCounts = s.ActivityIndexCounts;
                 obj.Resets = s.Resets;
+                obj.Calibration = obj.Calibration.import(obj.CalibrationPath,obj.SerialNumber);
             end
         end % End of set data_log
         % Get data_log
@@ -94,6 +97,55 @@ classdef DaysimeterData
             data_log = obj.data_logPrivate;
         end % End of get data_log
         
+        % Get CalibrationRatio
+        function CalibrationRatio = get.CalibrationRatio(obj)
+            if isempty(obj.Calibration) % If no calibration
+                CalibrationRatio = obj.CalibrationRatio;
+            elseif isempty(obj.CalibrationRatio) % If no calibration ratio
+                CalibrationRatio = zeros(numel(obj.Calibration),1);
+                [m,idx] = max(vertcat(obj.Calibration.Date));
+                if isempty(m) || isnat(m) % If no date use last entry
+                    CalibrationRatio(end) = 1;
+                else % Use most recent entry
+                    CalibrationRatio(idx) = 1;
+                end
+            end
+        end % End of get CalibrationRatio
+        
+        % Get Red
+        function Red = get.Red(obj)
+            c = vertcat(obj.Calibration.Red);
+            m = obj.CalibrationRatio;
+            c2 = c.*m; % Apply ratio to calibration constants
+            r = double(repmat(obj.RedCounts(:),1,numel(c2)));
+            Red = sum(bsxfun(@times,r,c2'),2);
+        end % End of get Red
+        
+        % Get Green
+        function Green = get.Green(obj)
+            c = vertcat(obj.Calibration.Green);
+            m = obj.CalibrationRatio;
+            c2 = c.*m; % Apply ratio to calibration constants
+            g = double(repmat(obj.GreenCounts(:),1,numel(c2)));
+            Green = sum(bsxfun(@times,g,c2'),2);
+        end % End of get Green
+        
+        % Get Blue
+        function Blue = get.Blue(obj)
+            c = vertcat(obj.Calibration.Blue);
+            m = obj.CalibrationRatio;
+            c2 = c.*m; % Apply ratio to calibration constants
+            b = double(repmat(obj.BlueCounts(:),1,numel(c2)));
+            Blue = sum(bsxfun(@times,b,c2'),2);
+        end % End of get Blue
+        
+        % Get ActivityIndex
+        function ActivityIndex = get.ActivityIndex(obj)
+            % convert activity to rms g
+            % raw activity is a mean squared value, 1 count = .0039 g's, and the 4 comes
+            % from four right shifts in the source code
+            ActivityIndex = (sqrt(obj.ActivityIndexCounts))*.0039*4;
+        end % End of get ActivityIndex
     end
     
     % External public methods
@@ -105,11 +157,6 @@ classdef DaysimeterData
     methods (Access = protected)
         s = parseraw(obj,varargin)
         s = parseloginfo(obj,varargin)
-    end
-    
-    % External static private methods
-    methods (Static, Access = private)
-        
     end
     
     % External static protected methods
