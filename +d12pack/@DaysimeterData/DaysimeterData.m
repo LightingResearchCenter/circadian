@@ -110,33 +110,35 @@ classdef DaysimeterData
                     CalibrationRatio(idx) = 1;
                 end
             end
+            
+            if isvector(CalibrationRatio)
+                CalibrationRatio = repmat((CalibrationRatio(:))',numel(obj.Time),1);
+            end
+                
         end % End of get CalibrationRatio
         
         % Get Red
         function Red = get.Red(obj)
             c = vertcat(obj.Calibration.Red);
             m = obj.CalibrationRatio;
-            c2 = c.*m; % Apply ratio to calibration constants
-            r = double(repmat(obj.RedCounts(:),1,numel(c2)));
-            Red = sum(bsxfun(@times,r,c2'),2);
+            v = double(obj.RedCounts(:));
+            Red = obj.applyCalibration(v,c,m);
         end % End of get Red
         
         % Get Green
         function Green = get.Green(obj)
             c = vertcat(obj.Calibration.Green);
             m = obj.CalibrationRatio;
-            c2 = c.*m; % Apply ratio to calibration constants
-            g = double(repmat(obj.GreenCounts(:),1,numel(c2)));
-            Green = sum(bsxfun(@times,g,c2'),2);
+            v = double(obj.GreenCounts(:));
+            Green = obj.applyCalibration(v,c,m);
         end % End of get Green
         
         % Get Blue
         function Blue = get.Blue(obj)
             c = vertcat(obj.Calibration.Blue);
             m = obj.CalibrationRatio;
-            c2 = c.*m; % Apply ratio to calibration constants
-            b = double(repmat(obj.BlueCounts(:),1,numel(c2)));
-            Blue = sum(bsxfun(@times,b,c2'),2);
+            v = double(obj.BlueCounts(:));
+            Blue = obj.applyCalibration(v,c,m);
         end % End of get Blue
         
         % Get ActivityIndex
@@ -151,6 +153,11 @@ classdef DaysimeterData
     % External public methods
     methods
         t = table(obj)
+    end
+    
+    % External public static methods
+    methods (Static)
+        CalibratedValue = applyCalibration(Value,CalibrationArray,CalibrationRatio)
     end
     
     % External protected methods
