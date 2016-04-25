@@ -4,9 +4,9 @@ classdef CalibrationData
     
     % Public properties
     properties
-        R       double = double.empty(1,0);     %
-        G       double = double.empty(1,0);     %
-        B       double = double.empty(1,0);     %
+        Red     double = double.empty(1,0);     %
+        Green   double = double.empty(1,0);     %
+        Blue    double = double.empty(1,0);     %
         Date    datetime = datetime.empty(1,0);	% Date calibration was performed
         Label   char = char.empty(0,1);         % Label describing calibration session
     end
@@ -14,11 +14,11 @@ classdef CalibrationData
     % Internal methods
     methods
         % Class constructor method
-        function obj = CalibrationData(R,G,B,varargin)
+        function obj = CalibrationData(Red,Green,Blue,varargin)
             if nargin >= 3
                 switch nargin
                     case 3
-                        Date = datetime('now','TimeZone','local');
+                        Date = datetime.empty(1,0);
                         Label = char.empty(0,1);
                     case 4
                         Date = varargin{1};
@@ -27,7 +27,7 @@ classdef CalibrationData
                         Date = varargin{1};
                         Label = varargin{2};
                 end
-                n = min([numel(R),numel(G),numel(B)]);
+                n = min([numel(Red),numel(Green),numel(Blue)]);
                 if numel(Date) < n
                     Date = repmat(Date(1),n,1);
                 end
@@ -39,9 +39,9 @@ classdef CalibrationData
                 end
                 
                 for iC = n:-1:1
-                    obj(iC,1).R = R(iC);
-                    obj(iC,1).G = G(iC);
-                    obj(iC,1).B = B(iC);
+                    obj(iC,1).Red = Red(iC);
+                    obj(iC,1).Green = Green(iC);
+                    obj(iC,1).Blue = Blue(iC);
                     obj(iC,1).Date = Date(iC);
                     obj(iC,1).Label = Label{iC};
                 end
@@ -49,9 +49,10 @@ classdef CalibrationData
         end % End of constructor method
     end
     
-    % External methods
+    % External public methods
     methods
         Coefficients = double(obj)
+        obj = import(obj,FilePath,SerialNumber)
     end
     
 end
