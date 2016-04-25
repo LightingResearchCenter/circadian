@@ -101,9 +101,10 @@ classdef DaysimeterData
         
     end
     
-    % External private methods
-    methods (Access = private)
-        
+    % External protected methods
+    methods (Access = protected)
+        s = parseraw(obj,varargin)
+        s = parseloginfo(obj,varargin)
     end
     
     % External static private methods
@@ -115,8 +116,6 @@ classdef DaysimeterData
     methods (Static, Access = protected)
         log_info = readloginfo(log_info_path)
         data_log = readdatalog(data_log_path)
-        s = parseraw(obj,varargin)
-        s = parseloginfo(obj,varargin)
     end
 end
 
