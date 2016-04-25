@@ -98,7 +98,7 @@ classdef DaysimeterData
     
     % External public methods
     methods
-        
+        t = table(obj)
     end
     
     % External protected methods
