@@ -148,6 +148,24 @@ classdef DaysimeterData
             % from four right shifts in the source code
             ActivityIndex = (sqrt(double(obj.ActivityIndexCounts)))*.0039*4;
         end % End of get ActivityIndex
+        
+        % Get Observation
+        function Observation = get.Observation(obj)
+            if isempty(obj.Observation)
+                Observation = true(size(obj.Time));
+            else
+                Observation = obj.Observation;
+            end
+        end % End of get Observation
+        
+        % Get Error
+        function Error = get.Error(obj)
+            if isempty(obj.Error)
+                Error = false(size(obj.Time));
+            else
+                Error = obj.Error;
+            end
+        end % End of get Error
     end
     
     % External public methods
