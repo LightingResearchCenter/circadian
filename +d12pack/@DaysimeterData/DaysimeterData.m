@@ -33,10 +33,13 @@ classdef DaysimeterData
     
     % Dependent read only properties
     properties (Dependent, GetAccess = public, SetAccess = private)
-        Red           double % Calibrated red channel readings
-        Green         double % Calibrated green channel readings
-        Blue          double % Calibrate blue channel readings
-        ActivityIndex double % Converted activity index
+        Red               double % Calibrated red channel readings
+        Green             double % Calibrated green channel readings
+        Blue              double % Calibrate blue channel readings
+        ActivityIndex     double % Converted activity index
+        Illuminance       double %
+        CircadianLight    double %
+        CircadianStimulus double %
     end
     
     % Private properties
@@ -166,6 +169,21 @@ classdef DaysimeterData
                 Error = obj.Error;
             end
         end % End of get Error
+        
+        % Get Illuminance
+        function Illuminance = get.Illuminance(obj)
+            Illuminance = obj.rgb2lux(obj.Red,obj.Green,obj.Blue);
+        end % End of get Illuminance
+        
+        % Get CircadianLight
+        function CircadianLight = get.CircadianLight(obj)
+            CircadianLight = obj.rgb2cla(obj.Red,obj.Green,obj.Blue);
+        end % End of get CircadianLight
+        
+        % Get CircadianStimulus
+        function CircadianStimulus = get.CircadianStimulus(obj)
+            CircadianStimulus = obj.cla2cs(obj.CircadianLight);
+        end % End of get CircadianStimulus
     end
     
     % External public methods
@@ -176,6 +194,9 @@ classdef DaysimeterData
     % External public static methods
     methods (Static)
         CalibratedValue = applyCalibration(Value,CalibrationArray,CalibrationRatio)
+        Illuminance = rgb2lux(Red,Green,Blue)
+        CircadianLight = rgb2cla(Red,Green,Blue)
+        CircadianStimulus = cla2cs(CircadianLight)
     end
     
     % External protected methods
