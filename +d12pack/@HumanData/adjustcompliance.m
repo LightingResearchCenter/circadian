@@ -2,6 +2,8 @@ function PhasorCompliance = adjustcompliance(Epoch,Time,Compliance,varargin)
 %ADJUSTCROP Summary of this function goes here
 %   Detailed explanation goes here
 
+PhasorCompliance = Compliance; % Copy Compliance
+
 if nargin > 3
     InBed = varargin{1};
     noncomplianceArray = ~Compliance & ~InBed; % noncompliance out of bed
