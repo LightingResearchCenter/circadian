@@ -20,7 +20,7 @@ Temp = Melanopsin;
 idx  = Scone > C(3)*Vmaclamda;
 Temp(idx) = Melanopsin(idx) ...
     + C(1)*(Scone(idx) - C(3)*Vmaclamda(idx)) ...
-    - C(2)*683*(1 - 2.71.^(-(Vprime(idx)/(683*6.5))));
+    - C(2)*683*(1 - exp(-(Vprime(idx)/(683*6.5))));
 
 CircadianLight = C(4)*Temp;
 
