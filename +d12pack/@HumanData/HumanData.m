@@ -3,8 +3,7 @@ classdef HumanData < d12pack.MobileData
     %   Detailed explanation goes here
     
     properties
-        BedTimes datetime
-        RiseTimes datetime
+        BedLog d12pack.BedLogData
         Compliance logical
     end
     
@@ -45,10 +44,12 @@ classdef HumanData < d12pack.MobileData
         
         % Get InBed
         function InBed = get.InBed(obj)
-            if ~isempty(obj.BedTimes) && ~isempty(obj.RiseTimes)
+            if ~isempty(obj.BedLog)
                 Temp = false(size(obj.Time));
-                for iBed = 1:numel(obj.BedTimes)
-                    Temp = Temp | (obj.Time >= obj.BedTimes(iBed) & obj.Time < obj.RiseTimes(iBed));
+                for iBed = 1:numel(obj.BedLog)
+                    if (isdatetime(obj.BedLog(iBed).BedTime) && ~isnat(obj.BedLog(iBed).BedTime)) && (isdatetime(obj.BedLog(iBed).RiseTime) && ~isnat(obj.BedLog(iBed).RiseTime))
+                        Temp = Temp | (obj.Time >= obj.BedLog(iBed).BedTime & obj.Time < obj.BedLog(iBed).RiseTime);
+                    end
                 end
                 InBed = Temp;
             else
