@@ -19,7 +19,7 @@ for iVar = 0:nVars-1
     
     % Retrieve all data in records for variable.
     if maxRecNum > 0
-        varData = cdflib.hyperGetVarData(cdfId,iVar,[0 maxRecNum 1]);
+        varData = cdflib.hyperGetVarData(cdfId,iVar,[0 maxRecNum+1 1]);
     else
         varData = cdflib.getVarData(cdfId,iVar,0);
     end
