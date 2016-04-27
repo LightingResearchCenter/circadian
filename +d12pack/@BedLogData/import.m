@@ -11,7 +11,7 @@ switch ext
             'ReadVariableNames',true,...
             'Basic',true);
     otherwise
-        error('Calibration file must be a spreadsheet.');
+        error('Bed log file must be a spreadsheet.');
 end
 
 % Select just the second and third columns
