@@ -19,6 +19,14 @@ t = t(:,2:3);
 % Rename the columns to ensure consistency
 varNames = {'BedTime','RiseTime'};
 t.Properties.VariableNames = varNames;
+% If errant text was imported convert to double (unconvertable text becomes
+% NaN
+if iscell(t.BedTime)
+    t.BedTime = str2double(t.BedTime);
+end
+if iscell(t.RiseTime)
+    t.RiseTime = str2double(t.RiseTime);
+end
 % Remove empty rows
 idx = isnan(t.BedTime) & isnan(t.RiseTime);
 t(idx,:) = [];
