@@ -3,13 +3,16 @@ classdef HumanData < d12pack.MobileData
     %   Detailed explanation goes here
     
     properties
-        BedLog d12pack.BedLogData
         Compliance logical
+        BedLog     d12pack.BedLogData
+        WorkLog    d12pack.WorkLogData
     end
     
     properties (Dependent)
-        Sleep   struct
-        InBed   logical
+        Sleep            struct
+        
+        AtWork           logical
+        InBed            logical
         PhasorCompliance logical
     end
     
@@ -54,6 +57,21 @@ classdef HumanData < d12pack.MobileData
                 InBed = Temp;
             else
                 InBed = logical.empty(numel(obj.Time),0);
+            end
+        end % End of get InBed method
+        
+        % Get AtWork
+        function AtWork = get.AtWork(obj)
+            if ~isempty(obj.WorkLog)
+                Temp = false(size(obj.Time));
+                for iBed = 1:numel(obj.WorkLog)
+                    if (isdatetime(obj.WorkLog(iBed).StartTime) && ~isnat(obj.WorkLog(iBed).StartTime)) && (isdatetime(obj.WorkLog(iBed).EndTime) && ~isnat(obj.WorkLog(iBed).EndTime))
+                        Temp = Temp | (obj.Time >= obj.WorkLog(iBed).StartTime & obj.Time < obj.WorkLog(iBed).RiseTime);
+                    end
+                end
+                AtWork = Temp;
+            else
+                AtWork = logical.empty(numel(obj.Time),0);
             end
         end % End of get InBed method
     end
