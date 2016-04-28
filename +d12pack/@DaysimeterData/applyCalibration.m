@@ -5,8 +5,11 @@ function CalibratedValue = applyCalibration(Value,CalibrationArray,CalibrationRa
 MixedCalibration = bsxfun(@times,CalibrationRatio,(CalibrationArray(:))');
 
 ExpandedValue = repmat(Value,1,numel(CalibrationArray));
-
-CalibratedValue = sum(ExpandedValue.*MixedCalibration,2);
+if ~isempty(ExpandedValue)
+    CalibratedValue = sum(ExpandedValue.*MixedCalibration,2);
+else
+    CalibratedValue = [];
+end
 
 end
 
