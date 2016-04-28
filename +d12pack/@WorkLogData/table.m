@@ -3,7 +3,7 @@ function t = table(obj)
 %   Detailed explanation goes here
 
 varNames = {'StartTime','EndTime','Workstation'};
-t = table(vertcat(obj.StartTime),vertcat(obj.EndTime),{obj.Workstation}','VariableNames',varNames);
+t = table(obj.StartTime,obj.EndTime,obj.Workstation,'VariableNames',varNames);
 
 end
 

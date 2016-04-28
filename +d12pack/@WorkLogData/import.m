@@ -41,11 +41,10 @@ if ~isempty(t)
     t.StartTime = datetime(t.StartTime,'ConvertFrom','excel','TimeZone',TimeZone);
     t.EndTime = datetime(t.EndTime,'ConvertFrom','excel','TimeZone',TimeZone);
     
-    n = numel(t.StartTime);
-    for iC = n:-1:1
-        obj(iC,1).StartTime = t.StartTime(iC);
-        obj(iC,1).EndTime = t.EndTime(iC);
-    end
+    obj.StartTime   = t.StartTime(:);
+    obj.EndTime     = t.EndTime(:);
+    obj.Workstation = t.Workstation(:);
+    obj.IsFixed = false;
 else
     error('Failed to import work log spreadsheet.');
 end
