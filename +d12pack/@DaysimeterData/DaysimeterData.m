@@ -21,6 +21,8 @@ classdef DaysimeterData
         Error        logical  % True if reading is in error
         Resets       uint16   % Running count of reset flags
         
+        Location     d12pack.LocationData
+        
         Created      datetime % When the original files were downloaded
         Modified     datetime % When this object was last saved
     end
