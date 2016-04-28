@@ -6,10 +6,12 @@ function obj = import(obj,FilePath,varargin)
 
 switch ext
     case {'.xls','.xlsx','.xlsm','.xltx','.xltm'}
+        s = warning('off','MATLAB:table:ModifiedVarnames');
         t = readtable(FilePath,...
             'FileType','spreadsheet',...
             'ReadVariableNames',true,...
             'Basic',true);
+        warning(s);
     otherwise
         error('Bed log file must be a spreadsheet.');
 end
@@ -47,7 +49,7 @@ if ~isempty(t)
         obj(iC,1).RiseTime = t.RiseTime(iC);
     end
 else
-    error('Failed to import bed log spreadsheet.');
+    warning(['Bed log was empty or could not be imported.',char(10),FilePath]);
 end
 
 end

@@ -6,10 +6,12 @@ function obj = import(obj,FilePath,varargin)
 
 switch ext
     case {'.xls','.xlsx','.xlsm','.xltx','.xltm'}
+        s = warning('off','MATLAB:table:ModifiedVarnames');
         t = readtable(FilePath,...
             'FileType','spreadsheet',...
             'ReadVariableNames',true,...
             'Basic',true);
+        warning(s);
     otherwise
         error('Work log file must be a spreadsheet.');
 end
@@ -41,12 +43,9 @@ if ~isempty(t)
     t.StartTime = datetime(t.StartTime,'ConvertFrom','excel','TimeZone',TimeZone);
     t.EndTime = datetime(t.EndTime,'ConvertFrom','excel','TimeZone',TimeZone);
     
-    obj.StartTime   = t.StartTime(:);
-    obj.EndTime     = t.EndTime(:);
-    obj.Workstation = t.Workstation(:);
-    obj.IsFixed = false;
+    obj = d12pack.WorkLogData(t.StartTime(:),t.EndTime(:),false,t.Workstation(:));
 else
-    error('Failed to import work log spreadsheet.');
+    warning(['Work log was empty or could not be imported.',char(10),FilePath]);
 end
 
 end
