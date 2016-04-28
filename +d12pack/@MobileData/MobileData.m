@@ -7,7 +7,7 @@ classdef MobileData < d12pack.DaysimeterData
     end
     
     properties (Dependent)
-        Phasor struct
+        Phasor d12pack.PhasorData
         InterdailyStability     double
         IntradailyVariability   double
     end
@@ -25,7 +25,11 @@ classdef MobileData < d12pack.DaysimeterData
         % Get Phasor method
         function Phasor = get.Phasor(obj)
             if isprop(obj,'InBed') && isprop(obj,'PhasorCompliance')
+                try
                 Phasor = obj.computePhasor(obj.Time,obj.CircadianStimulus,obj.Epoch,obj.ActivityIndex,obj.Observation,obj.PhasorCompliance,obj.InBed);
+                catch err
+                    display(err)
+                end
             elseif isprop(obj,'PhasorCompliance')
                 Phasor = obj.computePhasor(obj.Time,obj.CircadianStimulus,obj.Epoch,obj.ActivityIndex,obj.Observation,obj.PhasorCompliance);
             else

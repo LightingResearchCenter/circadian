@@ -1,6 +1,9 @@
-function Phasor = computePhasor(Time,CS,Epoch,ActivityIndex,Observation,varargin)
+function Phasor = computePhasor(Time,CircadianStimulus,Epoch,ActivityIndex,Observation,varargin)
 %PREP Summary of this function goes here
 %   Detailed explanation goes here
+
+% Preallocate output
+Phasor = d12pack.PhasorData;
 
 switch nargin
     case 6
@@ -14,27 +17,31 @@ switch nargin
         InBed = false(size(Time));
 end
 
-% Assign value to zero when in bed
-CS(InBed) = 0;
-ActivityIndex(InBed) = 0;
-
-% Indicies to be removed
-idxRemove = ~Observation | ~PhasorCompliance;
-
-% Remove specified indicies
-Time(idxRemove) = [];
-CS(idxRemove) = [];
-ActivityIndex(idxRemove) = [];
-
-% Preallocate output struct
-Phasor = struct;
-
-% Compute Phasor and assign to struct
-[Phasor.Vector,Phasor.Magnitude,Phasor.Angle,...
-    Phasor.MagnitudeHarmonics,Phasor.FirstHarmonic] = ...
-    phasor(datenum(Time),Epoch,CS,ActivityIndex);
-
-% Compute Coverage of Phasor and assign to struct
+if ~isempty(Time) && ~isempty(CircadianStimulus) && ~isempty(ActivityIndex)
+    
+    % Assign value to zero when in bed
+    CircadianStimulus(InBed) = 0;
+    ActivityIndex(InBed) = 0;
+    
+    % Indicies to be removed
+    idxRemove = ~Observation | ~PhasorCompliance;
+    
+    % Remove specified indicies
+    Time(idxRemove) = [];
+    CircadianStimulus(idxRemove) = [];
+    ActivityIndex(idxRemove) = [];
+    
+    if ~isempty(Time)
+        % Compute Phasor
+        [Phasor.Vector,Phasor.Magnitude,Phasor.Angle,...
+            Phasor.MagnitudeHarmonics,Phasor.FirstHarmonic] = ...
+            phasor(datenum(Time),Epoch,CircadianStimulus,ActivityIndex);
+    else
+        
+    end
+    
+end
+% Compute Coverage of Phasor
 Phasor.Coverage = Epoch*numel(Time);
 
 end
@@ -42,20 +49,20 @@ end
 
 function [vector,magnitude,Angle,magnitudeHarmonics,firstHarmonic] = phasor(Time,Epoch,signal1,signal2)
 % PHASOR Compares two time dependent signals
-%   
+%
 %   Input:
 %   timeArray is time in days or MATLAB datenum
 %   epoch   is the sampling rate (duration object)
 %   signal1 is the input signal to the system, this is generally light
 %   signal2 is the output signal of the system, this is often activity
-%   
+%
 %   Output:
 %   phasorVector is the complex representation of phasor magnitude and
 %   angle
-%   
+%
 %   Reference(s):
 %       Author(s), Title. Journal Abbrv. year; vol: pp-pp.
-%   
+%
 %   Example(s):
 %   [phasorVector,magnitudeHarmonics,firstHarmonic] = phasor.phasor(timeArray,epoch,lightArray,activityArray)
 
@@ -80,13 +87,13 @@ function [vector,magnitude,Angle] = cos24hrphasor(Time,Epoch,signal1,signal2)
 %   epoch     is the sampling rate (object of samplingrate class)
 %   signal1   is the input signal to the system, this is generally light
 %   signal2   is the output signal of the system, this is often activity
-%   
+%
 %   Output:
 %   vector is the complex representation of phasor magnitude and angle
-%   
+%
 %   Reference(s):
 %       Author(s), Title. Journal Abbrv. year; vol: pp-pp.
-%   
+%
 %   Example(s):
 %   [vector,magnitude,angle] = cos24hrphasor(timeArray,epoch,signal1,signal2)
 
@@ -216,12 +223,12 @@ temp = fft(XCORR)/n;
 % mag = abs(temp);
 % phase = angle(temp);
 if  rem(n,2)==0 % is n even?
-%     MAGc(1:n/2+1) = [mag(1);2*mag(2:n/2);mag(n/2+1)]; % [dc; 2*(fundamental to nyquist-1); nyquist]
-%     PHASEc = 180/pi*phase(1:n/2+1); % degrees
+    %     MAGc(1:n/2+1) = [mag(1);2*mag(2:n/2);mag(n/2+1)]; % [dc; 2*(fundamental to nyquist-1); nyquist]
+    %     PHASEc = 180/pi*phase(1:n/2+1); % degrees
     Complex = [temp(1);2*temp(2:n/2);temp(n/2+1)]; %zeros(n/2 - 2, 1)
 else % else n is odd
-%     MAGc(1:(n+1)/2) = [mag(1);2*mag(2:(n+1)/2)]; % [dc; 2*(fundamental to nyquist)]
-%     PHASEc = 180/pi*phase(1:(n+1)/2); % degrees
+    %     MAGc(1:(n+1)/2) = [mag(1);2*mag(2:(n+1)/2)]; % [dc; 2*(fundamental to nyquist)]
+    %     PHASEc = 180/pi*phase(1:(n+1)/2); % degrees
     Complex = zeros(2, (n+1)/2 - 1);
     Complex = [temp(1);2*temp(2:(n+1)/2)];
 end
