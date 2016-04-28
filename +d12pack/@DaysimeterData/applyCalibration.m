@@ -4,7 +4,7 @@ function CalibratedValue = applyCalibration(Value,CalibrationArray,CalibrationRa
 
 MixedCalibration = bsxfun(@times,CalibrationRatio,(CalibrationArray(:))');
 
-ExpandedValue = repmat(Value,1,numel(CalibrationArray));
+ExpandedValue = double(repmat(Value,1,numel(CalibrationArray)));
 if ~isempty(ExpandedValue)
     CalibratedValue = sum(ExpandedValue.*MixedCalibration,2);
 else
