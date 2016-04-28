@@ -70,6 +70,11 @@ classdef HumanData < d12pack.MobileData
         end % End of get InBed method
     end
     
+    % External public methods
+    methods % (Access = public)
+        t = analysis(obj)
+    end
+    
     % External static protected methods
     methods (Static, Access = protected)
         PhasorCompliance = adjustcompliance(Epoch,Time,Compliance,varargin)
