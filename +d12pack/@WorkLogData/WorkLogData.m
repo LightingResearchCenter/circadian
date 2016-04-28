@@ -40,11 +40,10 @@ classdef WorkLogData
                 
                 nStart = numel(StartTime);
                 nEnd   = numel(EndTime);
-                if iscell(Workstation)
-                    nWorkstation = numel(Workstation);
-                else
+                if ~iscell(Workstation)
                     Workstation = repmat({Workstation},size(StartTime));
                 end
+                nWorkstation = numel(Workstation);
                 if isequal(nStart,nEnd,nWorkstation)
                     obj.StartTime   = StartTime(:);
                     obj.EndTime     = EndTime(:);
@@ -57,12 +56,20 @@ classdef WorkLogData
         
         % Set StartTime
         function obj = set.StartTime(obj,StartTime)
-            if obj.IsFixed && isduration(StartTime)
+            if  isduration(StartTime)
                 obj.PrivateStartTime_duration = StartTime;
-            elseif ~(obj.IsFixed) && isdatetime(StartTime)
+                % Clear unused property
+                obj.PrivateStartTime_datetime = datetime.empty(1,0);
+                % Change mode to fixed
+                obj.IsFixed = true;
+            elseif isdatetime(StartTime)
                 obj.PrivateStartTime_datetime = StartTime;
+                % Clear unused property
+                obj.PrivateStartTime_duration = duration.empty(1,0);
+                % Change mode to NOT fixed
+                obj.IsFixed = false;
             else
-                error('StartTime must be of class duration for fixed work logs or class datetime for non-fixed work logs.');
+                error('StartTime must be a duration or datetime.');
             end
         end % End of set StartTime
         % Get StartTime
@@ -76,12 +83,20 @@ classdef WorkLogData
         
         % Set EndTime
         function obj = set.EndTime(obj,EndTime)
-            if obj.IsFixed && isduration(EndTime)
+            if isduration(EndTime)
                 obj.PrivateEndTime_duration = EndTime;
-            elseif ~obj.IsFixed && isdatetime(EndTime)
+                % Clear unused property
+                obj.PrivateEndTime_datetime = datetime.empty(1,0);
+                % Change mode to fixed
+                obj.IsFixed = true;
+            elseif isdatetime(EndTime)
                 obj.PrivateEndTime_datetime = EndTime;
+                % Clear unused property
+                obj.PrivateEndTime_duration = duration.empty(1,0);
+                % Change mode to NOT fixed
+                obj.IsFixed = false;
             else
-                error('EndTime must be of class duration for fixed work logs or class datetime for non-fixed work logs.');
+                error('EndTime must be a duration or datetime.');
             end
         end % End of set EndTime
         % Get EndTime
@@ -97,9 +112,15 @@ classdef WorkLogData
     
     % External methods
     methods % (Access = public)
-        obj = import(obj,FilePath,varargin)
         t = table(obj)
         disp(obj)
+        
+        obj = import(obj,FilePath,varargin)
+        TF = isAtWork(obj,Time)
+    end
+    
+    methods (Static) % (Access = public)
+        TF = isFedHoliday(Time)
     end
     
 end
