@@ -117,7 +117,8 @@ classdef DaysimeterData
             end
             
             if isvector(CalibrationRatio)
-                CalibrationRatio = repmat((CalibrationRatio(:))',numel(obj.Time),1);
+                %CalibrationRatio = repmat((CalibrationRatio(:))',numel(obj.Time),1);
+                CalibrationRatio = determineRation(obj);
             end
                 
         end % End of get CalibrationRatio
@@ -205,6 +206,7 @@ classdef DaysimeterData
     methods (Access = protected)
         s = parseraw(obj,varargin)
         s = parseloginfo(obj,varargin)
+        CalibrationRatio = determineRatio(obj)
     end
     
     % External static protected methods
