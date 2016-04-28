@@ -1,12 +1,9 @@
-function obj = convert2HumanData(log_info_path,data_log_path,cdfPath,bedLogPath)
+function obj = convert2HumanData(log_info_path,data_log_path,cdfData,bedLogPath,varargin)
 %CONVERT2HUMANDATA Summary of this function goes here
 %   Detailed explanation goes here
 
 % Create object from source files
 obj = d12pack.HumanData(log_info_path,data_log_path);
-
-% Import CDF
-cdfData = daysimeter12.readcdf(cdfPath);
 
 % Add subject ID
 obj.ID = cdfData.GlobalAttributes.subjectID;
@@ -21,6 +18,16 @@ obj.Compliance(1:numel(cdfData.Variables.complianceArray)) = logical(cdfData.Var
 
 % Add bed log
 obj.BedLog = obj.BedLog.import(bedLogPath);
+
+% Add work log
+if nargin == 5
+    workLogPath = varargin{1};
+    obj.WorkLog = obj.WorkLog.import(workLogPath);
+else
+    obj.WorkLog = d12pack.WorkLogData;
+    obj.WorkLog.StartTime = duration(9,0,0);
+    obj.WorkLog.EndTime = duration(17,0,0);
+end
 
 end
 

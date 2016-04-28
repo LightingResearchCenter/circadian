@@ -63,13 +63,7 @@ classdef HumanData < d12pack.MobileData
         % Get AtWork
         function AtWork = get.AtWork(obj)
             if ~isempty(obj.WorkLog)
-                Temp = false(size(obj.Time));
-                for iBed = 1:numel(obj.WorkLog)
-                    if (isdatetime(obj.WorkLog(iBed).StartTime) && ~isnat(obj.WorkLog(iBed).StartTime)) && (isdatetime(obj.WorkLog(iBed).EndTime) && ~isnat(obj.WorkLog(iBed).EndTime))
-                        Temp = Temp | (obj.Time >= obj.WorkLog(iBed).StartTime & obj.Time < obj.WorkLog(iBed).RiseTime);
-                    end
-                end
-                AtWork = Temp;
+                AtWork = obj.WorkLog.isAtWork(obj.Time);
             else
                 AtWork = logical.empty(numel(obj.Time),0);
             end
