@@ -12,6 +12,7 @@ classdef LocationData
         Wing            char
         Floor           char
         Workstation     char
+        WindowProximity char
         Lattitude       double
         Longitude       double
     end
