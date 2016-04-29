@@ -3,8 +3,15 @@ classdef StaticData < d12pack.DaysimeterData
     %   Detailed explanation goes here
     
     properties % (Access = public)
+        Type        char
         Orientation char
         Exposure    char
+        WeatherLog  d12pack.WeatherLogData
+    end
+    
+    properties (Dependent)
+        IsSunny
+        IsCloudy
     end
     
     methods
@@ -16,6 +23,24 @@ classdef StaticData < d12pack.DaysimeterData
                 obj.data_log = obj.readdatalog(data_log_path);
             end
         end % End of constructor method
+        
+        % Get IsSunny
+        function IsSunny = get.IsSunny(obj)
+            if isempty(obj.WeatherLog)
+                IsSunny = logical.empty(size(obj.Time));
+            else
+                IsSunny = obj.WeatherLog.isCondition(obj.Time,'Sunny');
+            end
+        end % End of get IsSunny
+        
+        % Get IsCloudy
+        function IsCloudy = get.IsCloudy(obj)
+            if isempty(obj.WeatherLog)
+                IsCloudy = logical.empty(size(obj.Time));
+            else
+                IsCloudy = obj.WeatherLog.isCondition(obj.Time,'Cloudy');
+            end
+        end % End of get IsCloudy
     end
     
 end
