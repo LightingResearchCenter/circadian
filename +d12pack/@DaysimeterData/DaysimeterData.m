@@ -5,11 +5,12 @@ classdef DaysimeterData
     
     % Public properties
     properties
-        SerialNumber uint16   % Daysimeter serial number
-        Calibration  d12pack.CalibrationData % Calibration values
+        SerialNumber     uint16   % Daysimeter serial number
+        Calibration      d12pack.CalibrationData % Calibration values
         CalibrationRatio double % Ratio used when mixing multiple calibration
-        CalibrationPath char = '\\root\projects\DaysimeterAndDimesimeterReferenceFiles\recalibration2016\calibration_log.csv';
-        Epoch        duration % Logging rate
+        RatioMethod      char
+        CalibrationPath  char = '\\root\projects\DaysimeterAndDimesimeterReferenceFiles\recalibration2016\calibration_log.csv';
+        Epoch            duration % Logging rate
         
         Time         datetime % Time stamps of readings
         RedCounts    uint16   % Uncalibrated counts from red channel
