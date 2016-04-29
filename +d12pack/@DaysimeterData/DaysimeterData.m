@@ -208,6 +208,7 @@ classdef DaysimeterData
         s = parseraw(obj,varargin)
         s = parseloginfo(obj,varargin)
         CalibrationRatio = determineRatio(obj)
+        HourlyValue = hourly(obj,Value,fun,varargin)
     end
     
     % External static protected methods
