@@ -33,10 +33,13 @@ CalibrationRatio = zeros(numel(obj.Time),numel(obj.Calibration));
 TCals = table(obj.Calibration);
 
 NewestDate = max(vertcat(TCals.Date));
-
-SelectedPost = TCals(TCals.Date == NewestDate,:);
-if size(SelectedPost,1) > 1 % If more than one pick last
-    SelectedPost = SelectedPost(end,:);
+if isnat(NewestDate)
+    SelectedPost = TCals(end,:);
+else
+    SelectedPost = TCals(TCals.Date == NewestDate,:);
+    if size(SelectedPost,1) > 1 % If more than one pick last
+        SelectedPost = SelectedPost(end,:);
+    end
 end
 % Find the index of the selection
 SelectedIdx = (TCals.Red == SelectedPost.Red) & ...

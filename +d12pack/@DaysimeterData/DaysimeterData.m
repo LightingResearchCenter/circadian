@@ -43,6 +43,10 @@ classdef DaysimeterData
         Illuminance       double %
         CircadianLight    double %
         CircadianStimulus double %
+        
+        HourlyMeanIlluminance       double
+        HourlyMeanCircadianLight    double
+        HourlyMeanCircadianStimulus double
     end
     
     % Private properties
@@ -119,7 +123,7 @@ classdef DaysimeterData
             
             if isvector(CalibrationRatio)
                 %CalibrationRatio = repmat((CalibrationRatio(:))',numel(obj.Time),1);
-                CalibrationRatio = determineRation(obj);
+                CalibrationRatio = determineRatio(obj);
             end
                 
         end % End of get CalibrationRatio
@@ -188,6 +192,21 @@ classdef DaysimeterData
         function CircadianStimulus = get.CircadianStimulus(obj)
             CircadianStimulus = obj.cla2cs(obj.CircadianLight);
         end % End of get CircadianStimulus
+        
+        % Get HourlyMeanIlluminance
+        function HourlyMeanIlluminance = get.HourlyMeanIlluminance(obj)
+            HourlyMeanIlluminance = hourly(obj,obj.Illuminance,'mean');
+        end % End of get HourlyMeanIlluminance
+        
+        % Get HourlyMeanCircadianLight
+        function HourlyMeanCircadianLight = get.HourlyMeanCircadianLight(obj)
+            HourlyMeanCircadianLight = hourly(obj,obj.CircadianLight,'mean');
+        end % End of get HourlyMeanCircadianLight
+        
+        % Get HourlyMeanCircadianStimulus
+        function HourlyMeanCircadianStimulus = get.HourlyMeanCircadianStimulus(obj)
+            HourlyMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'mean');
+        end % End of get HourlyMeanCircadianStimulus
     end
     
     % External public methods
