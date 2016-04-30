@@ -23,6 +23,7 @@ classdef DaysimeterData
         Resets       uint16   % Running count of reset flags
         
         Location     d12pack.LocationData
+        Session      struct
         
         Created      datetime % When the original files were downloaded
         Modified     datetime % When this object was last saved
