@@ -12,6 +12,9 @@ classdef DaysimeterData
         CalibrationPath  char = '\\root\projects\DaysimeterAndDimesimeterReferenceFiles\recalibration2016\calibration_log.csv';
         Epoch            duration % Logging rate
         
+        TimeZoneLaunch char = 'local';
+        TimeZoneDeploy char = 'local';
+        
         Time         datetime % Time stamps of readings
         RedCounts    uint16   % Uncalibrated counts from red channel
         GreenCounts  uint16   % Uncalibrated counts from green channel
@@ -110,23 +113,7 @@ classdef DaysimeterData
         
         % Get CalibrationRatio
         function CalibrationRatio = get.CalibrationRatio(obj)
-            if isempty(obj.Calibration) % If no calibration
-                CalibrationRatio = obj.CalibrationRatio;
-            elseif isempty(obj.CalibrationRatio) % If no calibration ratio
-                CalibrationRatio = zeros(numel(obj.Calibration),1);
-                [m,idx] = max(vertcat(obj.Calibration.Date));
-                if isempty(m) || isnat(m) % If no date use last entry
-                    CalibrationRatio(end) = 1;
-                else % Use most recent entry
-                    CalibrationRatio(idx) = 1;
-                end
-            end
-            
-            if isvector(CalibrationRatio)
-                %CalibrationRatio = repmat((CalibrationRatio(:))',numel(obj.Time),1);
-                CalibrationRatio = determineRatio(obj);
-            end
-                
+            CalibrationRatio = determineRatio(obj);
         end % End of get CalibrationRatio
         
         % Get Red
@@ -179,6 +166,8 @@ classdef DaysimeterData
             end
         end % End of get Error
         
+        
+        %%
         % Get Illuminance
         function Illuminance = get.Illuminance(obj)
             Illuminance = obj.rgb2lux(obj.Red,obj.Green,obj.Blue);
@@ -194,6 +183,8 @@ classdef DaysimeterData
             CircadianStimulus = obj.cla2cs(obj.CircadianLight);
         end % End of get CircadianStimulus
         
+        
+        %%
         % Get HourlyMeanIlluminance
         function HourlyMeanIlluminance = get.HourlyMeanIlluminance(obj)
             HourlyMeanIlluminance = hourly(obj,obj.Illuminance,'mean');
@@ -232,7 +223,7 @@ classdef DaysimeterData
     end
     
     % External static protected methods
-    methods (Static, Access = protected)
+    methods (Static)
         log_info = readloginfo(log_info_path)
         data_log = readdatalog(data_log_path)
     end

@@ -2,18 +2,20 @@ classdef StaticData < d12pack.DaysimeterData
     %STATICDATA Summary of this class goes here
     %   Detailed explanation goes here
     
+    %%
     properties % (Access = public)
         Type        char
         Orientation char
-        Exposure    char
         WeatherLog  d12pack.WeatherLogData
     end
     
+    %%
     properties (Dependent)
         IsSunny
         IsCloudy
     end
     
+    %%
     methods
         % Constructor method
         function obj = StaticData(log_info_path,data_log_path,varargin)
@@ -41,6 +43,11 @@ classdef StaticData < d12pack.DaysimeterData
                 IsCloudy = obj.WeatherLog.isCondition(obj.Time,'Cloudy');
             end
         end % End of get IsCloudy
+    end
+    
+    %%
+    methods
+        t = analysis(obj)
     end
     
 end

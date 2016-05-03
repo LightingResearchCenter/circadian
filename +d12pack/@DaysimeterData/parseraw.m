@@ -2,11 +2,7 @@ function s = parseraw(obj,varargin)
 %PARSERAW Summary of this function goes here
 %   Detailed explanation goes here
 
-if nargin > 1
-    s = obj.parseloginfo(varargin);
-else
-    s = obj.parseloginfo;
-end
+s = obj.parseloginfo;
 
 data_log = obj.data_log;
 
