@@ -13,6 +13,14 @@ classdef StaticData < d12pack.DaysimeterData
     properties (Dependent)
         IsSunny
         IsCloudy
+        
+        SunnyHourlyMeanIlluminance
+        SunnyHourlyMeanCircadianLight
+        SunnyHourlyMeanCircadianStimulus
+        
+        CloudyHourlyMeanIlluminance
+        CloudyHourlyMeanCircadianLight
+        CloudyHourlyMeanCircadianStimulus
     end
     
     %%
@@ -43,6 +51,38 @@ classdef StaticData < d12pack.DaysimeterData
                 IsCloudy = obj.WeatherLog.isCondition(obj.Time,'Cloudy');
             end
         end % End of get IsCloudy
+        
+        %%
+        % Get SunnyHourlyMeanIlluminance
+        function SunnyHourlyMeanIlluminance = get.SunnyHourlyMeanIlluminance(obj)
+            SunnyHourlyMeanIlluminance = hourly(obj,obj.Illuminance,'mean',obj.IsSunny);
+        end % End of get SunnyHourlyMeanIlluminance
+        
+        % Get SunnyHourlyMeanCircadianLight
+        function SunnyHourlyMeanCircadianLight = get.SunnyHourlyMeanCircadianLight(obj)
+            SunnyHourlyMeanCircadianLight = hourly(obj,obj.CircadianLight,'mean',obj.IsSunny);
+        end % End of get SunnyHourlyMeanCircadianLight
+        
+        % Get SunnyHourlyMeanCircadianStimulus
+        function SunnyHourlyMeanCircadianStimulus = get.SunnyHourlyMeanCircadianStimulus(obj)
+            SunnyHourlyMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'mean',obj.IsSunny);
+        end % End of get SunnyHourlyMeanCircadianStimulus
+        
+        %%
+        % Get CloudyHourlyMeanIlluminance
+        function CloudyHourlyMeanIlluminance = get.CloudyHourlyMeanIlluminance(obj)
+            CloudyHourlyMeanIlluminance = hourly(obj,obj.Illuminance,'mean',obj.IsCloudy);
+        end % End of get CloudyHourlyMeanIlluminance
+        
+        % Get CloudyHourlyMeanCircadianLight
+        function CloudyHourlyMeanCircadianLight = get.CloudyHourlyMeanCircadianLight(obj)
+            CloudyHourlyMeanCircadianLight = hourly(obj,obj.CircadianLight,'mean',obj.IsCloudy);
+        end % End of get CloudyHourlyMeanCircadianLight
+        
+        % Get CloudyHourlyMeanCircadianStimulus
+        function CloudyHourlyMeanCircadianStimulus = get.CloudyHourlyMeanCircadianStimulus(obj)
+            CloudyHourlyMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'mean',obj.IsCloudy);
+        end % End of get CloudyHourlyMeanCircadianStimulus
     end
     
     %%

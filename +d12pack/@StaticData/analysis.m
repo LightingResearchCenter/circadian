@@ -1,4 +1,4 @@
-function t = analysis(obj)
+function s = analysis(obj)
 %ANALYSIS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -15,6 +15,14 @@ Type = {obj.Type}';
 HourlyMeanIlluminance       = (horzcat(obj.HourlyMeanIlluminance))';
 HourlyMeanCircadianLight    = (horzcat(obj.HourlyMeanCircadianLight))';
 HourlyMeanCircadianStimulus = (horzcat(obj.HourlyMeanCircadianStimulus))';
+
+SunnyHourlyMeanIlluminance       = (horzcat(obj.SunnyHourlyMeanIlluminance))';
+SunnyHourlyMeanCircadianLight    = (horzcat(obj.SunnyHourlyMeanCircadianLight))';
+SunnyHourlyMeanCircadianStimulus = (horzcat(obj.SunnyHourlyMeanCircadianStimulus))';
+
+CloudyHourlyMeanIlluminance       = (horzcat(obj.CloudyHourlyMeanIlluminance))';
+CloudyHourlyMeanCircadianLight    = (horzcat(obj.CloudyHourlyMeanCircadianLight))';
+CloudyHourlyMeanCircadianStimulus = (horzcat(obj.CloudyHourlyMeanCircadianStimulus))';
 
 str0_23 = num2str((0:23)','%02.0f');
 
@@ -59,7 +67,7 @@ VariableNames = [{...
     HourlyMeanCircadianStimulus_Names...
     ];
 
-t = table(...
+t_overall = table(...
     SerialNumber,...
     tempCell,... % City_State
     tempCell,... % Building_Name
@@ -157,23 +165,57 @@ t = table(...
     tempNum,... % 23
     'VariableNames',VariableNames);
 
+t_sunny = t_overall;
+t_cloudy = t_overall;
+
 for ii = 1:numel(SerialNumber)
-    t.City_State{ii,1} = [location(ii).City,', ',location(ii).PostalStateAbbreviation];
-    t.Building_Name{ii,1} = location(ii).BuildingName;
-    t.Session_Name{ii,1} = session(ii).Name;
+    t_overall.City_State{ii,1} = [location(ii).City,', ',location(ii).PostalStateAbbreviation];
+    t_overall.Building_Name{ii,1} = location(ii).BuildingName;
+    t_overall.Session_Name{ii,1} = session(ii).Name;
     
-    t.Wing{ii,1}             = location(ii).Wing;
-    t.Floor{ii,1}            = location(ii).Floor;
-    t.Workstation{ii,1}      = location(ii).Workstation;
-    t.Window_Proximity{ii,1} = location(ii).WindowProximity;
-    t.Exposure{ii,1}         = location(ii).Exposure;
+    t_overall.Wing{ii,1}             = location(ii).Wing;
+    t_overall.Floor{ii,1}            = location(ii).Floor;
+    t_overall.Workstation{ii,1}      = location(ii).Workstation;
+    t_overall.Window_Proximity{ii,1} = location(ii).WindowProximity;
+    t_overall.Exposure{ii,1}         = location(ii).Exposure;
 end
 
+t_sunny.City_State = t_overall.City_State;
+t_sunny.Building_Name = t_overall.Building_Name;
+t_sunny.Session_Name = t_overall.Session_Name;
+t_sunny.Wing = t_overall.Wing;
+t_sunny.Floor = t_overall.Floor;
+t_sunny.Workstation = t_overall.Workstation;
+t_sunny.Window_Proximity = t_overall.Window_Proximity;
+t_sunny.Exposure = t_overall.Exposure;
+
+t_cloudy.City_State = t_overall.City_State;
+t_cloudy.Building_Name = t_overall.Building_Name;
+t_cloudy.Session_Name = t_overall.Session_Name;
+t_cloudy.Wing = t_overall.Wing;
+t_cloudy.Floor = t_overall.Floor;
+t_cloudy.Workstation = t_overall.Workstation;
+t_cloudy.Window_Proximity = t_overall.Window_Proximity;
+t_cloudy.Exposure = t_overall.Exposure;
+
 for jj = 1:24
-    t.(HourlyMeanIlluminance_Names{jj}) = HourlyMeanIlluminance(:,jj);
-    t.(HourlyMeanCircadianLight_Names{jj}) = HourlyMeanCircadianLight(:,jj);
-    t.(HourlyMeanCircadianStimulus_Names{jj}) = HourlyMeanCircadianStimulus(:,jj);
+    t_overall.(HourlyMeanIlluminance_Names{jj}) = HourlyMeanIlluminance(:,jj);
+    t_overall.(HourlyMeanCircadianLight_Names{jj}) = HourlyMeanCircadianLight(:,jj);
+    t_overall.(HourlyMeanCircadianStimulus_Names{jj}) = HourlyMeanCircadianStimulus(:,jj);
+    
+    t_sunny.(HourlyMeanIlluminance_Names{jj}) = SunnyHourlyMeanIlluminance(:,jj);
+    t_sunny.(HourlyMeanCircadianLight_Names{jj}) = SunnyHourlyMeanCircadianLight(:,jj);
+    t_sunny.(HourlyMeanCircadianStimulus_Names{jj}) = SunnyHourlyMeanCircadianStimulus(:,jj);
+    
+    t_cloudy.(HourlyMeanIlluminance_Names{jj}) = CloudyHourlyMeanIlluminance(:,jj);
+    t_cloudy.(HourlyMeanCircadianLight_Names{jj}) = CloudyHourlyMeanCircadianLight(:,jj);
+    t_cloudy.(HourlyMeanCircadianStimulus_Names{jj}) = CloudyHourlyMeanCircadianStimulus(:,jj);
 end
+
+s = struct;
+s.Overall = t_overall;
+s.Sunny = t_sunny;
+s.Cloudy = t_cloudy;
 
 end
 
