@@ -117,6 +117,7 @@ classdef WorkLogData
         
         obj = import(obj,FilePath,varargin)
         TF = isAtWork(obj,Time)
+        TF = isWorkDay(obj,Time)
     end
     
     methods (Static) % (Access = public)

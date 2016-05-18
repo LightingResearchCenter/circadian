@@ -16,27 +16,40 @@ HourlyMeanIlluminance       = (horzcat(obj.HourlyMeanIlluminance))';
 HourlyMeanCircadianLight    = (horzcat(obj.HourlyMeanCircadianLight))';
 HourlyMeanCircadianStimulus = (horzcat(obj.HourlyMeanCircadianStimulus))';
 
+HourlyGeometricMeanIlluminance       = (horzcat(obj.HourlyGeometricMeanIlluminance))';
+HourlyGeometricMeanCircadianLight    = (horzcat(obj.HourlyGeometricMeanCircadianLight))';
+HourlyGeometricMeanCircadianStimulus = (horzcat(obj.HourlyGeometricMeanCircadianStimulus))';
+
 SunnyHourlyMeanIlluminance       = (horzcat(obj.SunnyHourlyMeanIlluminance))';
 SunnyHourlyMeanCircadianLight    = (horzcat(obj.SunnyHourlyMeanCircadianLight))';
 SunnyHourlyMeanCircadianStimulus = (horzcat(obj.SunnyHourlyMeanCircadianStimulus))';
+
+SunnyHourlyGeometricMeanIlluminance       = (horzcat(obj.SunnyHourlyGeometricMeanIlluminance))';
+SunnyHourlyGeometricMeanCircadianLight    = (horzcat(obj.SunnyHourlyGeometricMeanCircadianLight))';
+SunnyHourlyGeometricMeanCircadianStimulus = (horzcat(obj.SunnyHourlyGeometricMeanCircadianStimulus))';
+
 
 CloudyHourlyMeanIlluminance       = (horzcat(obj.CloudyHourlyMeanIlluminance))';
 CloudyHourlyMeanCircadianLight    = (horzcat(obj.CloudyHourlyMeanCircadianLight))';
 CloudyHourlyMeanCircadianStimulus = (horzcat(obj.CloudyHourlyMeanCircadianStimulus))';
 
+CloudyHourlyGeometricMeanIlluminance       = (horzcat(obj.CloudyHourlyGeometricMeanIlluminance))';
+CloudyHourlyGeometricMeanCircadianLight    = (horzcat(obj.CloudyHourlyGeometricMeanCircadianLight))';
+CloudyHourlyGeometricMeanCircadianStimulus = (horzcat(obj.CloudyHourlyGeometricMeanCircadianStimulus))';
+
 str0_23 = num2str((0:23)','%02.0f');
 
-HourlyMeanIlluminance_Names = repmat('Hourly_Mean_Illuminance_h',24,1);
-HourlyMeanIlluminance_Names = [HourlyMeanIlluminance_Names,str0_23];
-HourlyMeanIlluminance_Names = (cellstr(HourlyMeanIlluminance_Names))';
+HourlyTemplate_Names = repmat('prefix_h',24,1);
+HourlyTemplate_Names = [HourlyTemplate_Names,str0_23];
+HourlyTemplate_Names = (cellstr(HourlyTemplate_Names))';
 
-HourlyMeanCircadianLight_Names = repmat('Hourly_Mean_Circadian_Light_h',24,1);
-HourlyMeanCircadianLight_Names = [HourlyMeanCircadianLight_Names,str0_23];
-HourlyMeanCircadianLight_Names = (cellstr(HourlyMeanCircadianLight_Names))';
+HourlyMeanIlluminance_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Mean_Illuminance');
+HourlyMeanCircadianLight_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Mean_Circadian_Light');
+HourlyMeanCircadianStimulus_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Mean_Circadian_Stimulus');
 
-HourlyMeanCircadianStimulus_Names = repmat('Hourly_Mean_Circadian_Stimulus_h',24,1);
-HourlyMeanCircadianStimulus_Names = [HourlyMeanCircadianStimulus_Names,str0_23];
-HourlyMeanCircadianStimulus_Names = (cellstr(HourlyMeanCircadianStimulus_Names))';
+HourlyGeometricMeanIlluminance_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Geometric_Mean_Illuminance');
+HourlyGeometricMeanCircadianLight_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Geometric_Mean_Circadian_Light');
+HourlyGeometricMeanCircadianStimulus_Names = regexprep(HourlyTemplate_Names,'prefix','Hourly_Geometric_Mean_Circadian_Stimulus');
 
 VariableNames = [{...
     'Serial_Number',...
@@ -65,6 +78,18 @@ VariableNames = [{...
     {'Section_Break_3'},...
     ...
     HourlyMeanCircadianStimulus_Names...
+    ...
+    {'Section_Break_4'},...
+    ...
+    HourlyGeometricMeanIlluminance_Names,...
+    ...
+    {'Section_Break_5'},...
+    ...
+    HourlyGeometricMeanCircadianLight_Names,...
+    ...
+    {'Section_Break_6'},...
+    ...
+    HourlyGeometricMeanCircadianStimulus_Names...
     ];
 
 t_overall = table(...
@@ -163,6 +188,88 @@ t_overall = table(...
     tempNum,... % 21
     tempNum,... % 22
     tempNum,... % 23
+    ...
+    sectionBreak,...
+    ...
+    tempNum,... % 00
+    tempNum,... % 01
+    tempNum,... % 02
+    tempNum,... % 03
+    tempNum,... % 04
+    tempNum,... % 05
+    tempNum,... % 06
+    tempNum,... % 07
+    tempNum,... % 08
+    tempNum,... % 09
+    tempNum,... % 10
+    tempNum,... % 11
+    tempNum,... % 12
+    tempNum,... % 13
+    tempNum,... % 14
+    tempNum,... % 15
+    tempNum,... % 16
+    tempNum,... % 17
+    tempNum,... % 18
+    tempNum,... % 19
+    tempNum,... % 20
+    tempNum,... % 21
+    tempNum,... % 22
+    tempNum,... % 23
+    ...
+    sectionBreak,...
+    ...
+    tempNum,... % 00
+    tempNum,... % 01
+    tempNum,... % 02
+    tempNum,... % 03
+    tempNum,... % 04
+    tempNum,... % 05
+    tempNum,... % 06
+    tempNum,... % 07
+    tempNum,... % 08
+    tempNum,... % 09
+    tempNum,... % 10
+    tempNum,... % 11
+    tempNum,... % 12
+    tempNum,... % 13
+    tempNum,... % 14
+    tempNum,... % 15
+    tempNum,... % 16
+    tempNum,... % 17
+    tempNum,... % 18
+    tempNum,... % 19
+    tempNum,... % 20
+    tempNum,... % 21
+    tempNum,... % 22
+    tempNum,... % 23
+    ...
+    sectionBreak,...
+    ...
+    tempNum,... % 00
+    tempNum,... % 01
+    tempNum,... % 02
+    tempNum,... % 03
+    tempNum,... % 04
+    tempNum,... % 05
+    tempNum,... % 06
+    tempNum,... % 07
+    tempNum,... % 08
+    tempNum,... % 09
+    tempNum,... % 10
+    tempNum,... % 11
+    tempNum,... % 12
+    tempNum,... % 13
+    tempNum,... % 14
+    tempNum,... % 15
+    tempNum,... % 16
+    tempNum,... % 17
+    tempNum,... % 18
+    tempNum,... % 19
+    tempNum,... % 20
+    tempNum,... % 21
+    tempNum,... % 22
+    tempNum,... % 23
+    ...
     'VariableNames',VariableNames);
 
 t_sunny = t_overall;
@@ -210,6 +317,19 @@ for jj = 1:24
     t_cloudy.(HourlyMeanIlluminance_Names{jj}) = CloudyHourlyMeanIlluminance(:,jj);
     t_cloudy.(HourlyMeanCircadianLight_Names{jj}) = CloudyHourlyMeanCircadianLight(:,jj);
     t_cloudy.(HourlyMeanCircadianStimulus_Names{jj}) = CloudyHourlyMeanCircadianStimulus(:,jj);
+    
+    
+    t_overall.(HourlyGeometricMeanIlluminance_Names{jj}) = HourlyGeometricMeanIlluminance(:,jj);
+    t_overall.(HourlyGeometricMeanCircadianLight_Names{jj}) = HourlyGeometricMeanCircadianLight(:,jj);
+    t_overall.(HourlyGeometricMeanCircadianStimulus_Names{jj}) = HourlyGeometricMeanCircadianStimulus(:,jj);
+    
+    t_sunny.(HourlyGeometricMeanIlluminance_Names{jj}) = SunnyHourlyGeometricMeanIlluminance(:,jj);
+    t_sunny.(HourlyGeometricMeanCircadianLight_Names{jj}) = SunnyHourlyGeometricMeanCircadianLight(:,jj);
+    t_sunny.(HourlyGeometricMeanCircadianStimulus_Names{jj}) = SunnyHourlyGeometricMeanCircadianStimulus(:,jj);
+    
+    t_cloudy.(HourlyGeometricMeanIlluminance_Names{jj}) = CloudyHourlyGeometricMeanIlluminance(:,jj);
+    t_cloudy.(HourlyGeometricMeanCircadianLight_Names{jj}) = CloudyHourlyGeometricMeanCircadianLight(:,jj);
+    t_cloudy.(HourlyGeometricMeanCircadianStimulus_Names{jj}) = CloudyHourlyGeometricMeanCircadianStimulus(:,jj);
 end
 
 s = struct;

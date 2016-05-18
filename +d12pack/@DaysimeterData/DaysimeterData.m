@@ -51,6 +51,10 @@ classdef DaysimeterData
         HourlyMeanIlluminance       double
         HourlyMeanCircadianLight    double
         HourlyMeanCircadianStimulus double
+        
+        HourlyGeometricMeanIlluminance       double
+        HourlyGeometricMeanCircadianLight    double
+        HourlyGeometricMeanCircadianStimulus double
     end
     
     % Private properties
@@ -199,6 +203,22 @@ classdef DaysimeterData
         function HourlyMeanCircadianStimulus = get.HourlyMeanCircadianStimulus(obj)
             HourlyMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'mean');
         end % End of get HourlyMeanCircadianStimulus
+        
+        %%
+        % Get HourlyGeometricMeanIlluminance
+        function HourlyGeometricMeanIlluminance = get.HourlyGeometricMeanIlluminance(obj)
+            HourlyGeometricMeanIlluminance = hourly(obj,obj.Illuminance,'geomean');
+        end % End of get HourlyGeometricMeanIlluminance
+        
+        % Get HourlyGeometricMeanCircadianLight
+        function HourlyGeometricMeanCircadianLight = get.HourlyGeometricMeanCircadianLight(obj)
+            HourlyGeometricMeanCircadianLight = hourly(obj,obj.CircadianLight,'geomean');
+        end % End of get HourlyGeometricMeanCircadianLight
+        
+        % Get HourlyGeometricMeanCircadianStimulus
+        function HourlyGeometricMeanCircadianStimulus = get.HourlyGeometricMeanCircadianStimulus(obj)
+            HourlyGeometricMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'geomean');
+        end % End of get HourlyGeometricMeanCircadianStimulus
     end
     
     % External public methods

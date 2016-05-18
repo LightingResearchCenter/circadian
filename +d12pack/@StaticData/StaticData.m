@@ -18,9 +18,17 @@ classdef StaticData < d12pack.DaysimeterData
         SunnyHourlyMeanCircadianLight
         SunnyHourlyMeanCircadianStimulus
         
+        SunnyHourlyGeometricMeanIlluminance
+        SunnyHourlyGeometricMeanCircadianLight
+        SunnyHourlyGeometricMeanCircadianStimulus
+        
         CloudyHourlyMeanIlluminance
         CloudyHourlyMeanCircadianLight
         CloudyHourlyMeanCircadianStimulus
+        
+        CloudyHourlyGeometricMeanIlluminance
+        CloudyHourlyGeometricMeanCircadianLight
+        CloudyHourlyGeometricMeanCircadianStimulus
     end
     
     %%
@@ -69,6 +77,22 @@ classdef StaticData < d12pack.DaysimeterData
         end % End of get SunnyHourlyMeanCircadianStimulus
         
         %%
+        % Get SunnyHourlyGeometricMeanIlluminance
+        function SunnyHourlyGeometricMeanIlluminance = get.SunnyHourlyGeometricMeanIlluminance(obj)
+            SunnyHourlyGeometricMeanIlluminance = hourly(obj,obj.Illuminance,'geomean',obj.IsSunny);
+        end % End of get SunnyHourlyGeometricMeanIlluminance
+        
+        % Get SunnyHourlyGeometricMeanCircadianLight
+        function SunnyHourlyGeometricMeanCircadianLight = get.SunnyHourlyGeometricMeanCircadianLight(obj)
+            SunnyHourlyGeometricMeanCircadianLight = hourly(obj,obj.CircadianLight,'geomean',obj.IsSunny);
+        end % End of get SunnyHourlyGeometricMeanCircadianLight
+        
+        % Get SunnyHourlyGeometricMeanCircadianStimulus
+        function SunnyHourlyGeometricMeanCircadianStimulus = get.SunnyHourlyGeometricMeanCircadianStimulus(obj)
+            SunnyHourlyGeometricMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'geomean',obj.IsSunny);
+        end % End of get SunnyHourlyGeometricMeanCircadianStimulus
+        
+        %%
         % Get CloudyHourlyMeanIlluminance
         function CloudyHourlyMeanIlluminance = get.CloudyHourlyMeanIlluminance(obj)
             CloudyHourlyMeanIlluminance = hourly(obj,obj.Illuminance,'mean',obj.IsCloudy);
@@ -83,6 +107,22 @@ classdef StaticData < d12pack.DaysimeterData
         function CloudyHourlyMeanCircadianStimulus = get.CloudyHourlyMeanCircadianStimulus(obj)
             CloudyHourlyMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'mean',obj.IsCloudy);
         end % End of get CloudyHourlyMeanCircadianStimulus
+        
+        %%
+        % Get CloudyHourlyGeometricMeanIlluminance
+        function CloudyHourlyGeometricMeanIlluminance = get.CloudyHourlyGeometricMeanIlluminance(obj)
+            CloudyHourlyGeometricMeanIlluminance = hourly(obj,obj.Illuminance,'geomean',obj.IsCloudy);
+        end % End of get CloudyHourlyGeometricMeanIlluminance
+        
+        % Get CloudyHourlyGeometricMeanCircadianLight
+        function CloudyHourlyGeometricMeanCircadianLight = get.CloudyHourlyGeometricMeanCircadianLight(obj)
+            CloudyHourlyGeometricMeanCircadianLight = hourly(obj,obj.CircadianLight,'geomean',obj.IsCloudy);
+        end % End of get CloudyHourlyGeometricMeanCircadianLight
+        
+        % Get CloudyHourlyGeometricMeanCircadianStimulus
+        function CloudyHourlyGeometricMeanCircadianStimulus = get.CloudyHourlyGeometricMeanCircadianStimulus(obj)
+            CloudyHourlyGeometricMeanCircadianStimulus = hourly(obj,obj.CircadianStimulus,'geomean',obj.IsCloudy);
+        end % End of get CloudyHourlyGeometricMeanCircadianStimulus
     end
     
     %%

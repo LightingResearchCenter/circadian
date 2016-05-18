@@ -12,42 +12,70 @@ classdef HumanData < d12pack.MobileData
         Sleep            struct
         
         AtWork           logical
+        WorkDay        logical
         InBed            logical
         PhasorCompliance logical
         PostWork         logical
         PreWork          logical
         
         WakingCoverage                    duration
+        
         MeanWakingActivityIndex           double
         MeanWakingIlluminance             double
         MeanWakingCircadianLight          double
         MeanWakingCircadianStimulus       double
+        
         GeometricMeanWakingIlluminance    double
         GeometricMeanWakingCircadianLight double
         
+        MedianWakingIlluminance           double
+        MedianWakingCircadianLight        double
+        MedianWakingCircadianStimulus     double
+        
+        
         AtWorkCoverage                    duration
+        
         MeanAtWorkActivityIndex           double
         MeanAtWorkIlluminance             double
         MeanAtWorkCircadianLight          double
         MeanAtWorkCircadianStimulus       double
+        
         GeometricMeanAtWorkIlluminance    double
         GeometricMeanAtWorkCircadianLight double
         
+        MedianAtWorkIlluminance           double
+        MedianAtWorkCircadianLight        double
+        MedianAtWorkCircadianStimulus     double
+        
+        
         PreWorkCoverage                    duration
+        
         MeanPreWorkActivityIndex           double
         MeanPreWorkIlluminance             double
         MeanPreWorkCircadianLight          double
         MeanPreWorkCircadianStimulus       double
+        
         GeometricMeanPreWorkIlluminance    double
         GeometricMeanPreWorkCircadianLight double
         
+        MedianPreWorkIlluminance           double
+        MedianPreWorkCircadianLight        double
+        MedianPreWorkCircadianStimulus     double
+        
+        
         PostWorkCoverage                    duration
+        
         MeanPostWorkActivityIndex           double
         MeanPostWorkIlluminance             double
         MeanPostWorkCircadianLight          double
         MeanPostWorkCircadianStimulus       double
+        
         GeometricMeanPostWorkIlluminance    double
         GeometricMeanPostWorkCircadianLight double
+        
+        MedianPostWorkIlluminance           double
+        MedianPostWorkCircadianLight        double
+        MedianPostWorkCircadianStimulus     double
     end
     
     %% Internal public methods
@@ -102,7 +130,16 @@ classdef HumanData < d12pack.MobileData
             else
                 AtWork = false(size(obj.Time));
             end
-        end % End of get InBed method
+        end % End of get AtWork method
+        
+        % Get IsWorkDay
+        function WorkDay = get.WorkDay(obj)
+            if ~isempty(obj.WorkLog)
+                WorkDay = obj.WorkLog.isWorkDay(obj.Time);
+            else
+                WorkDay = false(size(obj.Time));
+            end
+        end % End of get IsWorkDay method
         
         % Get PostWork
         function PostWork = get.PostWork(obj)
@@ -205,6 +242,24 @@ classdef HumanData < d12pack.MobileData
             GeometricMeanWakingCircadianLight = geomean(obj.CircadianLight(idx));
         end % End of get GeometricMeanWakingCircadianLight
         
+        % Get MedianWakingIlluminance
+        function MedianWakingIlluminance = get.MedianWakingIlluminance(obj)
+            idx = ~obj.InBed & obj.Compliance & obj.Observation;
+            MedianWakingIlluminance = median(obj.Illuminance(idx));
+        end % End of get MedianWakingIlluminance
+        
+        % Get MedianWakingCircadianLight
+        function MedianWakingCircadianLight = get.MedianWakingCircadianLight(obj)
+            idx = ~obj.InBed & obj.Compliance & obj.Observation;
+            MedianWakingCircadianLight = median(obj.CircadianLight(idx));
+        end % End of get MedianWakingCircadianLight
+        
+        % Get MedianWakingCircadianStimulus
+        function MedianWakingCircadianStimulus = get.MedianWakingCircadianStimulus(obj)
+            idx = ~obj.InBed & obj.Compliance & obj.Observation;
+            MedianWakingCircadianStimulus = median(obj.CircadianStimulus(idx));
+        end % End of get MedianWakingCircadianStimulus
+        
         %% Mean at work gets
         % Get AtWorkCoverage
         function AtWorkCoverage = get.AtWorkCoverage(obj)
@@ -247,6 +302,24 @@ classdef HumanData < d12pack.MobileData
             idx = obj.AtWork & obj.Compliance & obj.Observation;
             GeometricMeanAtWorkCircadianLight = geomean(obj.CircadianLight(idx));
         end % End of get GeometricMeanAtWorkCircadianLight
+        
+        % Get MedianAtWorkIlluminance
+        function MedianAtWorkIlluminance = get.MedianAtWorkIlluminance(obj)
+            idx = obj.AtWork & obj.Compliance & obj.Observation;
+            MedianAtWorkIlluminance = median(obj.Illuminance(idx));
+        end % End of get MedianAtWorkIlluminance
+        
+        % Get MedianAtWorkCircadianLight
+        function MedianAtWorkCircadianLight = get.MedianAtWorkCircadianLight(obj)
+            idx = obj.AtWork & obj.Compliance & obj.Observation;
+            MedianAtWorkCircadianLight = median(obj.CircadianLight(idx));
+        end % End of get MedianAtWorkCircadianLight
+        
+        % Get MedianAtWorkCircadianStimulus
+        function MedianAtWorkCircadianStimulus = get.MedianAtWorkCircadianStimulus(obj)
+            idx = obj.AtWork & obj.Compliance & obj.Observation;
+            MedianAtWorkCircadianStimulus = median(obj.CircadianStimulus(idx));
+        end % End of get MedianAtWorkCircadianStimulus
         
         %% PreWork gets
         % Get PreWorkCoverage
@@ -291,6 +364,24 @@ classdef HumanData < d12pack.MobileData
             GeometricMeanPreWorkCircadianLight = geomean(obj.CircadianLight(idx));
         end % End of get GeometricMeanPreWorkCircadianLight
         
+        % Get MedianPreWorkIlluminance
+        function MedianPreWorkIlluminance = get.MedianPreWorkIlluminance(obj)
+            idx = obj.PreWork & obj.Compliance & obj.Observation;
+            MedianPreWorkIlluminance = median(obj.Illuminance(idx));
+        end % End of get MedianPreWorkIlluminance
+        
+        % Get MedianPreWorkCircadianLight
+        function MedianPreWorkCircadianLight = get.MedianPreWorkCircadianLight(obj)
+            idx = obj.PreWork & obj.Compliance & obj.Observation;
+            MedianPreWorkCircadianLight = median(obj.CircadianLight(idx));
+        end % End of get MedianPreWorkCircadianLight
+        
+        % Get MedianPreWorkCircadianStimulus
+        function MedianPreWorkCircadianStimulus = get.MedianPreWorkCircadianStimulus(obj)
+            idx = obj.PreWork & obj.Compliance & obj.Observation;
+            MedianPreWorkCircadianStimulus = median(obj.CircadianStimulus(idx));
+        end % End of get MedianPreWorkCircadianStimulus
+        
         %% PostWork gets
         % Get PostWorkCoverage
         function PostWorkCoverage = get.PostWorkCoverage(obj)
@@ -333,6 +424,24 @@ classdef HumanData < d12pack.MobileData
             idx = obj.PostWork & obj.Compliance & obj.Observation;
             GeometricMeanPostWorkCircadianLight = geomean(obj.CircadianLight(idx));
         end % End of get GeometricMeanPostWorkCircadianLight
+        
+        % Get MedianPostWorkIlluminance
+        function MedianPostWorkIlluminance = get.MedianPostWorkIlluminance(obj)
+            idx = obj.PostWork & obj.Compliance & obj.Observation;
+            MedianPostWorkIlluminance = median(obj.Illuminance(idx));
+        end % End of get MedianPostWorkIlluminance
+        
+        % Get MedianPostWorkCircadianLight
+        function MedianPostWorkCircadianLight = get.MedianPostWorkCircadianLight(obj)
+            idx = obj.PostWork & obj.Compliance & obj.Observation;
+            MedianPostWorkCircadianLight = median(obj.CircadianLight(idx));
+        end % End of get MedianPostWorkCircadianLight
+        
+        % Get MedianPostWorkCircadianStimulus
+        function MedianPostWorkCircadianStimulus = get.MedianPostWorkCircadianStimulus(obj)
+            idx = obj.PostWork & obj.Compliance & obj.Observation;
+            MedianPostWorkCircadianStimulus = median(obj.CircadianStimulus(idx));
+        end % End of get MedianPostWorkCircadianStimulus
     end
     
     % External public methods
