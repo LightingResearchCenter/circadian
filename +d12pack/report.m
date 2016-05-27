@@ -3,23 +3,21 @@ classdef report < matlab.mixin.SetGet
     %   Detailed explanation goes here
     
     %%
-    events
-        Update
-    end
-    
-    %%
-    properties (SetObservable)% (Access = public)
+    properties % (Access = public)
         Figure
         Margin = struct('Left',36,'Right',36,'Top',18,'Bottom',36);
         Header
         Footer
         Body
-        Type = 'Report';
         DateGenerate = datetime('now','TimeZone','local');
+    end
+    
+    properties (SetObservable)
+        Type = 'Report';
         PageNumber = [1,1];
     end
     
-    properties (SetObservable, Dependent)
+    properties (Dependent)
         Title
         Units
         PaperType
@@ -37,15 +35,19 @@ classdef report < matlab.mixin.SetGet
         DefaultHeaderHeight = 54;
         DefaultFooterHeight = 54;
         TitleBox
+        FooterBox
+        PageNumBox
     end
     
     %%
     methods
         %% Class constructor
         function obj = report
-            addlistener(obj,'Update',@evtCb);
+            addlistener(obj,'Type','PostSet',@obj.footerTextCallback);
+            addlistener(obj,'PageNumber','PostSet',@obj.pageNumCallback);
             
             obj.Figure = figure;
+            obj.Figure.Renderer = 'painters';
             obj.Figure.Resize = 'off';
             obj.Figure.ToolBar = 'none';
             obj.Figure.DockControls = 'off';
@@ -212,27 +214,27 @@ classdef report < matlab.mixin.SetGet
             nowStr = datestr(obj.DateGenerate,'yyyy mmmm dd, HH:MM');
             footerStr = {obj.Type;['Generated: ',nowStr]};
             
-            hFooterTxt = annotation(obj.Footer,'textbox');
-            hFooterTxt.Units = 'pixels';
-            hFooterTxt.Position = [0,0,w,h];
-            hFooterTxt.LineStyle = 'none';
-            hFooterTxt.HorizontalAlignment = 'center';
-            hFooterTxt.VerticalAlignment = 'top';
-            hFooterTxt.FontUnits = 'pixels';
-            hFooterTxt.FontSize = 16;
-            hFooterTxt.FontName = 'Arial';
-            hFooterTxt.String = footerStr;
+            obj.FooterBox = annotation(obj.Footer,'textbox');
+            obj.FooterBox.Units = 'pixels';
+            obj.FooterBox.Position = [0,0,w,h];
+            obj.FooterBox.LineStyle = 'none';
+            obj.FooterBox.HorizontalAlignment = 'center';
+            obj.FooterBox.VerticalAlignment = 'top';
+            obj.FooterBox.FontUnits = 'pixels';
+            obj.FooterBox.FontSize = 16;
+            obj.FooterBox.FontName = 'Arial';
+            obj.FooterBox.String = footerStr;
             
-            hPageNum = annotation(obj.Footer,'textbox');
-            hPageNum.Units = 'pixels';
-            hPageNum.Position = [0,0,w,h];
-            hPageNum.LineStyle = 'none';
-            hPageNum.HorizontalAlignment = 'center';
-            hPageNum.VerticalAlignment = 'bottom';
-            hPageNum.FontUnits = 'pixels';
-            hPageNum.FontSize = 11;
-            hPageNum.FontName = 'Arial';
-            hPageNum.String = sprintf('page %d of %d',obj.PageNumber(1),obj.PageNumber(2));
+            obj.PageNumBox = annotation(obj.Footer,'textbox');
+            obj.PageNumBox.Units = 'pixels';
+            obj.PageNumBox.Position = [0,0,w,h];
+            obj.PageNumBox.LineStyle = 'none';
+            obj.PageNumBox.HorizontalAlignment = 'center';
+            obj.PageNumBox.VerticalAlignment = 'bottom';
+            obj.PageNumBox.FontUnits = 'pixels';
+            obj.PageNumBox.FontSize = 11;
+            obj.PageNumBox.FontName = 'Arial';
+            obj.PageNumBox.String = sprintf('%d of %d',obj.PageNumber(1),obj.PageNumber(2));
             
             obj.Units = oldUnits;
         end % End of initFooter
@@ -247,8 +249,8 @@ classdef report < matlab.mixin.SetGet
             w = obj.Width - obj.Margin.Left - obj.Margin.Right;
             h = obj.Header.Position(2) - y;
             
-            obj.Body          = uipanel;
-            obj.Body.Units	= 'pixels';
+            obj.Body            = uipanel;
+            obj.Body.Units      = 'pixels';
             obj.Body.Position	= [x,y,w,h];
             obj.Body.BorderType = 'none';
             obj.Body.BackgroundColor = 'white';
@@ -296,15 +298,23 @@ classdef report < matlab.mixin.SetGet
             hLogo.AlphaData = alpha; % Set alpha channel
         end
         
-        %% Update Footer Text
-        function obj = updateFooterText(obj)
-            
-        end
     end
     
     methods (Static)
-        function evtCb(src,evnt)
-            display('Event triggered');
+        %% Update Footer text on event callback
+        function footerTextCallback(src,evnt)
+            evnt.AffectedObject.DateGenerate = datetime('now','TimeZone','local');
+            nowStr = datestr(evnt.AffectedObject.DateGenerate,'yyyy mmmm dd, HH:MM');
+            footerStr = {evnt.AffectedObject.Type;['Generated: ',nowStr]};
+            evnt.AffectedObject.FooterBox.String = footerStr;
+        end
+        
+        %% Update Page number on event callback
+        function pageNumCallback(src,evnt)
+            thisPage = evnt.AffectedObject.PageNumber(1);
+            ofPages = evnt.AffectedObject.PageNumber(2);
+            pageStr = sprintf('%d of %d',thisPage,ofPages);
+            evnt.AffectedObject.PageNumBox.String = pageStr;
         end
     end
 end
