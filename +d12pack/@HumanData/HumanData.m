@@ -447,6 +447,7 @@ classdef HumanData < d12pack.MobileData
     % External public methods
     methods % (Access = public)
         t = analysis(obj)
+        obj = mask(obj)
     end
     
     % External static protected methods
