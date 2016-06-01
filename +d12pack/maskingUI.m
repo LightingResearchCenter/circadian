@@ -19,11 +19,14 @@ classdef maskingUI < matlab.mixin.SetGet
         EndButton                   matlab.ui.control.UIControl     % Select End
         SaveButton                  matlab.ui.control.UIControl     % Save Changes
         CancelButton                matlab.ui.control.UIControl     % Cancel Cha...
+        ClearButton                 matlab.ui.control.UIControl     % Clear Mask
+        DoneButton                  matlab.ui.control.UIControl     % Save & Exit
         SubjectIDLabel              matlab.ui.control.UIControl     % Subject ID:
         SubjectID                   matlab.ui.control.UIControl     % SubjectID
         DaysimeterSNLabel           matlab.ui.control.UIControl     % Daysimeter...
         DaysimeterSN                matlab.ui.control.UIControl     % DaysimeterSN
-        ExitButton                  matlab.ui.control.UIControl     % Save & Exit
+        
+        Status = 'editing';
     end
     
     properties (Access = public, SetObservable)
@@ -33,14 +36,19 @@ classdef maskingUI < matlab.mixin.SetGet
     properties (Access = private, SetObservable)
         hCS
         hAI
-        hBed % Description
+        hBed
         hWork
+        hObs
+        hErr
+        hNC
         TempData
+        xStart
+        xEnd
     end
     
     properties (Access = private)
         Blue   = [180, 211, 227]/255; % circadian stimulus
-        Grey   = [226, 226, 226]/255; % excluded data
+        Grey   = [226, 226, 226]/255; % excluded data/nonobservation
         Red    = [255, 215, 215]/255; % error
         Yellow = [255, 255, 191]/255; % noncompliance
         Purple = [186, 141, 186]/255; % in bed
@@ -77,6 +85,7 @@ classdef maskingUI < matlab.mixin.SetGet
         % Load data from obj
         function app = loadData(app,DataObj)
             app.Data = DataObj;
+            app.TempData = app.Data;
             app.SubjectID.String = app.Data.ID;
             app.DaysimeterSN.String = num2str(app.Data.SerialNumber);
             app.plotData;
@@ -86,6 +95,7 @@ classdef maskingUI < matlab.mixin.SetGet
         % Save changes
         function app = saveChanges(app)
             app.Data = app.TempData;
+            app.TempData = app.Data;
         end
         
         %Discard changes
@@ -101,65 +111,111 @@ classdef maskingUI < matlab.mixin.SetGet
         % Code that executes after component creation
         function app = startupFcn(app)
             addlistener(app,'Data','PostSet',@app.DataSavedCallback);
-            addlistener(app,'TempData','PostSet',@app.DataChangedCallback);
+            addlistener(app,'xStart','PostSet',@app.DataChangedCallback);
+            addlistener(app,'xEnd','PostSet',@app.DataChangedCallback);
         end
         
         function app = plotData(app)
             hold(app.DataAxes,'on');
             
-            t0 = datenum(app.Data.Time);
-            t1 = [t0(1);t0;t0(end)];
-            
             app.hBed = patch;
             app.hBed.Parent = app.DataAxes;
-            app.hBed.XData = t1;
-            app.hBed.YData = [0;double(app.Data.InBed);0];
             app.hBed.EdgeColor = 'none';
             app.hBed.FaceColor = app.Purple;
             app.hBed.DisplayName = 'In Bed';
             
             app.hWork = patch;
             app.hWork.Parent = app.DataAxes;
-            app.hWork.XData = t1;
-            app.hWork.YData = [0;double(app.Data.AtWork);0];
             app.hWork.EdgeColor = 'none';
             app.hWork.FaceColor = app.Green;
             app.hWork.DisplayName = 'At Work';
             
+            app.hNC = patch('Visible','off');
+            app.hNC.Parent = app.DataAxes;
+            app.hNC.EdgeColor = 'none';
+            app.hNC.FaceColor = app.Yellow;
+            app.hNC.DisplayName = 'Noncompliance';
+            
+            app.hErr = patch('Visible','off');
+            app.hErr.Parent = app.DataAxes;
+            app.hErr.EdgeColor = 'none';
+            app.hErr.FaceColor = app.Red;
+            app.hErr.DisplayName = 'Device Error';
+            
+            app.hObs = patch('Visible','off');
+            app.hObs.Parent = app.DataAxes;
+            app.hObs.EdgeColor = 'none';
+            app.hObs.FaceColor = app.Grey;
+            app.hObs.DisplayName = 'Excluded Data/Nonobservation';
+            
             app.hCS = patch;
             app.hCS.Parent = app.DataAxes;
-            app.hCS.XData = t1;
-            app.hCS.YData = [0;app.Data.CircadianStimulus;0];
             app.hCS.DisplayName = 'Circadian Stimulus (CS)';
             app.hCS.EdgeColor = 'none';
             app.hCS.FaceColor = app.Blue;
             
-            app.hAI = plot(app.DataAxes,...
-                app.Data.Time,app.Data.ActivityIndex,...
-                'Color','black',...
-                'LineWidth',0.5);
-            app.hAI.DisplayName = 'Activity Index';
+            app.hAI = plot(app.DataAxes,datetime('now'),1,'Color','black');
+            app.hAI.LineWidth = 0.5;
+            app.hAI.DisplayName = 'Activity Index (AI)';
+            
+            app.refreshData;
+            app.refreshTempData;
             
             hold(app.DataAxes,'off');
             
-            app.ShowBedSwitchValueChanged;
+            l = legend(app.DataAxes,'show');
+            l.Location = 'eastoutside';
+            l.Orientation = 'vertical';
         end
         
-        function app = refreshdata(app)
+        function app = refreshData(app)
             t0 = datenum(app.Data.Time);
             t1 = [t0(1);t0;t0(end)];
             
             app.hCS.XData = t1;
             app.hCS.YData = [0;app.Data.CircadianStimulus;0];
+            app.hCS.Visible = 'on';
             
             app.hAI.XData = t0;
             app.hAI.YData = app.Data.ActivityIndex;
+            app.hCS.Visible = 'on';
             
             app.hBed.XData = t1;
             app.hBed.YData = [0;double(app.Data.InBed);0];
             
             app.hWork.XData = t1;
             app.hWork.YData = [0;double(app.Data.AtWork);0];
+        end
+        
+        function app = refreshTempData(app)
+            t0 = datenum(app.Data.Time);
+            t1 = [t0(1);t0;t0(end)];
+            
+            app.hObs.XData = t1;
+            app.hObs.YData = [0;double(~app.TempData.Observation);0];
+            
+            app.hErr.XData = t1;
+            app.hErr.YData = [0;double(app.TempData.Error);0];
+            
+            app.hNC.XData = t1;
+            app.hNC.YData = [0;double(~app.TempData.Compliance);0];
+            
+            switch app.ButtonGroup.SelectedObject.String
+                case 'Observation'
+                    app.hObs.Visible = 'on';
+                    app.hErr.Visible = 'off';
+                    app.hNC.Visible = 'off';
+                case 'Error'
+                    app.hObs.Visible = 'off';
+                    app.hErr.Visible = 'on';
+                    app.hNC.Visible = 'off';
+                case 'Noncompliance'
+                    app.hObs.Visible = 'off';
+                    app.hErr.Visible = 'off';
+                    app.hNC.Visible = 'on';
+                otherwise
+                    error('Unsupported mask type selected.');
+            end
         end
         
     end
@@ -229,15 +285,10 @@ classdef maskingUI < matlab.mixin.SetGet
             
             % Create ButtonGroup
             app.ButtonGroup = uibuttongroup(app.Figure);
-            app.ButtonGroup.BorderType = 'line';
-            app.ButtonGroup.TitlePosition = 'lefttop';
-            %             app.ButtonGroup.Title = 'Mask Type';
-            app.ButtonGroup.FontName = 'Helvetica';
-            app.ButtonGroup.FontUnits = 'pixels';
-            app.ButtonGroup.FontSize = 12;
             app.ButtonGroup.Units = 'pixels';
             app.ButtonGroup.Position = [17 314 188 88];
             app.ButtonGroup.Clipping = 'off';
+            app.ButtonGroup.SelectionChangedFcn = @app.MaskChangeCallback;
             
             % Create ObservationRadioButton
             app.ObservationRadioButton = uicontrol(app.ButtonGroup);
@@ -328,12 +379,20 @@ classdef maskingUI < matlab.mixin.SetGet
             app.CancelButton.Callback = @app.CancelButtonCallback;
             app.CancelButton.Enable = 'off';
             
-            % Create ExitButton
-            app.ExitButton = uicontrol(app.Figure);
-            app.ExitButton.Style = 'pushbutton';
-            app.ExitButton.Position = [61 41 100 22];
-            app.ExitButton.String = 'Save & Exit';
-            app.ExitButton.Callback = @app.ExitButtonCallback;
+            % Create ClearButton
+            app.ClearButton = uicontrol(app.Figure);
+            app.ClearButton.Style = 'pushbutton';
+            app.ClearButton.Position = [61 104 100 22];
+            app.ClearButton.String = 'Clear Mask';
+            app.ClearButton.Callback = @app.ClearButtonCallback;
+            
+            % Create DoneButton
+            app.DoneButton = uicontrol(app.Figure);
+            app.DoneButton.Style = 'pushbutton';
+            app.DoneButton.Position = [61 41 100 22];
+            app.DoneButton.FontWeight = 'bold';
+            app.DoneButton.String = 'Done';
+            app.DoneButton.Callback = @app.DoneButtonCallback;
         end
     end
     
@@ -345,7 +404,7 @@ classdef maskingUI < matlab.mixin.SetGet
             switch value
                 case app.ShowBedSwitch.Max % On state
                     app.hBed.Visible = 'on';
-                    app.refreshdata;
+                    app.refreshData;
                 case app.ShowBedSwitch.Min % Off state
                     app.hBed.Visible = 'off';
                 otherwise
@@ -359,7 +418,7 @@ classdef maskingUI < matlab.mixin.SetGet
             switch value
                 case app.ShowWorkSwitch.Max % On state
                     app.hWork.Visible = 'on';
-                    app.refreshdata;
+                    app.refreshData;
                 case app.ShowWorkSwitch.Min % Off state
                     app.hWork.Visible = 'off';
                 otherwise
@@ -378,34 +437,91 @@ classdef maskingUI < matlab.mixin.SetGet
         end
         
         function StartButtonCallback(app,src,callbackData)
+            [app.xStart,~] = ginput(1);
+            
             app.StartButton.Enable = 'off';
             app.EndButton.Enable = 'on';
+            app.CancelButton.Enable = 'on';
         end
         
         function EndButtonCallback(app,src,callbackData)
+            [app.xEnd,~] = ginput(1);
             
             app.EndButton.Enable = 'off';
             app.SaveButton.Enable = 'on';
             app.CancelButton.Enable = 'on';
+            
+            t = datenum(app.Data.Time);
+            TF = t >= app.xStart & t <= app.xEnd;
+            
+            switch app.ButtonGroup.SelectedObject.String
+                case 'Observation'
+                    app.TempData.Observation = TF;
+                case 'Error'
+                    TF = TF | app.TempData.Error;
+                    app.TempData.Error = TF;
+                case 'Noncompliance'
+                    TF = TF | ~app.TempData.Compliance;
+                    app.TempData.Compliance = ~TF;
+                otherwise
+                    error('Unsupported mask type selected.');
+            end
+            
+            app.refreshTempData;
         end
         
         function SaveButtonCallback(app,src,callbackData)
+            app.saveChanges;
+            app.refreshTempData;
             
-            app.SaveButton.Enable = 'off';
+            app.SaveButton.Enable   = 'off';
             app.CancelButton.Enable = 'off';
-            app.StartButton.Enable = 'on';
+            app.StartButton.Enable  =  'on';
+            app.EndButton.Enable    = 'off';
         end
         
         function CancelButtonCallback(app,src,callbackData)
+            app.discardCahnges;
+            app.refreshTempData;
             
-            app.SaveButton.Enable = 'off';
+            app.SaveButton.Enable   = 'off';
             app.CancelButton.Enable = 'off';
-            app.StartButton.Enable = 'on';
+            app.StartButton.Enable  =  'on';
+            app.EndButton.Enable    = 'off';
+            
+            app.ChangesSavedLamp.Value = 'on';
         end
         
-        function ExitButtonCallback(app,src,callbackData)
+        function ClearButtonCallback(app,src,callbackData)
+            T = true(size(app.Data.Time));
+            switch app.ButtonGroup.SelectedObject.String
+                case 'Observation'
+                    app.TempData.Observation = T;
+                case 'Error'
+                    app.TempData.Error = ~T;
+                case 'Noncompliance'
+                    app.TempData.Compliance = T;
+                otherwise
+                    error('Unsupported mask type selected.');
+            end
+            
             app.saveChanges;
-            app.delete;
+            app.refreshTempData;
+            
+            app.SaveButton.Enable   = 'off';
+            app.CancelButton.Enable = 'off';
+            app.StartButton.Enable  =  'on';
+            app.EndButton.Enable    = 'off';
+        end
+        
+        function DoneButtonCallback(app,src,callbackData)
+            app.saveChanges;
+            app.Status = 'done';
+        end
+        
+        function MaskChangeCallback(app,OldValue,NewValue,Source,EventName)
+            app.discardCahnges;
+            app.refreshTempData;
         end
     end
 end
