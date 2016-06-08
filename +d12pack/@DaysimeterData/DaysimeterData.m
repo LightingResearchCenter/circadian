@@ -48,6 +48,9 @@ classdef DaysimeterData
         CircadianLight    double %
         CircadianStimulus double %
         
+        MillerCircadianStimulus
+        MillerActivityIndex
+        
         HourlyMeanIlluminance       double
         HourlyMeanCircadianLight    double
         HourlyMeanCircadianStimulus double
@@ -55,6 +58,10 @@ classdef DaysimeterData
         HourlyGeometricMeanIlluminance       double
         HourlyGeometricMeanCircadianLight    double
         HourlyGeometricMeanCircadianStimulus double
+    end
+    
+    properties (Constant)
+        MillerTime = 0:10:24*60-10;
     end
     
     % Private properties
@@ -186,6 +193,17 @@ classdef DaysimeterData
         function CircadianStimulus = get.CircadianStimulus(obj)
             CircadianStimulus = obj.cla2cs(obj.CircadianLight);
         end % End of get CircadianStimulus
+        
+        %%
+         % Get MillerCircadianStimulus
+        function MillerCircadianStimulus = get.MillerCircadianStimulus(obj)
+            MillerCircadianStimulus = miller(obj,obj.CircadianStimulus,'mean');
+        end % End of get MillerCircadianStimulus
+        
+         % Get MillerActivityIndex
+        function MillerActivityIndex = get.MillerActivityIndex(obj)
+            MillerActivityIndex = miller(obj,obj.ActivityIndex,'mean');
+        end % End of get MillerActivityIndex
         
         
         %%

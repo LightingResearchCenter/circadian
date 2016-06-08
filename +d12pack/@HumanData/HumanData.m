@@ -12,7 +12,7 @@ classdef HumanData < d12pack.MobileData
         Sleep            struct
         
         AtWork           logical
-        WorkDay        logical
+        WorkDay          logical
         InBed            logical
         PhasorCompliance logical
         PostWork         logical

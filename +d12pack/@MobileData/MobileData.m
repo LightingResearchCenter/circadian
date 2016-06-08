@@ -36,10 +36,37 @@ classdef MobileData < d12pack.DaysimeterData
                 Phasor = obj.computePhasor(obj.Time,obj.CircadianStimulus,obj.Epoch,obj.ActivityIndex,obj.Observation);
             end
         end % End of get Phasor method
+        
+        % InterdailyStability
+        function InterdailyStability = get.InterdailyStability(obj)
+            if isprop(obj,'PhasorCompliance')
+                % Indicies to keep
+                idxKeep = obj.Observation & obj.PhasorCompliance;
+                AI = obj.ActivityIndex(idxKeep);
+                [InterdailyStability,~] = obj.isiv(AI,obj.Epoch);
+            else
+                AI = obj.ActivityIndex(obj.Observation);
+                [InterdailyStability,~] = obj.isiv(AI,obj.Epoch);
+            end
+        end % End of get InterdailyStability
+        
+        % IntradailyVariability
+        function IntradailyVariability = get.IntradailyVariability(obj)
+            if isprop(obj,'PhasorCompliance')
+                % Indicies to keep
+                idxKeep = obj.Observation & obj.PhasorCompliance;
+                AI = obj.ActivityIndex(idxKeep);
+                [~,IntradailyVariability] = obj.isiv(AI,obj.Epoch);
+            else
+                AI = obj.ActivityIndex(obj.Observation);
+                [~,IntradailyVariability] = obj.isiv(AI,obj.Epoch);
+            end
+        end % End of get InterdailyStability
     end
     
     methods (Static, Access = protected)
         Phasor = computePhasor(Time,CS,Epoch,ActivityIndex,Observation,varargin)
+        [IS,IV] = isiv(ActivityIndex,epoch)
     end
 end
 
