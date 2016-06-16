@@ -6,8 +6,8 @@ function obj = import(obj,FilePath,SerialNumber)
 
 [~,~,ext] = fileparts(FilePath);
 
-varNames = {'SerialNumber','Red','Green','Blue','Date','Label'};
-format = '%u16 %f %f %f %s %s';
+varNames = {'SerialNumber','Red','Green','Blue','Date','Label','Notes'};
+format = '%u16 %f %f %f %s %s %s';
 
 switch ext
     case {'.dat','.txt','.csv'}
