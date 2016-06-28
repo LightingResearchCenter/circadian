@@ -6,8 +6,8 @@ function obj = import(obj,FilePath,SerialNumber)
 
 [~,~,ext] = fileparts(FilePath);
 
-varNames = {'SerialNumber','Red','Green','Blue','Date','Label','Notes'};
-format = '%u16 %f %f %f %s %s %s';
+varNames = {'SerialNumber','Red','Green','Blue','Date','Label'};
+format = '%u16 %f %f %f %s %s';
 
 switch ext
     case {'.dat','.txt','.csv'}
@@ -24,6 +24,15 @@ t.Properties.VariableNames = varNames;
 
 q = t.SerialNumber == SerialNumber;
 t = t(q,:);
+
+if ~isempty(t)
+    idxRemoveRed   = isempty(t.Red)   | isnan(t.Red);
+    idxRemoveGreen = isempty(t.Green) | isnan(t.Green);
+    idxRemoveBlue  = isempty(t.Blue)  | isnan(t.Blue);
+    idxRemove      = idxRemoveRed | idxRemoveGreen | idxRemoveBlue;
+    
+    t(idxRemove,:) = [];
+end
 
 if ~isempty(t)
     % Convert date strings to datetime
