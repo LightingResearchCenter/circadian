@@ -13,9 +13,13 @@ if ~isempty(obj.Calibration)
         case 'newest'
             CalibrationRatio = newestMethod(obj);
         case 'luxthreshold'
+            CalibrationRatio = luxThresholdMethod(obj,30,600);
+        case 'lowluxthreshold'
             CalibrationRatio = luxThresholdMethod(obj,30);
         case 'postir'
             CalibrationRatio = postIRMethod(obj);
+        case 'original+factor'
+            CalibrationRatio = originalFactorMethod(obj);
         otherwise
             CalibrationRatio = newestMethod(obj);
     end
@@ -53,15 +57,25 @@ end % End of postIRMethod
 
 
 % luxthreshold method
-function CalibrationRatio = luxThresholdMethod(obj,LuxThreshold)
+function CalibrationRatio = luxThresholdMethod(obj,lowThresh,varargin)
+if nargin == 3
+    highThresh = varargin{1};
+else
+    highThresh = inf;
+end
 CalibrationRatio = zeros(numel(obj.Time),numel(obj.Calibration));
 
 TCals = table(obj.Calibration);
 
 PreIdx = strcmpi(TCals.Label,'PreIRCorrection');
 PostIdx = strcmpi(TCals.Label,'PostIRCorrection');
-if any(PreIdx) && any(PostIdx)
-    PreCals = TCals(PreIdx,:);
+OrigIdx = strcmpi(TCals.Label,'Original');
+if any(PostIdx) && (any(PreIdx) || any(OrigIdx))
+    if any(PreIdx)
+        PreCals = TCals(PreIdx,:);
+    else
+        PreCals = TCals(OrigIdx,:);
+    end
     PostCals = TCals(PostIdx,:);
     
     NewestPreDate = max(vertcat(PreCals.Date));
@@ -100,14 +114,18 @@ if any(PreIdx) && any(PostIdx)
     PreIRGreen = obj.applyCalibration(obj.GreenCounts,obj.Calibration(SelectedPreIdx).Green,1);
     PreIRBlue = obj.applyCalibration(obj.BlueCounts,obj.Calibration(SelectedPreIdx).Blue,1);
     PreIRCorrectionIlluminance = obj.rgb2lux(PreIRRed,PreIRGreen,PreIRBlue);
-    luxUnder = PreIRCorrectionIlluminance < LuxThreshold;
+    luxUnder = PreIRCorrectionIlluminance < lowThresh;
+    luxOver = PreIRCorrectionIlluminance >= highThresh;
+    luxMiddle = ~luxUnder | ~luxOver;
     
     CalibrationRatio(luxUnder,SelectedPreIdx) = 1;
-    CalibrationRatio(~luxUnder,SelectedPostIdx) = 1;
+    CalibrationRatio(luxMiddle,SelectedPostIdx) = 1;
+    
+    CalibrationRatio(luxOver,SelectedPreIdx) = 0.2;
+    CalibrationRatio(luxOver,SelectedPostIdx) = 0.8;
 end
 
 end % End of luxThresholdMethod
-
 
 
 % postir method
@@ -139,3 +157,34 @@ if any(PostIdx)
 end
 
 end % End of postIRMethod
+
+
+% originalFactorMethod method
+function CalibrationRatio = originalFactorMethod(obj)
+CalibrationRatio = zeros(numel(obj.Time),numel(obj.Calibration));
+
+TCals = table(obj.Calibration);
+
+orgIdx = strcmpi(TCals.Label,'Original');
+if any(orgIdx)
+    orgCals = TCals(orgIdx,:);
+    oldestORgtDate = min(vertcat(orgCals.Date));
+    
+    if isnat(oldestORgtDate) % If no date use last
+        SelectedPost = orgCals(end,:);
+    else % Use least recent
+        SelectedPost = orgCals(orgCals.Date == oldestORgtDate,:);
+        if size(SelectedPost,1) > 1 % If more than one pick last
+            SelectedPost = SelectedPost(end,:);
+        end
+    end
+    % Find the index of the selection
+    SelectedPostIdx = (TCals.Red == SelectedPost.Red) & ...
+        (TCals.Green == SelectedPost.Green) & ...
+        (TCals.Blue == SelectedPost.Blue) & ...
+        (strcmp(TCals.Label,SelectedPost.Label));
+    
+    CalibrationRatio(:,SelectedPostIdx) = obj.CorrectionFactor;
+end
+
+end % End of originalFactorMethod
