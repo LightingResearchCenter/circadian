@@ -9,6 +9,7 @@ classdef DaysimeterData
         Calibration      d12pack.CalibrationData % Calibration values
         CalibrationRatio double % Ratio used when mixing multiple calibration
         RatioMethod      char
+        CorrectionFactor double = 1;
         CalibrationPath  char = '\\root\projects\DaysimeterAndDimesimeterReferenceFiles\recalibration2016\calibration_log.csv';
         Epoch            duration % Logging rate
         
