@@ -3,26 +3,20 @@ function [data,IDnum] = readraw(log_infoPath,data_logPath)
 %   Detailed explanation goes here
 
 % read the header file
-fidInfo = fopen(log_infoPath,'r','b');
-I = fread(fidInfo,'uchar');
-fclose(fidInfo);
+I = daysimeter12.readloginfo(log_infoPath);
 
 % read the data file
-fidData = fopen(data_logPath,'r','b');
-D = fread(fidData,'uint16');
-fclose(fidData);
+D = daysimeter12.readdatalog(data_logPath);
 
 % find the ID number
-q = find(I==10,4,'first');
-IDstr = char(I(q(1)+1:q(1)+4))';
+IDstr = daysimeter12.parseDeviceSn(I);
 IDnum = str2double(IDstr);
 
 % find the start date time
-startDateTimeStr = char(I(q(2)+1:q(2)+14))';
-startTime = datevec(startDateTimeStr,'mm-dd-yy HH:MM');
+startTime = daysimeter12.parseStartDateTime(I);
 
 % find the log interval
-logInterval = str2double(char(I(q(3)+1:q(3)+5))');
+logInterval = daysimeter12.parseLoggingInterval(I);
 
 % seperate data into raw R,G,B,A
 n = floor(numel(D)/4)*4;

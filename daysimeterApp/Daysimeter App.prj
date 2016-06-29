@@ -1,0 +1,79 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="36408080" file="C:\Users\jonesg5\Documents\GitHub\circadian\daysimeterApp\Daysimeter App.prj" location="C:\Users\jonesg5\Documents\GitHub\circadian\daysimeterApp" name="Daysimeter App" target="target.mlapps" target-name="Package App">
+    <param.appname>Daysimeter App</param.appname>
+    <param.authnamewatermark>Geoffrey E. Jones</param.authnamewatermark>
+    <param.email>jonesg5@rpi.edu</param.email>
+    <param.company>RPI, Lighting Research Center</param.company>
+    <param.icon>${PROJECT_ROOT}\Daysimeter App_resources\icon_24.png</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}\Daysimeter App_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\Daysimeter App_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\Daysimeter App_resources\icon_16.png</file>
+    </param.icons>
+    <param.summary />
+    <param.description />
+    <param.screenshot>${PROJECT_ROOT}\screenShot.PNG</param.screenshot>
+    <param.version>1.1.2</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>C:\Users\jonesg5\Documents\GitHub\circadian\daysimeterApp</param.output>
+    <param.guid>d8b2d2c0-9c71-42bb-b2fb-43e0e03eef06</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\DaysimeterApp.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\+io\copyDatalog.m</file>
+      <file>${PROJECT_ROOT}\+io\copyLoginfo.m</file>
+      <file>${PROJECT_ROOT}\+io\daysimeterStatus.m</file>
+      <file>${PROJECT_ROOT}\+io\downloadDaysimeter.m</file>
+      <file>${PROJECT_ROOT}\+io\getDaysimeters.m</file>
+      <file>${PROJECT_ROOT}\+io\getDeviceSn.m</file>
+      <file>${PROJECT_ROOT}\+io\makeNameStub.m</file>
+      <file>${PROJECT_ROOT}\+io\parseDeviceSn.m</file>
+      <file>${PROJECT_ROOT}\+io\readloginfo.m</file>
+      <file>${PROJECT_ROOT}\+io\setLogInfo.m</file>
+      <file>${PROJECT_ROOT}\download_24.png</file>
+      <file>${PROJECT_ROOT}\finder.m</file>
+      <file>${PROJECT_ROOT}\stop_24.png</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="C:\Users\jonesg5\Documents\GitHub\circadian" name="daysimeterApp" optional="false">C:\Users\jonesg5\Documents\GitHub\circadian\daysimeterApp</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2016a</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

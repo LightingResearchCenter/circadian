@@ -14,3 +14,21 @@
 
 # Simulink Code Generation
 slprj/
+
+# start/stop hub testing 
+startStopHub/
+hubtest.m
+
+# Build files
+daysimeterApp/Daysimeter App.mlappinstall
+daysimeterApp/DaysimeterApp-Standalone/for_redistribution/DaysimeterAppInstaller_web.exe
+daysimeterApp/DaysimeterApp-Standalone/for_redistribution_files_only/default_icon.ico
+daysimeterApp/DaysimeterApp-Standalone/for_redistribution_files_only/splash.png
+daysimeterApp/DaysimeterApp-Standalone/for_testing/requiredMCRProducts.txt
+daysimeterApp/DaysimeterApp-Standalone/for_redistribution_files_only/readme.txt
+daysimeterApp/DaysimeterApp-Standalone/for_testing/mccExcludedFiles.log
+daysimeterApp/DaysimeterApp-Standalone/for_testing/readme.txt
+daysimeterApp/DaysimeterApp-Standalone/for_testing/splash.png
+daysimeterApp/DaysimeterApp-Standalone/for_redistribution_files_only/DaysimeterApp.exe
+daysimeterApp/DaysimeterApp-Standalone/PackagingLog.html
+daysimeterApp/DaysimeterApp-Standalone/for_testing/DaysimeterApp.exe

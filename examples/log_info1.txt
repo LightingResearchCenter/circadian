@@ -1,0 +1,17 @@
+0
+0229
+04-08-16 18:44
+180
+0528
+1
+2944
+*****************
+
+Notes:
+Status (0=stand by, 2=start new log, 4=continue log)
+ID number(Do Not Change)
+Start Date/Time (mm-dd-yy HH:MM)
+Log Interval (multiple of 30 seconds; must be three digits...e.g., use 030 instead of 30)
+Number of hours logging on current battery
+Download flag (0=download occurred, 1=not yet downloaded)
+Battery voltage (mV/10)
