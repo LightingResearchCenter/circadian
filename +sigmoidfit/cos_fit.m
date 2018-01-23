@@ -14,5 +14,7 @@ phi = atan2(b(1),b(2))/k;
 
 fitted = mes + amp.*cos((X - phi).*k);
 
-cm = struct('mes',mes,'amp',amp,'phi',phi,'Fitted',fitted);
+rsquared = 1 - sum((y-fitted).^2)/sum((y-mean(y)).^2);
+
+cm = struct('mes',mes,'amp',amp,'phi',phi,'Fitted',fitted,'Rsquared',rsquared);
 end

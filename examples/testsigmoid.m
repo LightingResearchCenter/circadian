@@ -2,6 +2,9 @@ close all
 clear
 clc
 
+[circadianDir,~,~] = fileparts(pwd);
+addpath(circadianDir);
+
 rt = now;
 
 filePath = 'test.cdf';
@@ -66,4 +69,4 @@ hTable = text(4,0.98,tableText);
 hTable.VerticalAlignment = 'top';
 hTable.FontName = 'Courier';
 
-saveas(hFig,['C:\Users\jonesg5\Desktop\test_',datestr(rt,'yyyy-mm-dd_HHMMSS'),'.pdf']);
+% saveas(hFig,['C:\Users\jonesg5\Desktop\test_',datestr(rt,'yyyy-mm-dd_HHMMSS'),'.pdf']);

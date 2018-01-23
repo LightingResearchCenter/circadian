@@ -1,4 +1,4 @@
-function [nlm,fStat,pVal] = cos_fit_nlm(X,y)
+function [nlm,fStat,pVal,varargout] = cos_fit_nlm(X,y)
 %COS_FIT_NLM Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -19,6 +19,10 @@ nlm = fitnlm(X,y,@modelfun,b0,'CoefficientNames',coefNames);
 
 % Calculate F-statistic and p-value
 [fStat,pVal,emptyNullModel,hasIntercept] = sigmoidfit.ftest(nlm);
+
+if nargout > 3
+    varargout{1,1} = cm;
+end
 
 end
 

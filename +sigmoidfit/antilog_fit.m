@@ -1,9 +1,13 @@
-function [nlm,fStat,pVal,cm] = antilog_fit(X,y)
+function [nlm,fStat,pVal,varargout] = antilog_fit(X,y,varargin)
 %ANTILOG_FIT Summary of this function goes here
 %   Detailed explanation goes here
 
-% Fit a cosine curve
-cm = sigmoidfit.cos_fit(X,y);
+if nargin > 2
+    cm  = varargin{1};
+else
+    % Fit a cosine curve
+    cm = sigmoidfit.cos_fit(X,y);
+end
 
 % Get starting coefficient values from cosine fit
 min0 = mean(y) - cm.amp;
@@ -21,6 +25,10 @@ nlm = fitnlm(X,y,@modelfun,b0,'CoefficientNames',coefNames);
 
 % Calculate F-statistic and p-value
 [fStat,pVal,emptyNullModel,hasIntercept] = sigmoidfit.ftest(nlm);
+
+if nargout > 3
+    varargout{1,1} = cm;
+end
 
 end
 
